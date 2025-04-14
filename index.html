@@ -1,0 +1,324 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Recipe Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between">
+                <div class="flex items-center space-x-7">
+                    <div>
+                        <a href="#" class="flex items-center py-4 text-indigo-600">
+                            <i class="fas fa-utensils text-2xl mr-2"></i>
+                            <span class="font-bold text-xl">Recipe AI</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Primary Navigation -->
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="#" class="py-4 px-3 text-gray-700 hover:text-indigo-600 transition duration-300">Home</a>
+                    <a href="#about"
+                        class="py-4 px-3 text-gray-700 hover:text-indigo-600 transition duration-300">About</a>
+                    <a href="#contact"
+                        class="py-4 px-3 text-gray-700 hover:text-indigo-600 transition duration-300">Contact</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button class="mobile-menu-button outline-none" aria-label="Open mobile menu">
+                        <svg class="w-6 h-6 text-gray-500" viewBox="0 0 24 24" fill="none">
+                            <path class="menu-icon" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                            <path class="close-icon hidden" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu hidden md:hidden">
+            <a href="#"
+                class="block py-2 px-4 text-gray-700 hover:bg-indigo-600 hover:text-white transition duration-300">Home</a>
+            <a href="#about"
+                class="block py-2 px-4 text-gray-700 hover:bg-indigo-600 hover:text-white transition duration-300">About</a>
+            <a href="#contact"
+                class="block py-2 px-4 text-gray-700 hover:bg-indigo-600 hover:text-white transition duration-300">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <div class="container mx-auto px-4 py-8" id="home">
+            <header class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-indigo-600 mb-2">AI Recipe Generator</h1>
+                <p class="text-gray-600">Turn your available ingredients into delicious meals!</p>
+            </header>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Input Section -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <form id="recipeForm" class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 mb-2">Enter Your Ingredients</label>
+                            <textarea id="ingredients"
+                                class="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500" rows="3"
+                                placeholder="e.g., chicken, spinach, garlic, lemons"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 mb-2">Dietary Preferences</label>
+                            <select id="diet" class="w-full p-2 border rounded">
+                                <option value="none">No Restrictions</option>
+                                <option value="vegan">Vegan</option>
+                                <option value="vegetarian">Vegetarian</option>
+                                <option value="gluten-free">Gluten-Free</option>
+                                <option value="keto">Keto</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">Upload Photos of Your Ingredients (Max 3)</label>
+                            <input type="file" id="imageUpload" accept="image/*" capture="environment" multiple
+                                class="w-full">
+                            <div id="imagePreviewContainer" class="flex flex-wrap gap-2"></div>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition-colors">
+                            Generate Recipe
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Recipe Display Section -->
+                <div id="recipeOutput" class="bg-white rounded-lg shadow-lg p-6 min-h-[400px]">
+                    <div class="text-center text-gray-500">
+                        Your recipe will appear here...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Saved Recipes Section -->
+            <div class="mt-8">
+                <h2 class="text-2xl font-bold text-indigo-600 mb-4">Community Recipes</h2>
+                <div id="savedRecipes" class="grid md:grid-cols-3 gap-4">
+                    <!-- Saved recipes will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <section id="about" class="bg-gray-50 py-16">
+            <div class="container mx-auto px-4">
+                <h2 class="text-4xl font-bold text-center text-indigo-600 mb-12">About Recipe AI</h2>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-2xl font-semibold mb-4">Our Mission</h3>
+                            <p class="text-gray-600">
+                                Recipe AI is dedicated to reducing food waste and inspiring culinary creativity. We help
+                                you transform everyday ingredients into delicious meals using the power of artificial
+                                intelligence.
+                            </p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-2xl font-semibold mb-4">How It Works</h3>
+                            <ul class="list-disc pl-5 text-gray-600 space-y-2">
+                                <li>Input your available ingredients</li>
+                                <li>Upload photos of your ingredients (optional)</li>
+                                <li>Select dietary preferences</li>
+                                <li>Let AI generate personalized recipes</li>
+                                <li>Save and share your favorite creations</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-2xl font-semibold mb-4">Key Features</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center p-4">
+                                    <i class="fas fa-camera text-3xl text-indigo-600 mb-2"></i>
+                                    <h4 class="font-semibold">Image Recognition</h4>
+                                </div>
+                                <div class="text-center p-4">
+                                    <i class="fas fa-brain text-3xl text-indigo-600 mb-2"></i>
+                                    <h4 class="font-semibold">AI-Powered</h4>
+                                </div>
+                                <div class="text-center p-4">
+                                    <i class="fas fa-leaf text-3xl text-indigo-600 mb-2"></i>
+                                    <h4 class="font-semibold">Dietary Options</h4>
+                                </div>
+                                <div class="text-center p-4">
+                                    <i class="fas fa-users text-3xl text-indigo-600 mb-2"></i>
+                                    <h4 class="font-semibold">Community</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-2xl font-semibold mb-4">Our Impact</h3>
+                            <div class="grid grid-cols-3 gap-4 text-center">
+                                <div class="p-4">
+                                    <div class="text-3xl font-bold text-indigo-600">1000+</div>
+                                    <div class="text-gray-600">Recipes Generated</div>
+                                </div>
+                                <div class="p-4">
+                                    <div class="text-3xl font-bold text-indigo-600">500+</div>
+                                    <div class="text-gray-600">Active Users</div>
+                                </div>
+                                <div class="p-4">
+                                    <div class="text-3xl font-bold text-indigo-600">4.8</div>
+                                    <div class="text-gray-600">User Rating</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16">
+            <div class="container mx-auto px-4">
+                <h2 class="text-4xl font-bold text-center text-indigo-600 mb-12">Contact Us</h2>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="bg-white p-8 rounded-lg shadow-md">
+                        <form id="contactForm" class="space-y-6">
+                            <div>
+                                <label class="block text-gray-700 mb-2">Name</label>
+                                <input type="text" class="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500"
+                                    required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Email</label>
+                                <input type="email" class="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500"
+                                    required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Subject</label>
+                                <input type="text" class="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500"
+                                    required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Message</label>
+                                <textarea class="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500" rows="4"
+                                    required></textarea>
+                            </div>
+                            <button type="submit"
+                                class="w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition-colors">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                    <div class="space-y-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-2xl font-semibold mb-4">Get in Touch</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <i class="fas fa-envelope text-2xl text-indigo-600 w-8"></i>
+                                    <a href="/cdn-cgi/l/email-protection#f685838686998482b68493959f8693979fd895999b"
+                                        class="text-gray-600 hover:text-indigo-600"><span class="__cf_email__"
+                                            data-cfemail="23505653534c5157635146404a5346424a0d404c4e">[email&#160;protected]</span></a>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-phone text-2xl text-indigo-600 w-8"></i>
+                                    <a href="tel:+1234567890" class="text-gray-600 hover:text-indigo-600">+1 (234)
+                                        567-890</a>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-map-marker-alt text-2xl text-indigo-600 w-8"></i>
+                                    <span class="text-gray-600">123 Recipe Street, Foodville, FK 12345</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-2xl font-semibold mb-4">Follow Us</h3>
+                            <div class="flex space-x-6">
+                                <a href="https://twitter.com"
+                                    class="text-gray-600 hover:text-indigo-600 transition duration-300">
+                                    <i class="fab fa-twitter text-3xl"></i>
+                                </a>
+                                <a href="https://facebook.com"
+                                    class="text-gray-600 hover:text-indigo-600 transition duration-300">
+                                    <i class="fab fa-facebook text-3xl"></i>
+                                </a>
+                                <a href="https://instagram.com"
+                                    class="text-gray-600 hover:text-indigo-600 transition duration-300">
+                                    <i class="fab fa-instagram text-3xl"></i>
+                                </a>
+                                <a href="https://linkedin.com"
+                                    class="text-gray-600 hover:text-indigo-600 transition duration-300">
+                                    <i class="fab fa-linkedin text-3xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-2xl font-semibold mb-4">Business Hours</h3>
+                            <div class="space-y-2 text-gray-600">
+                                <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
+                                <p>Saturday: 10:00 AM - 4:00 PM</p>
+                                <p>Sunday: Closed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-12">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Recipe AI</h3>
+                    <p class="text-gray-300">Transform your ingredients into delicious meals with the power of AI.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition duration-300">Home</a></li>
+                        <li><a href="#about" class="text-gray-300 hover:text-white transition duration-300">About</a>
+                        </li>
+                        <li><a href="#contact"
+                                class="text-gray-300 hover:text-white transition duration-300">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="https://twitter.com" class="text-gray-300 hover:text-white transition duration-300">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="https://facebook.com" class="text-gray-300 hover:text-white transition duration-300">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="https://instagram.com" class="text-gray-300 hover:text-white transition duration-300">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-300">
+                <p>&copy; 2024 Recipe AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>
