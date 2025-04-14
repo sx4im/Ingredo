@@ -117,10 +117,10 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📬 Contact
 
-Project Link: [https://github.com/yourusername/Recipe_Ai](https://github.com/yourusername/Recipe_Ai)
+Project Link: [sx4imm@gmail.com](mailto:sx4imm@gmail.com)
 
 ---
 
 <div align="center">
-  <sub>Built with ❤️ by you</sub>
+  <sub>Built with ❤️ by Saim Shafique</sub>
 </div>
