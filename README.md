@@ -2,7 +2,6 @@
 
 <div align="center">
   
-  ![Recipe AI Banner](https://user-images.githubusercontent.com/74038190/212749447-bfb7e725-6987-49d9-ae85-2015e3e7cc41.gif)
 
   [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Recipe_Ai/pulls)
