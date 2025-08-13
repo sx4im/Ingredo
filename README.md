@@ -116,7 +116,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📬 Contact
 
-Project Link: [sx4imm@gmail.com](mailto:sx4imm@gmail.com)
+Mail: [sx4imm@gmail.com](mailto:sx4imm@gmail.com)
 
 ---
 
