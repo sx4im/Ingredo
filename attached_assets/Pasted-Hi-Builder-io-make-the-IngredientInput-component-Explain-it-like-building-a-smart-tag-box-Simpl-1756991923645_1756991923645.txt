@@ -1,0 +1,39 @@
+Hi Builder.io — make the IngredientInput component. Explain it like building a smart tag box.
+
+Simple explanation:
+This is the input where the user types or pastes ingredients and sees them as chips. Add an “Add photo” icon to attach images later.
+
+What to build (step by step):
+1. File: `src/components/IngredientInput/IngredientInput.tsx` (TypeScript React).
+2. Props (exact):
+   - `initialIngredients?: IngredientChip[]` where `type IngredientChip = { id: string; name: string; qty?: string; unit?: string; imageId?: string }`
+   - `onChange(ingredients: IngredientChip[]): void`
+   - `placeholder?: string`
+   - `maxItems?: number` (default 50)
+   - `onOpenImageModal?: () => void` (fires when Add Photo clicked)
+3. UI elements:
+   - A single-line input that also supports paste of CSV / newline; when paste contains multiple items, parse into chips immediately.
+   - Chips show `name` + optional `qty unit`, each chip has remove (x) control and a drag handle.
+   - Inline autocomplete dropdown: call `GET /api/ingredients?q=xxx` (debounce 300ms) and show fuzzy matches and confidence score.
+   - Keyboard support: Enter to confirm, Arrow keys to navigate suggestions, Backspace removes last chip when input empty.
+   - Drag-to-reorder chips using `@dnd-kit` or `react-beautiful-dnd`.
+   - “Add photo” icon button inside input area that opens image uploader modal by calling `onOpenImageModal`.
+4. Parsing rules:
+   - Split paste by comma or newline, trim whitespace.
+   - If token looks like `2 eggs` parse qty = "2", name = "eggs".
+   - Keep display name in original case but expose normalized when calling backend.
+5. Persistence:
+   - Autosave current chips to `localStorage` key `ingredo:search_draft` and restore on mount.
+6. Tests & Storybook:
+   - Unit tests for parsing logic, keyboard flow, adding/removing chips, and drag reorder (Jest + RTL).
+   - Stories: Empty, With chips, Paste multiple, With suggestions, Mobile layout.
+7. Backend contract examples:
+   - `GET /api/ingredients?q=garlic` -> `{ suggestions: [{name:'garlic',normalized:'garlic',commonUnit:'clove'}] }`
+8. Accessibility:
+   - Input labelled with `aria-label`, suggestions with `role="listbox"`, chips with `role="option"`.
+9. Acceptance criteria:
+   - Paste and Enter create chips.
+   - Autocomplete suggestions display and can be selected via keyboard or mouse.
+   - Drag reorder updates underlying array and triggers `onChange`.
+10. Commit message:
+   `feat(ingredients): IngredientInput with chips, autocomplete, parsing, and image button`

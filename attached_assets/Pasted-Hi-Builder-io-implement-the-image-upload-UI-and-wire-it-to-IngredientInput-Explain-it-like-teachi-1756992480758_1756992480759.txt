@@ -1,0 +1,42 @@
+Hi Builder.io — implement the image upload UI and wire it to IngredientInput. Explain it like teaching a friend to take and show photos.
+
+Simple explanation:
+User takes or chooses photos of what’s in their fridge. We show thumbnails, let them crop, and ask the backend to recognize ingredients so we can turn suggestions into chips.
+
+What to build (step by step):
+1. Files:
+   - `src/components/ImageUploader/ImageUploader.tsx`
+   - `src/components/ImageUploader/ImagePreviewModal.tsx` (crop + rotate)
+2. Props:
+   - `maxImages?: number` default 5
+   - `maxSizeMB?: number` default 5
+   - `onUploadComplete(items: UploadedImage[]): void`
+   - `onAttach(imageId: string, chipIndex?: number): void`
+   - `autoDetect?: boolean` default false
+   - `accept?: string` default `"image/*;capture=camera"`
+   - `type UploadedImage = { id: string; url: string; thumbnailUrl?: string; recognized?: {name:string,normalized:string,confidence:number}[] }`
+3. Client pre-processing:
+   - Resize images to max 2048px on the longest side with `browser-image-compression` or `pica`.
+   - Strip EXIF (no GPS) using `exif-js` or similar, and ensure correct orientation.
+   - Validate MIME (jpeg, png, webp) and size; show clear error messages.
+4. Upload flow:
+   - POST `/api/uploads/sign { filename, contentType, size }` -> `{ image_id, uploadUrl }`
+   - PUT file to `uploadUrl` (signed).
+   - POST `/api/uploads/complete { image_id, url, metadata }`
+   - Optionally call POST `/api/recognize-image { image_id, mode:'vision', max_suggestions:5 }` to get recognized suggestions.
+5. UI features:
+   - Drag-and-drop zone, file picker, and camera capture on mobile.
+   - Show upload progress per file, cancel option, and thumbnail grid.
+   - Clicking a thumbnail opens a modal to crop/rotate and edit alt text.
+   - Under each thumbnail show recognized chips with confidence; each chip can be accepted (push to IngredientInput), edited, or rejected. Provide "Add all" action.
+6. Offline support:
+   - Store pending uploads in IndexedDB (idb) and retry when back online.
+7. Tests & Storybook:
+   - Stories: empty state, uploading, uploaded-with-suggestions, attach flow.
+   - Unit tests for pre-processing, validation, and UI states.
+8. Accessibility:
+   - Dropzone keyboard accessible, ARIA live region updates for progress and success.
+9. Acceptance criteria:
+   - Signed upload flow works; progress visible; recognized suggestions shown and can be added to chips.
+10. Commit:
+   `feat(upload): ImageUploader with signed upload, preprocessing, recognition integration`
