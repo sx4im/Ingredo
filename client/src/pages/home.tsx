@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Chip } from "@/components/ui/chip";
 import Iridescence from "@/components/Iridescence";
+import CountUp from "@/components/CountUp";
 import { type IngredientChip } from "@shared/schema";
 import { Search, ChefHat, Recycle, Heart, Plus, Star, Bookmark, ArrowRight, Clock, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -118,15 +119,34 @@ export default function Home() {
             <div className="max-w-4xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
                 <div className="text-center">
-                  <div className="text-5xl font-bold text-vintage-warm-brown mb-2">2,847</div>
+                  <div className="text-5xl font-bold text-vintage-warm-brown mb-2">
+                    <CountUp 
+                      to={2847} 
+                      duration={2.5} 
+                      separator="," 
+                      className="count-up-text"
+                    />
+                  </div>
                   <div className="text-vintage-light-beige/90 text-lg">Recipes Available</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-5xl font-bold text-vintage-warm-brown mb-2">156</div>
+                  <div className="text-5xl font-bold text-vintage-warm-brown mb-2">
+                    <CountUp 
+                      to={156} 
+                      duration={2} 
+                      className="count-up-text"
+                    />
+                  </div>
                   <div className="text-vintage-light-beige/90 text-lg">Ingredients Supported</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-5xl font-bold text-vintage-warm-brown mb-2">98%</div>
+                  <div className="text-5xl font-bold text-vintage-warm-brown mb-2">
+                    <CountUp 
+                      to={98} 
+                      duration={2.2} 
+                      className="count-up-text"
+                    />%
+                  </div>
                   <div className="text-vintage-light-beige/90 text-lg">User Satisfaction</div>
                 </div>
               </div>
