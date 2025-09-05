@@ -1,5 +1,5 @@
 export default /* glsl */`
-#ifdef USE_LOGARITHMIC_DEPTH_BUFFER
+#ifdef USE_LOGDEPTHBUF
 
 	varying float vFragDepth;
 	varying float vIsPerspective;

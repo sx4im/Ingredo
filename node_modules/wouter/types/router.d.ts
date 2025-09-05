@@ -24,6 +24,12 @@ export interface RouterObject {
   readonly hrefs: HrefsFormatter;
 }
 
+// state captured during SSR render
+export type SsrContext = {
+  // if a redirect was encountered, this will be populated with the path
+  redirectTo?: Path;
+};
+
 // basic options to construct a router
 export type RouterOptions = {
   hook?: BaseLocationHook;
@@ -32,5 +38,6 @@ export type RouterOptions = {
   parser?: Parser;
   ssrPath?: Path;
   ssrSearch?: SearchString;
+  ssrContext?: SsrContext;
   hrefs?: HrefsFormatter;
 };

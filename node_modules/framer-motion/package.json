@@ -1,6 +1,6 @@
 {
     "name": "framer-motion",
-    "version": "11.13.1",
+    "version": "11.18.2",
     "description": "A simple and powerful JavaScript animation library",
     "main": "dist/cjs/index.js",
     "module": "dist/es/index.mjs",
@@ -50,7 +50,7 @@
     "types": "dist/index.d.ts",
     "author": "Matt Perry",
     "license": "MIT",
-    "repository": "https://github.com/framer/motion/",
+    "repository": "https://github.com/motiondivision/motion/",
     "sideEffects": false,
     "keywords": [
         "react animation",
@@ -70,21 +70,21 @@
     "scripts": {
         "eslint": "yarn run lint",
         "lint": "yarn eslint src/**/*.ts",
-        "build": "yarn clean && tsc -p . && rollup -c && node ./scripts/check-bundle.js",
+        "build": "yarn clean && tsc --noEmitOnError -p . && rollup -c && node ./scripts/check-bundle.js",
         "dev": "yarn watch",
         "clean": "rm -rf types dist lib",
         "test": "yarn test-server && yarn test-client",
         "test-client": "jest --config jest.config.json --max-workers=2",
         "test-server": "jest --config jest.config.ssr.json",
         "prettier": "prettier ./src/* --write",
-        "watch": "concurrently -c blue,red -n tsc,rollup --kill-others \"tsc --watch -p . --preserveWatchOutput\" \"rollup --config --watch --no-watch.clearScreen\"",
+        "watch": "concurrently -c blue,red -n tsc --noEmitOnError ,rollup --kill-others \"tsc  --noEmitOnError --watch -p . --preserveWatchOutput\" \"rollup --config --watch --no-watch.clearScreen\"",
         "prepack": "yarn build",
         "postpublish": "git push --tags",
         "measure": "rollup -c ./rollup.size.config.mjs"
     },
     "dependencies": {
-        "motion-dom": "^11.13.0",
-        "motion-utils": "^11.13.0",
+        "motion-dom": "^11.18.1",
+        "motion-utils": "^11.18.1",
         "tslib": "^2.4.0"
     },
     "devDependencies": {
@@ -93,8 +93,8 @@
     },
     "peerDependencies": {
         "@emotion/is-prop-valid": "*",
-        "react": "^18.0.0",
-        "react-dom": "^18.0.0"
+        "react": "^18.0.0 || ^19.0.0",
+        "react-dom": "^18.0.0 || ^19.0.0"
     },
     "peerDependenciesMeta": {
         "@emotion/is-prop-valid": {
@@ -110,15 +110,15 @@
     "bundlesize": [
         {
             "path": "./dist/size-rollup-motion.js",
-            "maxSize": "34.4 kB"
+            "maxSize": "34.7 kB"
         },
         {
             "path": "./dist/size-rollup-m.js",
-            "maxSize": "5.71 kB"
+            "maxSize": "5.9 kB"
         },
         {
             "path": "./dist/size-rollup-dom-animation.js",
-            "maxSize": "17.35 kB"
+            "maxSize": "17.55 kB"
         },
         {
             "path": "./dist/size-rollup-dom-max.js",
@@ -126,7 +126,7 @@
         },
         {
             "path": "./dist/size-rollup-animate.js",
-            "maxSize": "18.2 kB"
+            "maxSize": "18.45 kB"
         },
         {
             "path": "./dist/size-rollup-scroll.js",
@@ -134,8 +134,8 @@
         },
         {
             "path": "./dist/size-rollup-waapi-animate.js",
-            "maxSize": "2.54 kB"
+            "maxSize": "2.7 kB"
         }
     ],
-    "gitHead": "dc2b2785a6272cd0cb16c7f31fae489353d7ff14"
+    "gitHead": "4104786df5cdc20315ade57aa52bbda472e8abfa"
 }
