@@ -5,10 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Chip } from "@/components/ui/chip";
-import { IngredientInput } from "@/components/IngredientInput";
-import FaultyTerminal from "@/components/FaultyTerminal";
+import ThemeAwarePixelBlast from "@/components/ThemeAwarePixelBlast";
 import { type IngredientChip } from "@shared/schema";
-import { Search, ChefHat, Recycle, Heart, Plus, Star, Bookmark, ArrowRight, Play, Clock, Users } from "lucide-react";
+import { Search, ChefHat, Recycle, Heart, Plus, Star, Bookmark, ArrowRight, Clock, Users } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
   const [ingredients, setIngredients] = React.useState<IngredientChip[]>([
@@ -17,6 +17,7 @@ export default function Home() {
     { id: "3", name: "Mozzarella" }
   ]);
   const [hoveredRecipe, setHoveredRecipe] = React.useState<number | null>(null);
+  const { toast } = useToast();
 
   const handleIngredientsChange = (newIngredients: IngredientChip[]) => {
     setIngredients(newIngredients);
@@ -68,25 +69,24 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative w-full h-screen flex items-center justify-center">
         <div className="absolute inset-0 z-0">
-          <FaultyTerminal
-            scale={1.0}
-            gridMul={[1.5, 1]}
-            digitSize={0.8}
-            timeScale={0.3}
-            pause={false}
-            scanlineIntensity={0.2}
-            glitchAmount={0.4}
-            flickerAmount={0.3}
-            noiseAmp={0.1}
-            chromaticAberration={0}
-            dither={0}
-            curvature={0.05}
-            tint="#2d5016"
-            mouseReact={true}
-            mouseStrength={0.2}
-            pageLoadAnimation={false}
-            brightness={0.8}
-            className="opacity-70"
+          <ThemeAwarePixelBlast
+            variant="circle"
+            pixelSize={6}
+            patternScale={3}
+            patternDensity={1.2}
+            pixelSizeJitter={0.5}
+            enableRipples
+            rippleSpeed={0.4}
+            rippleThickness={0.12}
+            rippleIntensityScale={1.5}
+            liquid
+            liquidStrength={0.12}
+            liquidRadius={1.2}
+            liquidWobbleSpeed={5}
+            speed={0.6}
+            edgeFade={0.25}
+            transparent
+            className=""
             style={{}}
           />
         </div>
@@ -97,66 +97,93 @@ export default function Home() {
               Cook with what you have
             </h1>
             <p className="lead text-vintage-light-beige/98 mb-10 max-w-3xl mx-auto text-center drop-shadow-lg text-xl font-medium">
-              Discover amazing recipes based on ingredients you already have at home. 
-              No more food waste, just delicious possibilities.
+              Turn the ingredients you already have into amazing meals. Discover personalized recipes that help you save time, reduce food waste, and enjoy delicious possibilities every day.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-8 justify-center mb-16">
-              <Button 
-                size="lg"
-                className="vintage-cta px-12 py-6 text-xl font-extrabold rounded-3xl transform hover:scale-110 transition-all duration-300 shadow-2xl hover:shadow-3xl group"
+              <Link 
+                href="/search" 
+                className="animated-button text-xl px-8 py-4"
                 data-testid="start-cooking-button"
-                asChild
               >
-                <Link href="/search" className="flex items-center">
-                  Start Cooking <ArrowRight className="ml-3 h-7 w-7 group-hover:translate-x-1 transition-transform duration-300" />
+                  Start Cooking
+                <ArrowRight className="button-icon ml-2" style={{ color: 'var(--vintage-warm-brown)' }} />
                 </Link>
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg"
-                className="px-12 py-6 text-xl font-extrabold border-3 border-vintage-light-beige text-vintage-light-beige hover:bg-vintage-light-beige hover:text-vintage-dark-green rounded-3xl transform hover:scale-110 transition-all duration-300 shadow-2xl hover:shadow-3xl group backdrop-blur-sm"
+                              <button 
+                  onClick={() => {
+                    const element = document.getElementById('how-it-works');
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  className="animated-button-secondary text-xl px-8 py-4"
                 data-testid="learn-more-button"
-                asChild
               >
-                <Link href="#features" className="flex items-center">
-                  Learn More <Play className="ml-3 h-7 w-7 group-hover:scale-110 transition-transform duration-300" />
-                </Link>
-              </Button>
+                  <ArrowRight className="button-icon mr-2" style={{ color: 'var(--vintage-warm-brown)' }} />
+                Learn More
+                </button>
             </div>
 
-            {/* Quick Ingredient Entry */}
-            <Card className="vintage-section bg-vintage-light-beige/25 backdrop-blur-lg shadow-2xl rounded-3xl border-2 border-vintage-warm-brown/30 hover:shadow-3xl transition-all duration-500">
-              <CardContent className="p-10">
-                <h3 className="h3 vintage-text-primary mb-8 text-center font-extrabold text-2xl" style={{ fontFamily: 'var(--font-display)' }}>What ingredients do you have?</h3>
-                <div className="mb-4">
-                  <IngredientInput
-                    initialIngredients={ingredients}
-                    onChange={handleIngredientsChange}
-                    placeholder="Type ingredients or paste a list..."
-                    maxItems={20}
-                    onOpenImageModal={() => console.log("Open image modal")}
-                  />
+            {/* Simple Stats Section */}
+            <div className="max-w-4xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div className="text-center">
+                  <div className="text-5xl font-bold text-vintage-warm-brown mb-2">2,847</div>
+                  <div className="text-vintage-light-beige/90 text-lg">Recipes Available</div>
                 </div>
-                <Button 
-                  variant="secondary"
-                  className="vintage-button-secondary px-10 py-4 text-xl font-extrabold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group"
-                  data-testid="find-recipes-button"
-                  asChild
+                <div className="text-center">
+                  <div className="text-5xl font-bold text-vintage-warm-brown mb-2">156</div>
+                  <div className="text-vintage-light-beige/90 text-lg">Ingredients Supported</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-5xl font-bold text-vintage-warm-brown mb-2">98%</div>
+                  <div className="text-vintage-light-beige/90 text-lg">User Satisfaction</div>
+                </div>
+              </div>
+
+              {/* Simple Call to Action */}
+              <div className="text-center">
+                <Link 
+                  href="/search" 
+                  className="animated-button explore-button font-extrabold"
+                  style={{ maxWidth: '300px' }}
                 >
-                  <Link href="/search" className="flex items-center">
-                    Find Recipes <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform duration-300" />
+                  Explore All Recipes 
+                  <ArrowRight className="button-icon ml-2" style={{ color: 'var(--vintage-warm-brown)' }} />
                   </Link>
-                </Button>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
+
       </section>
 
+
       {/* Features Section */}
-      <section className="section-padding bg-muted/30">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="section-padding bg-muted/30 relative">
+        <div className="absolute inset-0 z-0">
+          <ThemeAwarePixelBlast
+            variant="circle"
+            pixelSize={5}
+            patternScale={2.5}
+            patternDensity={0.8}
+            pixelSizeJitter={0.4}
+            enableRipples
+            rippleSpeed={0.35}
+            rippleThickness={0.15}
+            rippleIntensityScale={1.0}
+            liquid
+            liquidStrength={0.06}
+            liquidRadius={0.8}
+            liquidWobbleSpeed={3.5}
+            speed={0.35}
+            edgeFade={0.4}
+            transparent
+            className=""
+            style={{}}
+          />
+        </div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto">
             <h2 className="h2 text-vintage-light-beige mb-12">Why Ingredo?</h2>
             <div className="grid md:grid-cols-3 gap-8">
@@ -195,8 +222,30 @@ export default function Home() {
       </section>
 
       {/* Sample Recipes */}
-      <section className="section-padding">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="section-padding relative">
+        <div className="absolute inset-0 z-0">
+          <ThemeAwarePixelBlast
+            variant="circle"
+            pixelSize={4}
+            patternScale={2}
+            patternDensity={1.0}
+            pixelSizeJitter={0.3}
+            enableRipples
+            rippleSpeed={0.3}
+            rippleThickness={0.1}
+            rippleIntensityScale={1.2}
+            liquid
+            liquidStrength={0.08}
+            liquidRadius={1.0}
+            liquidWobbleSpeed={4}
+            speed={0.4}
+            edgeFade={0.3}
+            transparent
+            className=""
+            style={{}}
+          />
+        </div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto">
             <h2 className="h2 text-vintage-light-beige mb-12">Popular Recipes</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -208,9 +257,9 @@ export default function Home() {
                   onMouseLeave={handleRecipeLeave}
                 >
                   <div className="relative overflow-hidden">
-                    <img 
-                      src={recipe.image}
-                      alt={recipe.title}
+                  <img 
+                    src={recipe.image}
+                    alt={recipe.title}
                       className={`w-full h-48 object-cover transition-transform duration-300 ${
                         hoveredRecipe === recipe.id ? 'scale-105' : ''
                       }`}
@@ -275,38 +324,98 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary/5 to-accent/5">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-6">Ready to start cooking?</h2>
-            <p className="text-xl text-muted-foreground mb-8">
-              Join thousands of home cooks discovering new recipes with ingredients they already have.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg"
-                className="px-8 py-3 transform hover:scale-105 transition-transform"
-                data-testid="get-started-button"
-                asChild
+      {/* How It Works Section */}
+      <section className="section-padding relative" id="how-it-works">
+        <div className="absolute inset-0 z-0">
+          <ThemeAwarePixelBlast
+            variant="circle"
+            pixelSize={5}
+            patternScale={2}
+            patternDensity={1}
+            pixelSizeJitter={0.3}
+            enableRipples
+            rippleSpeed={0.3}
+            rippleThickness={0.1}
+            rippleIntensityScale={1.2}
+            liquid
+            liquidStrength={0.08}
+            liquidRadius={1}
+            liquidWobbleSpeed={4}
+            speed={0.4}
+            edgeFade={0.3}
+            transparent
+            className=""
+            style={{}}
+          />
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="vintage-hero w-full mx-auto text-center bg-vintage-light-beige/10 backdrop-blur-sm rounded-3xl p-16 shadow-2xl border border-vintage-warm-brown/10 hover:shadow-3xl transition-all duration-500">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-vintage-light-beige mb-4">
+                How It Works
+              </h2>
+              <p className="text-vintage-light-beige/80 text-lg max-w-2xl mx-auto">
+                Get started with Ingredo in just three simple steps
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Step 1 */}
+            <div className="group bg-vintage-dark-green/20 backdrop-blur-sm rounded-2xl p-6 border border-vintage-warm-brown/20 hover:bg-vintage-dark-green/30 transition-all duration-300">
+              <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
+                1
+              </div>
+              <h3 className="text-xl font-semibold text-vintage-light-beige mb-3 text-center">
+                Add Your Ingredients
+              </h3>
+              <p className="text-vintage-light-beige/80 leading-relaxed text-left">
+                Simply type or select the ingredients you have in your kitchen. Our smart system will recognize them instantly.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="group bg-vintage-dark-green/20 backdrop-blur-sm rounded-2xl p-6 border border-vintage-warm-brown/20 hover:bg-vintage-dark-green/30 transition-all duration-300">
+              <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
+                2
+              </div>
+              <h3 className="text-xl font-semibold text-vintage-light-beige mb-3 text-center">
+                Discover Recipes
+              </h3>
+              <p className="text-vintage-light-beige/80 leading-relaxed text-left">
+                Browse through perfectly matched recipes or explore creative suggestions based on your available ingredients.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="group bg-vintage-dark-green/20 backdrop-blur-sm rounded-2xl p-6 border border-vintage-warm-brown/20 hover:bg-vintage-dark-green/30 transition-all duration-300">
+              <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
+                3
+              </div>
+              <h3 className="text-xl font-semibold text-vintage-light-beige mb-3 text-center">
+                Start Cooking
+              </h3>
+              <p className="text-vintage-light-beige/80 leading-relaxed text-left">
+                Follow step-by-step instructions and create delicious meals while reducing food waste in your kitchen.
+              </p>
+            </div>
+          </div>
+
+            {/* CTA Button */}
+            <div className="text-center mt-12">
+              <Link 
+                href="/search" 
+                className="animated-button explore-button font-extrabold"
+                style={{ maxWidth: '300px' }}
               >
-                <Link href="/search">
-                  Get Started Free
+                Get Started Now
+                <ArrowRight className="button-icon ml-2" style={{ color: 'var(--vintage-warm-brown)' }} />
                 </Link>
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="lg"
-                className="px-8 py-3"
-                data-testid="watch-demo-button"
-              >
-                <Play className="mr-2 h-4 w-4" />
-                Watch Demo
-              </Button>
             </div>
           </div>
         </div>
       </section>
+
     </div>
   );
 }

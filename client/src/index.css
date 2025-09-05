@@ -7,25 +7,25 @@
   /* Vintage Color Palette */
   --vintage-dark-green: #414A37;
   --vintage-warm-brown: #99744A;
-  --vintage-light-beige: #DBC2A6;
+  --vintage-light-beige: #f7ede6;
   
   /* Main theme colors using vintage palette */
-  --background: #DBC2A6; /* Light beige background */
+  --background: #f7ede6; /* Light beige background */
   --foreground: #414A37; /* Dark green text */
-  --card: #DBC2A6; /* Light beige cards */
+  --card: #f7ede6; /* Light beige cards */
   --card-foreground: #414A37; /* Dark green text on cards */
-  --popover: #DBC2A6; /* Light beige popovers */
+  --popover: #f7ede6; /* Light beige popovers */
   --popover-foreground: #414A37; /* Dark green text on popovers */
   --primary: #414A37; /* Dark green primary */
-  --primary-foreground: #DBC2A6; /* Light beige text on primary */
+  --primary-foreground: #f7ede6; /* Light beige text on primary */
   --secondary: #99744A; /* Warm brown secondary */
-  --secondary-foreground: #DBC2A6; /* Light beige text on secondary */
+  --secondary-foreground: #f7ede6; /* Light beige text on secondary */
   --muted: #F5F0E8; /* Very light beige for muted backgrounds */
   --muted-foreground: #6B6B6B; /* Muted text color */
   --accent: #99744A; /* Warm brown accent */
-  --accent-foreground: #DBC2A6; /* Light beige text on accent */
-  --destructive: #DC2626; /* Red for destructive actions */
-  --destructive-foreground: #DBC2A6; /* Light beige text on destructive */
+  --accent-foreground: #f7ede6; /* Light beige text on accent */
+  --destructive: #000000; /* Red for destructive actions */
+  --destructive-foreground: #f7ede6; /* Light beige text on destructive */
   --border: #C4B5A0; /* Light brown borders */
   --input: #F5F0E8; /* Very light beige input backgrounds */
   --ring: #414A37; /* Dark green focus rings */
@@ -34,12 +34,12 @@
   --chart-3: #6B6B6B; /* Muted color for charts */
   --chart-4: #C4B5A0; /* Light brown for charts */
   --chart-5: #F5F0E8; /* Very light beige for charts */
-  --sidebar: #DBC2A6; /* Light beige sidebar */
+  --sidebar: #f7ede6; /* Light beige sidebar */
   --sidebar-foreground: #414A37; /* Dark green sidebar text */
   --sidebar-primary: #414A37; /* Dark green sidebar primary */
-  --sidebar-primary-foreground: #DBC2A6; /* Light beige text on sidebar primary */
+  --sidebar-primary-foreground: #f7ede6; /* Light beige text on sidebar primary */
   --sidebar-accent: #99744A; /* Warm brown sidebar accent */
-  --sidebar-accent-foreground: #DBC2A6; /* Light beige text on sidebar accent */
+  --sidebar-accent-foreground: #f7ede6; /* Light beige text on sidebar accent */
   --sidebar-border: #C4B5A0; /* Light brown sidebar borders */
   --sidebar-ring: #414A37; /* Dark green sidebar focus rings */
   --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
@@ -48,49 +48,51 @@
   --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, monospace;
   --radius: 0.5rem;
   --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.05);
-  --shadow-xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.05);
-  --shadow-sm: 0px 1px 2px 0px hsl(0 0% 0% / 0.05), 0px 1px 3px 0px hsl(0 0% 0% / 0.1);
-  --shadow: 0px 1px 2px 0px hsl(0 0% 0% / 0.05), 0px 1px 3px 0px hsl(0 0% 0% / 0.1);
-  --shadow-md: 0px 2px 4px -1px hsl(0 0% 0% / 0.1), 0px 4px 6px -1px hsl(0 0% 0% / 0.1);
-  --shadow-lg: 0px 4px 6px -2px hsl(0 0% 0% / 0.1), 0px 10px 15px -3px hsl(0 0% 0% / 0.1);
-  --shadow-xl: 0px 8px 10px -4px hsl(0 0% 0% / 0.1), 0px 20px 25px -5px hsl(0 0% 0% / 0.1);
-  --shadow-2xl: 0px 25px 50px -12px hsl(0 0% 0% / 0.25);
-  --tracking-normal: 0em;
-  --spacing: 0.25rem;
+}
+
+
+/* Smooth theme transitions */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Theme switching animation */
+html {
+  transition: all 0.3s ease;
 }
 
 .dark {
   /* Dark mode using vintage palette - darker, richer tones */
   --background: #2A2F24; /* Very dark green background */
-  --foreground: #DBC2A6; /* Light beige text */
+  --foreground: #f7ede6; /* Light beige text */
   --card: #414A37; /* Dark green cards */
-  --card-foreground: #DBC2A6; /* Light beige text on cards */
+  --card-foreground: #f7ede6; /* Light beige text on cards */
   --popover: #414A37; /* Dark green popovers */
-  --popover-foreground: #DBC2A6; /* Light beige text on popovers */
+  --popover-foreground: #f7ede6; /* Light beige text on popovers */
   --primary: #99744A; /* Warm brown primary in dark mode */
   --primary-foreground: #2A2F24; /* Very dark green text on primary */
   --secondary: #6B5B47; /* Darker warm brown secondary */
-  --secondary-foreground: #DBC2A6; /* Light beige text on secondary */
+  --secondary-foreground: #f7ede6; /* Light beige text on secondary */
   --muted: #3A4034; /* Dark muted green */
   --muted-foreground: #A69B8A; /* Muted light beige */
   --accent: #99744A; /* Warm brown accent */
   --accent-foreground: #2A2F24; /* Very dark green text on accent */
   --destructive: #DC2626; /* Red for destructive actions */
-  --destructive-foreground: #DBC2A6; /* Light beige text on destructive */
+  --destructive-foreground: #f7ede6; /* Light beige text on destructive */
   --border: #5A6350; /* Medium dark green borders */
   --input: #3A4034; /* Dark muted green input backgrounds */
   --ring: #99744A; /* Warm brown focus rings */
   --chart-1: #99744A; /* Warm brown for charts */
-  --chart-2: #DBC2A6; /* Light beige for charts */
+  --chart-2: #f7ede6; /* Light beige for charts */
   --chart-3: #A69B8A; /* Muted light beige for charts */
   --chart-4: #5A6350; /* Medium dark green for charts */
   --chart-5: #3A4034; /* Dark muted green for charts */
   --sidebar: #2A2F24; /* Very dark green sidebar */
-  --sidebar-foreground: #DBC2A6; /* Light beige sidebar text */
+  --sidebar-foreground: #f7ede6; /* Light beige sidebar text */
   --sidebar-primary: #99744A; /* Warm brown sidebar primary */
   --sidebar-primary-foreground: #2A2F24; /* Very dark green text on sidebar primary */
   --sidebar-accent: #6B5B47; /* Darker warm brown sidebar accent */
-  --sidebar-accent-foreground: #DBC2A6; /* Light beige text on sidebar accent */
+  --sidebar-accent-foreground: #f7ede6; /* Light beige text on sidebar accent */
   --sidebar-border: #5A6350; /* Medium dark green sidebar borders */
   --sidebar-ring: #99744A; /* Warm brown sidebar focus rings */
   --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
@@ -352,24 +354,34 @@
   background: var(--vintage-dark-green);
   color: var(--vintage-light-beige);
   border: 2px solid var(--vintage-dark-green);
-  transition: all 0.3s ease;
+  border-radius: 6px;
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .vintage-button:hover {
   background: var(--vintage-warm-brown);
   border-color: var(--vintage-warm-brown);
-  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .vintage-button-secondary {
   background: transparent;
   color: var(--vintage-dark-green);
   border: 2px solid var(--vintage-dark-green);
+  border-radius: 6px;
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .vintage-button-secondary:hover {
   background: var(--vintage-dark-green);
   color: var(--vintage-light-beige);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .vintage-accent {
@@ -407,11 +419,194 @@
 
 /* Enhanced vintage styling for better visual hierarchy */
 .vintage-section {
-  background: linear-gradient(135deg, var(--vintage-light-beige) 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, var(--vintage-light-beige) 0%, #FFFFFF 100%);
   border: 2px solid var(--vintage-warm-brown);
   border-radius: 16px;
   padding: 2rem;
   box-shadow: 0 4px 16px rgba(65, 74, 55, 0.1);
+}
+
+/* Animated Button Styles */
+.animated-button {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 0 auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  font-size: 1.125rem;
+  backdrop-filter: blur(16px);
+  font-weight: 600;
+  isolation: isolate;
+  border: 2px solid;
+  position: relative;
+  z-index: 10;
+  padding: 0.75rem 1.5rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: var(--vintage-light-beige);
+  border-color: var(--vintage-light-beige);
+  color: var(--vintage-dark-green);
+  transition: all 0.3s ease;
+}
+
+/* Animated Circular Border for Step Numbers */
+.step-number {
+  position: relative;
+  overflow: hidden;
+}
+
+.step-number::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--vintage-warm-brown), var(--vintage-light-beige), var(--vintage-warm-brown));
+  background-size: 200% 200%;
+  border-radius: 50%;
+  z-index: -1;
+  animation: rotate-border 3s linear infinite;
+}
+
+@keyframes rotate-border {
+  0% {
+    background-position: 0% 50%;
+    transform: rotate(0deg);
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+    transform: rotate(360deg);
+  }
+}
+
+.animated-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--vintage-warm-brown);
+  transition: all 0.7s ease;
+  z-index: -1;
+  border-radius: inherit;
+}
+
+.animated-button:hover::before {
+  left: 0;
+  transform: scale(1.5);
+  transition: all 0.7s ease;
+}
+
+.animated-button:hover {
+  color: var(--vintage-light-beige);
+  border-color: var(--vintage-warm-brown);
+}
+
+.animated-button .button-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  justify-content: flex-end;
+  border-radius: 9999px;
+  border: 1px solid var(--vintage-warm-brown);
+  padding: 0.375rem;
+  transform: rotate(45deg);
+  color: var(--vintage-warm-brown);
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.animated-button:hover .button-icon {
+  transform: rotate(90deg);
+  background: var(--vintage-light-beige);
+  border: none;
+  color: var(--vintage-dark-green);
+}
+
+/* Explore Button - Same size as other buttons but wider */
+.animated-button.explore-button {
+  font-size: 1.125rem;
+  padding: 0.75rem 2rem;
+  min-width: 250px;
+}
+
+.animated-button.explore-button .button-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0.375rem;
+}
+
+/* Secondary Animated Button */
+.animated-button-secondary {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 0 auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  font-size: 1.125rem;
+  backdrop-filter: blur(16px);
+  font-weight: 600;
+  isolation: isolate;
+  border: 2px solid;
+  position: relative;
+  z-index: 10;
+  padding: 0.75rem 1.5rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: transparent;
+  border-color: var(--vintage-warm-brown);
+  color: var(--vintage-warm-brown);
+  transition: all 0.3s ease;
+}
+
+.animated-button-secondary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--vintage-warm-brown);
+  transition: all 0.7s ease;
+  z-index: -1;
+  border-radius: inherit;
+}
+
+.animated-button-secondary:hover::before {
+  left: 0;
+  transform: scale(1.5);
+  transition: all 0.7s ease;
+}
+
+.animated-button-secondary:hover {
+  color: var(--vintage-light-beige);
+  border-color: var(--vintage-warm-brown);
+}
+
+.animated-button-secondary .button-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  justify-content: flex-end;
+  border-radius: 9999px;
+  border: 1px solid var(--vintage-warm-brown);
+  padding: 0.375rem;
+  transform: rotate(45deg);
+  color: var(--vintage-warm-brown) !important;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.animated-button-secondary:hover .button-icon {
+  transform: rotate(90deg);
+  background: var(--vintage-light-beige) !important;
+  border: 1px solid var(--vintage-light-beige);
+  color: var(--vintage-dark-green) !important;
 }
 
 .vintage-hero {

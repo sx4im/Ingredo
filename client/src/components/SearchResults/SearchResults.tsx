@@ -199,9 +199,9 @@ export function SearchResults({
     return (
       <Card className={className}>
         <CardContent className="p-8 text-center">
-          <div className="text-destructive mb-4">
-            <Search className="mx-auto h-12 w-12 mb-4 opacity-50" />
-            <h3 className="text-lg font-medium mb-2">Search failed</h3>
+          <div className="flex flex-col items-center justify-center">
+            <Search className="h-12 w-12 mb-4 text-vintage-light-beige" />
+            <h3 className="text-lg font-medium mb-2 text-vintage-light-beige">Search failed</h3>
             <p className="text-muted-foreground mb-4">
               We couldn't find any recipes. Please try again.
             </p>

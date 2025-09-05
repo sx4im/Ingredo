@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
-import { useTheme } from "@/ui/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -13,7 +12,7 @@ import {
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Leaf, Search, Sun, Moon, Menu, User, Heart, BookOpen, Settings, LogOut } from "lucide-react";
+import { Leaf, Search, Menu, User, Heart, BookOpen, Settings, LogOut } from "lucide-react";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -21,7 +20,6 @@ interface AppShellProps {
 
 export function AppShell({ children }: AppShellProps) {
   const [location] = useLocation();
-  const { theme, toggleTheme } = useTheme();
   const [searchQuery, setSearchQuery] = React.useState("");
 
   const navigation = [
@@ -41,7 +39,7 @@ export function AppShell({ children }: AppShellProps) {
     <div className="min-h-screen flex flex-col">
       {/* Header */}
       <div className="w-full px-4 py-2">
-        <header className="mx-auto max-w-7xl bg-vintage-light-beige rounded-lg">
+        <header className="mx-auto max-w-7xl bg-vintage-light-beige rounded-lg border-2 border-vintage-warm-brown/20 shadow-lg">
           <div className="px-6 py-3">
             <div className="flex h-12 items-center justify-between">
             {/* Logo */}
@@ -49,7 +47,7 @@ export function AppShell({ children }: AppShellProps) {
               <img 
                 src="/logo.png" 
                 alt="Ingredo Logo" 
-                className="w-16 h-16 rounded-lg group-hover:opacity-80 transition-opacity duration-200"
+                className="w-16 h-16 rounded-xl group-hover:opacity-80 transition-opacity duration-200 shadow-md"
               />
             </Link>
 
@@ -88,22 +86,6 @@ export function AppShell({ children }: AppShellProps) {
 
             {/* Right Actions */}
             <div className="flex items-center space-x-4">
-              {/* Theme Toggle */}
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleTheme}
-                aria-label="Toggle theme"
-                data-testid="theme-toggle"
-                className="h-8 w-8 text-vintage-dark-green hover:text-vintage-warm-brown transition-colors duration-200"
-              >
-                {theme === "light" ? (
-                  <Moon className="h-4 w-4" />
-                ) : (
-                  <Sun className="h-4 w-4" />
-                )}
-              </Button>
-
               {/* Profile Menu */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

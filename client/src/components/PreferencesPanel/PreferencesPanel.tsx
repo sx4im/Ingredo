@@ -393,14 +393,14 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
             <div className="space-y-2">
               <Label className="text-sm font-medium">Cuisine</Label>
               <Select
-                value={filters.cuisine || ""}
-                onValueChange={(value) => updateFilter("cuisine", value || undefined)}
+                value={filters.cuisine || "any"}
+                onValueChange={(value) => updateFilter("cuisine", value === "any" ? undefined : value)}
               >
                 <SelectTrigger data-testid="cuisine-select">
                   <SelectValue placeholder="Any cuisine" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Any cuisine</SelectItem>
+                  <SelectItem value="any">Any cuisine</SelectItem>
                   {CUISINE_OPTIONS.map(cuisine => (
                     <SelectItem key={cuisine} value={cuisine}>{cuisine}</SelectItem>
                   ))}

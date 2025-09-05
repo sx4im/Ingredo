@@ -17,6 +17,7 @@ import {
   Settings,
   ChefHat
 } from "lucide-react";
+import ThemeAwarePixelBlast from "@/components/ThemeAwarePixelBlast";
 
 interface UserProfile {
   id: string;
@@ -106,8 +107,33 @@ export default function Profile() {
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="relative min-h-screen">
+      {/* PixelBlast Background */}
+      <div className="absolute inset-0 z-0">
+        <ThemeAwarePixelBlast
+          variant="circle"
+          pixelSize={5}
+          patternScale={2.5}
+          patternDensity={0.8}
+          pixelSizeJitter={0.4}
+          enableRipples
+          rippleSpeed={0.35}
+          rippleThickness={0.15}
+          rippleIntensityScale={1.0}
+          liquid
+          liquidStrength={0.06}
+          liquidRadius={0.8}
+          liquidWobbleSpeed={3.5}
+          speed={0.35}
+          edgeFade={0.4}
+          transparent
+          className=""
+          style={{}}
+        />
+      </div>
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+        <div className="max-w-6xl mx-auto">
         {/* Profile Header */}
         <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-8">
           <Avatar className="h-20 w-20">
@@ -386,6 +412,7 @@ export default function Profile() {
             )}
           </TabsContent>
         </Tabs>
+        </div>
       </div>
     </div>
   );
