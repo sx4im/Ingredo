@@ -675,3 +675,47 @@ html {
   border: 2px solid var(--background);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  /* Hide background and overlays when printing */
+  .fixed {
+    display: none !important;
+  }
+  
+  /* Ensure recipe content is visible */
+  .recipe-print-content {
+    color: #000 !important;
+    background: #fff !important;
+  }
+  
+  /* Hide non-essential UI elements */
+  .print-hidden {
+    display: none !important;
+  }
+  
+  /* Style for print layout */
+  .recipe-print-content h1 {
+    color: #000 !important;
+    font-size: 24px !important;
+  }
+  
+  .recipe-print-content h2 {
+    color: #000 !important;
+    font-size: 18px !important;
+  }
+  
+  .recipe-print-content p {
+    color: #000 !important;
+  }
+  
+  /* Ensure proper page breaks */
+  .recipe-section {
+    page-break-inside: avoid;
+  }
+}

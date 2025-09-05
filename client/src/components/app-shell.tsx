@@ -38,7 +38,7 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <div className="w-full px-4 py-2">
+      <div className="w-full px-4 py-2 relative z-50">
         <header className="mx-auto max-w-7xl bg-vintage-light-beige rounded-lg border-2 border-vintage-warm-brown/20 shadow-lg">
           <div className="px-6 py-3">
             <div className="flex h-12 items-center justify-between">
@@ -49,6 +49,12 @@ export function AppShell({ children }: AppShellProps) {
                 alt="Ingredo Logo" 
                 className="w-16 h-16 rounded-xl group-hover:opacity-80 transition-opacity duration-200 shadow-md"
               />
+              <span 
+                className="ml-3 text-3xl font-bold text-vintage-dark-green group-hover:text-vintage-warm-brown transition-colors duration-200"
+                style={{ fontFamily: 'var(--font-display)' }}
+              >
+                Ingredo
+              </span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -182,12 +188,12 @@ export function AppShell({ children }: AppShellProps) {
       </div>
 
       {/* Main Content */}
-      <main className="flex-1">
+      <main className="flex-1 relative z-10">
         {children}
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border bg-muted/30">
+      <footer className="border-t border-border bg-muted/30 relative z-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="col-span-2 lg:col-span-1">

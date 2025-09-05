@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Chip } from "@/components/ui/chip";
-import ThemeAwarePixelBlast from "@/components/ThemeAwarePixelBlast";
+import Iridescence from "@/components/Iridescence";
 import { type IngredientChip } from "@shared/schema";
 import { Search, ChefHat, Recycle, Heart, Plus, Star, Bookmark, ArrowRight, Clock, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -56,7 +56,7 @@ export default function Home() {
       id: 3,
       title: "Classic Pasta Marinara",
       description: "Authentic Italian pasta with homemade marinara sauce and fresh herbs.",
-      image: "https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?ixlib=rb-4.0.3&w=600&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&w=600&h=400&fit=crop",
       time: "45 min",
       rating: 4.9,
       reviews: 203,
@@ -65,31 +65,21 @@ export default function Home() {
   ];
 
   return (
-    <div>
+    <div className="relative min-h-screen">
+      {/* Unified Iridescence Background for entire discover section */}
+      <div className="fixed inset-0 z-0">
+        <Iridescence
+          color={[0.26, 0.29, 0.22]} // vintage-dark-green in RGB (0-1 range)
+          mouseReact={true}
+          amplitude={0.15}
+          speed={0.8}
+        />
+        {/* Dark overlay for better visibility */}
+        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(65, 74, 55, 0.6)' }}></div>
+      </div>
+
       {/* Hero Section */}
-      <section className="relative w-full h-screen flex items-center justify-center">
-        <div className="absolute inset-0 z-0">
-          <ThemeAwarePixelBlast
-            variant="circle"
-            pixelSize={6}
-            patternScale={3}
-            patternDensity={1.2}
-            pixelSizeJitter={0.5}
-            enableRipples
-            rippleSpeed={0.4}
-            rippleThickness={0.12}
-            rippleIntensityScale={1.5}
-            liquid
-            liquidStrength={0.12}
-            liquidRadius={1.2}
-            liquidWobbleSpeed={5}
-            speed={0.6}
-            edgeFade={0.25}
-            transparent
-            className=""
-            style={{}}
-          />
-        </div>
+      <section className="relative w-full h-screen flex items-center justify-center z-10">
         
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="vintage-hero w-full mx-auto text-center bg-vintage-light-beige/10 backdrop-blur-sm rounded-3xl p-16 shadow-2xl border border-vintage-warm-brown/10 hover:shadow-3xl transition-all duration-500">
@@ -160,60 +150,38 @@ export default function Home() {
 
 
       {/* Features Section */}
-      <section className="section-padding bg-muted/30 relative">
-        <div className="absolute inset-0 z-0">
-          <ThemeAwarePixelBlast
-            variant="circle"
-            pixelSize={5}
-            patternScale={2.5}
-            patternDensity={0.8}
-            pixelSizeJitter={0.4}
-            enableRipples
-            rippleSpeed={0.35}
-            rippleThickness={0.15}
-            rippleIntensityScale={1.0}
-            liquid
-            liquidStrength={0.06}
-            liquidRadius={0.8}
-            liquidWobbleSpeed={3.5}
-            speed={0.35}
-            edgeFade={0.4}
-            transparent
-            className=""
-            style={{}}
-          />
-        </div>
+      <section className="section-padding relative z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto">
             <h2 className="h2 text-vintage-light-beige mb-12">Why Ingredo?</h2>
             <div className="grid md:grid-cols-3 gap-8">
               <Card className="shadow-sm hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                    <ChefHat className="h-6 w-6 text-primary" />
+                  <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
+                    <ChefHat className="h-6 w-6" style={{ color: '#FF6B35' }} />
                   </div>
-                  <h3 className="h5 vintage-text-primary mb-2">Smart Recipe Matching</h3>
-                  <p className="text-muted-foreground">Our AI finds recipes that maximize your available ingredients and minimize shopping needs.</p>
+                  <h3 className="h5 text-vintage-light-beige mb-2">Smart Recipe Matching</h3>
+                  <p className="text-vintage-light-beige/90">Our AI finds recipes that maximize your available ingredients and minimize shopping needs.</p>
                 </CardContent>
               </Card>
 
               <Card className="shadow-sm hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
-                  <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4">
-                    <Recycle className="h-6 w-6 text-accent" />
+                  <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
+                    <Recycle className="h-6 w-6" style={{ color: '#4CAF50' }} />
                   </div>
-                  <h3 className="h5 vintage-text-primary mb-2">Reduce Food Waste</h3>
-                  <p className="text-muted-foreground">Use what you have before it spoils. Track expiration dates and get timely recipe suggestions.</p>
+                  <h3 className="h5 text-vintage-light-beige mb-2">Reduce Food Waste</h3>
+                  <p className="text-vintage-light-beige/90">Use what you have before it spoils. Track expiration dates and get timely recipe suggestions.</p>
                 </CardContent>
               </Card>
 
               <Card className="shadow-sm hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
-                  <div className="w-12 h-12 bg-secondary/60 rounded-lg flex items-center justify-center mb-4">
-                    <Heart className="h-6 w-6 text-secondary-foreground" />
+                  <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
+                    <Heart className="h-6 w-6" style={{ color: '#E91E63' }} />
                   </div>
-                  <h3 className="h5 vintage-text-primary mb-2">Save Favorites</h3>
-                  <p className="text-muted-foreground">Build your personal cookbook with recipes you love and organize them into collections.</p>
+                  <h3 className="h5 text-vintage-light-beige mb-2">Save Favorites</h3>
+                  <p className="text-vintage-light-beige/90">Build your personal cookbook with recipes you love and organize them into collections.</p>
                 </CardContent>
               </Card>
             </div>
@@ -222,29 +190,7 @@ export default function Home() {
       </section>
 
       {/* Sample Recipes */}
-      <section className="section-padding relative">
-        <div className="absolute inset-0 z-0">
-          <ThemeAwarePixelBlast
-            variant="circle"
-            pixelSize={4}
-            patternScale={2}
-            patternDensity={1.0}
-            pixelSizeJitter={0.3}
-            enableRipples
-            rippleSpeed={0.3}
-            rippleThickness={0.1}
-            rippleIntensityScale={1.2}
-            liquid
-            liquidStrength={0.08}
-            liquidRadius={1.0}
-            liquidWobbleSpeed={4}
-            speed={0.4}
-            edgeFade={0.3}
-            transparent
-            className=""
-            style={{}}
-          />
-        </div>
+      <section className="section-padding relative z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto">
             <h2 className="h2 text-vintage-light-beige mb-12">Popular Recipes</h2>
@@ -325,29 +271,7 @@ export default function Home() {
       </section>
 
       {/* How It Works Section */}
-      <section className="section-padding relative" id="how-it-works">
-        <div className="absolute inset-0 z-0">
-          <ThemeAwarePixelBlast
-            variant="circle"
-            pixelSize={5}
-            patternScale={2}
-            patternDensity={1}
-            pixelSizeJitter={0.3}
-            enableRipples
-            rippleSpeed={0.3}
-            rippleThickness={0.1}
-            rippleIntensityScale={1.2}
-            liquid
-            liquidStrength={0.08}
-            liquidRadius={1}
-            liquidWobbleSpeed={4}
-            speed={0.4}
-            edgeFade={0.3}
-            transparent
-            className=""
-            style={{}}
-          />
-        </div>
+      <section className="section-padding relative z-10" id="how-it-works">
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="vintage-hero w-full mx-auto text-center bg-vintage-light-beige/10 backdrop-blur-sm rounded-3xl p-16 shadow-2xl border border-vintage-warm-brown/10 hover:shadow-3xl transition-all duration-500">

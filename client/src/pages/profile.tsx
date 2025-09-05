@@ -17,7 +17,7 @@ import {
   Settings,
   ChefHat
 } from "lucide-react";
-import ThemeAwarePixelBlast from "@/components/ThemeAwarePixelBlast";
+import Iridescence from "@/components/Iridescence";
 
 interface UserProfile {
   id: string;
@@ -108,28 +108,16 @@ export default function Profile() {
 
   return (
     <div className="relative min-h-screen">
-      {/* PixelBlast Background */}
-      <div className="absolute inset-0 z-0">
-        <ThemeAwarePixelBlast
-          variant="circle"
-          pixelSize={5}
-          patternScale={2.5}
-          patternDensity={0.8}
-          pixelSizeJitter={0.4}
-          enableRipples
-          rippleSpeed={0.35}
-          rippleThickness={0.15}
-          rippleIntensityScale={1.0}
-          liquid
-          liquidStrength={0.06}
-          liquidRadius={0.8}
-          liquidWobbleSpeed={3.5}
-          speed={0.35}
-          edgeFade={0.4}
-          transparent
-          className=""
-          style={{}}
+      {/* Unified Iridescence Background */}
+      <div className="fixed inset-0 z-0">
+        <Iridescence
+          color={[0.26, 0.29, 0.22]} // vintage-dark-green in RGB (0-1 range)
+          mouseReact={true}
+          amplitude={0.15}
+          speed={0.8}
         />
+        {/* Dark overlay for better visibility */}
+        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(65, 74, 55, 0.6)' }}></div>
       </div>
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">

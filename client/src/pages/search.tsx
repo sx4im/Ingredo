@@ -8,7 +8,7 @@ import { SearchResults } from "@/components/SearchResults";
 import { type IngredientChip, type SearchFilters } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { Search as SearchIcon } from "lucide-react";
-import ThemeAwarePixelBlast from "@/components/ThemeAwarePixelBlast";
+import Iridescence from "@/components/Iridescence";
 
 export default function Search() {
   const [selectedIngredients, setSelectedIngredients] = React.useState<IngredientChip[]>([]);
@@ -51,28 +51,16 @@ export default function Search() {
 
   return (
     <div className="relative min-h-screen">
-      {/* PixelBlast Background */}
-      <div className="absolute inset-0 z-0">
-        <ThemeAwarePixelBlast
-          variant="circle"
-          pixelSize={4}
-          patternScale={2}
-          patternDensity={1.0}
-          pixelSizeJitter={0.3}
-          enableRipples
-          rippleSpeed={0.3}
-          rippleThickness={0.1}
-          rippleIntensityScale={1.2}
-          liquid
-          liquidStrength={0.08}
-          liquidRadius={1.0}
-          liquidWobbleSpeed={4}
-          speed={0.4}
-          edgeFade={0.3}
-          transparent
-          className=""
-          style={{}}
+      {/* Unified Iridescence Background */}
+      <div className="fixed inset-0 z-0">
+        <Iridescence
+          color={[0.26, 0.29, 0.22]} // vintage-dark-green in RGB (0-1 range)
+          mouseReact={true}
+          amplitude={0.15}
+          speed={0.8}
         />
+        {/* Dark overlay for better visibility */}
+        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(65, 74, 55, 0.6)' }}></div>
       </div>
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
