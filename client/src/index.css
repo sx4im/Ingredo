@@ -4,44 +4,44 @@
 @tailwind utilities;
 
 :root {
-  /* Vintage Color Palette */
-  --vintage-dark-green: #414A37;
-  --vintage-warm-brown: #99744A;
-  --vintage-light-beige: #f7ede6;
+  /* Modern Professional Color Palette */
+  --vintage-dark-green: #1e40af; /* Vibrant blue */
+  --vintage-warm-brown: #f59e0b; /* Warm amber */
+  --vintage-light-beige: #fefefe; /* Clean white */
   
-  /* Main theme colors using vintage palette */
-  --background: #f7ede6; /* Light beige background */
-  --foreground: #414A37; /* Dark green text */
-  --card: #f7ede6; /* Light beige cards */
-  --card-foreground: #414A37; /* Dark green text on cards */
-  --popover: #f7ede6; /* Light beige popovers */
-  --popover-foreground: #414A37; /* Dark green text on popovers */
-  --primary: #414A37; /* Dark green primary */
-  --primary-foreground: #f7ede6; /* Light beige text on primary */
-  --secondary: #99744A; /* Warm brown secondary */
-  --secondary-foreground: #f7ede6; /* Light beige text on secondary */
-  --muted: #F5F0E8; /* Very light beige for muted backgrounds */
-  --muted-foreground: #6B6B6B; /* Muted text color */
-  --accent: #99744A; /* Warm brown accent */
-  --accent-foreground: #f7ede6; /* Light beige text on accent */
-  --destructive: #000000; /* Red for destructive actions */
-  --destructive-foreground: #f7ede6; /* Light beige text on destructive */
-  --border: #C4B5A0; /* Light brown borders */
-  --input: #F5F0E8; /* Very light beige input backgrounds */
-  --ring: #414A37; /* Dark green focus rings */
-  --chart-1: #414A37; /* Dark green for charts */
-  --chart-2: #99744A; /* Warm brown for charts */
-  --chart-3: #6B6B6B; /* Muted color for charts */
-  --chart-4: #C4B5A0; /* Light brown for charts */
-  --chart-5: #F5F0E8; /* Very light beige for charts */
-  --sidebar: #f7ede6; /* Light beige sidebar */
-  --sidebar-foreground: #414A37; /* Dark green sidebar text */
-  --sidebar-primary: #414A37; /* Dark green sidebar primary */
-  --sidebar-primary-foreground: #f7ede6; /* Light beige text on sidebar primary */
-  --sidebar-accent: #99744A; /* Warm brown sidebar accent */
-  --sidebar-accent-foreground: #f7ede6; /* Light beige text on sidebar accent */
-  --sidebar-border: #C4B5A0; /* Light brown sidebar borders */
-  --sidebar-ring: #414A37; /* Dark green sidebar focus rings */
+  /* Main theme colors using modern palette */
+  --background: #fefefe; /* Clean white background */
+  --foreground: #1e293b; /* Dark slate text */
+  --card: #ffffff; /* Pure white cards */
+  --card-foreground: #1e293b; /* Dark slate text on cards */
+  --popover: #ffffff; /* Pure white popovers */
+  --popover-foreground: #1e293b; /* Dark slate text on popovers */
+  --primary: #1e40af; /* Vibrant blue primary */
+  --primary-foreground: #ffffff; /* White text on primary */
+  --secondary: #f59e0b; /* Warm amber secondary */
+  --secondary-foreground: #ffffff; /* White text on secondary */
+  --muted: #f8fafc; /* Very light gray for muted backgrounds */
+  --muted-foreground: #1e40af; /* Bright blue text color */
+  --accent: #f59e0b; /* Warm amber accent */
+  --accent-foreground: #ffffff; /* White text on accent */
+  --destructive: #ef4444; /* Red for destructive actions */
+  --destructive-foreground: #ffffff; /* White text on destructive */
+  --border: #e2e8f0; /* Light gray borders */
+  --input: #f8fafc; /* Very light gray input backgrounds */
+  --ring: #1e40af; /* Vibrant blue focus rings */
+  --chart-1: #1e40af; /* Vibrant blue for charts */
+  --chart-2: #f59e0b; /* Warm amber for charts */
+  --chart-3: #64748b; /* Muted color for charts */
+  --chart-4: #f59e0b; /* Bright amber for charts */
+  --chart-5: #10b981; /* Bright emerald for charts */
+  --sidebar: #ffffff; /* Clean white sidebar */
+  --sidebar-foreground: #1e293b; /* Dark slate sidebar text */
+  --sidebar-primary: #1e40af; /* Vibrant blue sidebar primary */
+  --sidebar-primary-foreground: #ffffff; /* White text on sidebar primary */
+  --sidebar-accent: #f59e0b; /* Warm amber sidebar accent */
+  --sidebar-accent-foreground: #ffffff; /* White text on sidebar accent */
+  --sidebar-border: #e2e8f0; /* Light gray sidebar borders */
+  --sidebar-ring: #1e40af; /* Vibrant blue sidebar focus rings */
   --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
   --font-serif: 'Crimson Text', Georgia, 'Times New Roman', serif;
   --font-sans: 'Source Sans Pro', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
@@ -61,54 +61,6 @@ html {
   transition: all 0.3s ease;
 }
 
-.dark {
-  /* Dark mode using vintage palette - darker, richer tones */
-  --background: #2A2F24; /* Very dark green background */
-  --foreground: #f7ede6; /* Light beige text */
-  --card: #414A37; /* Dark green cards */
-  --card-foreground: #f7ede6; /* Light beige text on cards */
-  --popover: #414A37; /* Dark green popovers */
-  --popover-foreground: #f7ede6; /* Light beige text on popovers */
-  --primary: #99744A; /* Warm brown primary in dark mode */
-  --primary-foreground: #2A2F24; /* Very dark green text on primary */
-  --secondary: #6B5B47; /* Darker warm brown secondary */
-  --secondary-foreground: #f7ede6; /* Light beige text on secondary */
-  --muted: #3A4034; /* Dark muted green */
-  --muted-foreground: #A69B8A; /* Muted light beige */
-  --accent: #99744A; /* Warm brown accent */
-  --accent-foreground: #2A2F24; /* Very dark green text on accent */
-  --destructive: #DC2626; /* Red for destructive actions */
-  --destructive-foreground: #f7ede6; /* Light beige text on destructive */
-  --border: #5A6350; /* Medium dark green borders */
-  --input: #3A4034; /* Dark muted green input backgrounds */
-  --ring: #99744A; /* Warm brown focus rings */
-  --chart-1: #99744A; /* Warm brown for charts */
-  --chart-2: #f7ede6; /* Light beige for charts */
-  --chart-3: #A69B8A; /* Muted light beige for charts */
-  --chart-4: #5A6350; /* Medium dark green for charts */
-  --chart-5: #3A4034; /* Dark muted green for charts */
-  --sidebar: #2A2F24; /* Very dark green sidebar */
-  --sidebar-foreground: #f7ede6; /* Light beige sidebar text */
-  --sidebar-primary: #99744A; /* Warm brown sidebar primary */
-  --sidebar-primary-foreground: #2A2F24; /* Very dark green text on sidebar primary */
-  --sidebar-accent: #6B5B47; /* Darker warm brown sidebar accent */
-  --sidebar-accent-foreground: #f7ede6; /* Light beige text on sidebar accent */
-  --sidebar-border: #5A6350; /* Medium dark green sidebar borders */
-  --sidebar-ring: #99744A; /* Warm brown sidebar focus rings */
-  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  --font-serif: 'Crimson Text', Georgia, 'Times New Roman', serif;
-  --font-sans: 'Source Sans Pro', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, monospace;
-  --radius: 0.5rem;
-  --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.2);
-  --shadow-xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.2);
-  --shadow-sm: 0px 1px 2px 0px hsl(0 0% 0% / 0.2), 0px 1px 3px 0px hsl(0 0% 0% / 0.3);
-  --shadow: 0px 1px 2px 0px hsl(0 0% 0% / 0.2), 0px 1px 3px 0px hsl(0 0% 0% / 0.3);
-  --shadow-md: 0px 2px 4px -1px hsl(0 0% 0% / 0.3), 0px 4px 6px -1px hsl(0 0% 0% / 0.3);
-  --shadow-lg: 0px 4px 6px -2px hsl(0 0% 0% / 0.3), 0px 10px 15px -3px hsl(0 0% 0% / 0.3);
-  --shadow-xl: 0px 8px 10px -4px hsl(0 0% 0% / 0.3), 0px 20px 25px -5px hsl(0 0% 0% / 0.3);
-  --shadow-2xl: 0px 25px 50px -12px hsl(0 0% 0% / 0.5);
-}
 
 @layer base {
   * {
@@ -264,13 +216,13 @@ html {
     border: 2px solid var(--vintage-warm-brown);
     border-radius: 16px;
     padding: 2rem;
-    box-shadow: 0 8px 32px rgba(65, 74, 55, 0.15);
+    box-shadow: 0 8px 32px rgba(30, 41, 59, 0.15);
     transition: all 0.3s ease;
     text-align: center;
   }
 
   .vintage-card-enhanced:hover {
-    box-shadow: 0 16px 48px rgba(65, 74, 55, 0.25);
+    box-shadow: 0 16px 48px rgba(30, 41, 59, 0.25);
     transform: translateY(-4px);
   }
 
@@ -341,12 +293,12 @@ html {
 .vintage-card {
   background: var(--vintage-light-beige);
   border: 2px solid var(--vintage-warm-brown);
-  box-shadow: 0 4px 12px rgba(65, 74, 55, 0.15);
+  box-shadow: 0 4px 12px rgba(30, 41, 59, 0.15);
   transition: all 0.3s ease;
 }
 
 .vintage-card:hover {
-  box-shadow: 0 8px 24px rgba(65, 74, 55, 0.25);
+  box-shadow: 0 8px 24px rgba(30, 41, 59, 0.25);
   transform: translateY(-2px);
 }
 
@@ -405,14 +357,14 @@ html {
 .recipe-card-vintage {
   background: var(--vintage-light-beige);
   border: 1px solid var(--border);
-  box-shadow: 0 2px 8px rgba(65, 74, 55, 0.1);
+  box-shadow: 0 2px 8px rgba(30, 41, 59, 0.1);
   transition: all 0.3s ease;
   border-radius: 12px;
   overflow: hidden;
 }
 
 .recipe-card-vintage:hover {
-  box-shadow: 0 8px 24px rgba(65, 74, 55, 0.2);
+  box-shadow: 0 8px 24px rgba(30, 41, 59, 0.2);
   transform: translateY(-4px);
   border-color: var(--vintage-warm-brown);
 }
@@ -423,7 +375,7 @@ html {
   border: 2px solid var(--vintage-warm-brown);
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 4px 16px rgba(65, 74, 55, 0.1);
+  box-shadow: 0 4px 16px rgba(30, 41, 59, 0.1);
 }
 
 /* Animated Button Styles */
@@ -614,7 +566,7 @@ html {
   color: var(--vintage-light-beige);
   border-radius: 20px;
   padding: 3rem;
-  box-shadow: 0 8px 32px rgba(65, 74, 55, 0.3);
+  box-shadow: 0 8px 32px rgba(30, 41, 59, 0.3);
 }
 
 .vintage-cta {
@@ -631,7 +583,7 @@ html {
   background: var(--vintage-dark-green);
   border-color: var(--vintage-dark-green);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(65, 74, 55, 0.3);
+  box-shadow: 0 4px 12px rgba(30, 41, 59, 0.3);
 }
 
 .recipe-card-vintage .match-badge {

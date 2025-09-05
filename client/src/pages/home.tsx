@@ -70,13 +70,11 @@ export default function Home() {
       {/* Unified Iridescence Background for entire discover section */}
       <div className="fixed inset-0 z-0">
         <Iridescence
-          color={[0.26, 0.29, 0.22]} // vintage-dark-green in RGB (0-1 range)
+          color={[0.12, 0.25, 0.69]} // vibrant blue in RGB (0-1 range)
           mouseReact={true}
           amplitude={0.15}
           speed={0.8}
         />
-        {/* Dark overlay for better visibility */}
-        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(65, 74, 55, 0.6)' }}></div>
       </div>
 
       {/* Hero Section */}
@@ -84,10 +82,10 @@ export default function Home() {
         
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="vintage-hero w-full mx-auto text-center bg-vintage-light-beige/10 backdrop-blur-sm rounded-3xl p-16 shadow-2xl border border-vintage-warm-brown/10 hover:shadow-3xl transition-all duration-500">
-            <h1 className="display-text text-vintage-light-beige mb-8 drop-shadow-2xl font-extrabold">
+            <h1 className="display-text text-gray-800 mb-8 drop-shadow-2xl font-extrabold">
               Cook with what you have
             </h1>
-            <p className="lead text-vintage-light-beige/98 mb-10 max-w-3xl mx-auto text-center drop-shadow-lg text-xl font-medium">
+            <p className="lead text-gray-800/98 mb-10 max-w-3xl mx-auto text-center drop-shadow-lg text-xl font-medium">
               Turn the ingredients you already have into amazing meals. Discover personalized recipes that help you save time, reduce food waste, and enjoy delicious possibilities every day.
             </p>
 
@@ -127,7 +125,7 @@ export default function Home() {
                       className="count-up-text"
                     />
                   </div>
-                  <div className="text-vintage-light-beige/90 text-lg">Recipes Available</div>
+                  <div className="text-gray-800/90 text-lg">Recipes Available</div>
                 </div>
                 <div className="text-center">
                   <div className="text-5xl font-bold text-vintage-warm-brown mb-2">
@@ -137,7 +135,7 @@ export default function Home() {
                       className="count-up-text"
                     />
                   </div>
-                  <div className="text-vintage-light-beige/90 text-lg">Ingredients Supported</div>
+                  <div className="text-gray-800/90 text-lg">Ingredients Supported</div>
                 </div>
                 <div className="text-center">
                   <div className="text-5xl font-bold text-vintage-warm-brown mb-2">
@@ -147,7 +145,7 @@ export default function Home() {
                       className="count-up-text"
                     />%
                   </div>
-                  <div className="text-vintage-light-beige/90 text-lg">User Satisfaction</div>
+                  <div className="text-gray-800/90 text-lg">User Satisfaction</div>
                 </div>
               </div>
 
@@ -173,15 +171,15 @@ export default function Home() {
       <section className="section-padding relative z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto">
-            <h2 className="h2 text-vintage-light-beige mb-12">Why Ingredo?</h2>
+            <h2 className="h2 text-gray-800 mb-12">Why Ingredo?</h2>
             <div className="grid md:grid-cols-3 gap-8">
               <Card className="shadow-sm hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
                   <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
                     <ChefHat className="h-6 w-6" style={{ color: '#FF6B35' }} />
                   </div>
-                  <h3 className="h5 text-vintage-light-beige mb-2">Smart Recipe Matching</h3>
-                  <p className="text-vintage-light-beige/90">Our AI finds recipes that maximize your available ingredients and minimize shopping needs.</p>
+                  <h3 className="h5 text-gray-800 mb-2">Smart Recipe Matching</h3>
+                  <p className="text-gray-800/90">Our AI finds recipes that maximize your available ingredients and minimize shopping needs.</p>
                 </CardContent>
               </Card>
 
@@ -190,8 +188,8 @@ export default function Home() {
                   <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
                     <Recycle className="h-6 w-6" style={{ color: '#4CAF50' }} />
                   </div>
-                  <h3 className="h5 text-vintage-light-beige mb-2">Reduce Food Waste</h3>
-                  <p className="text-vintage-light-beige/90">Use what you have before it spoils. Track expiration dates and get timely recipe suggestions.</p>
+                  <h3 className="h5 text-gray-800 mb-2">Reduce Food Waste</h3>
+                  <p className="text-gray-800/90">Use what you have before it spoils. Track expiration dates and get timely recipe suggestions.</p>
                 </CardContent>
               </Card>
 
@@ -200,8 +198,8 @@ export default function Home() {
                   <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
                     <Heart className="h-6 w-6" style={{ color: '#E91E63' }} />
                   </div>
-                  <h3 className="h5 text-vintage-light-beige mb-2">Save Favorites</h3>
-                  <p className="text-vintage-light-beige/90">Build your personal cookbook with recipes you love and organize them into collections.</p>
+                  <h3 className="h5 text-gray-800 mb-2">Save Favorites</h3>
+                  <p className="text-gray-800/90">Build your personal cookbook with recipes you love and organize them into collections.</p>
                 </CardContent>
               </Card>
             </div>
@@ -213,7 +211,7 @@ export default function Home() {
       <section className="section-padding relative z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto">
-            <h2 className="h2 text-vintage-light-beige mb-12">Popular Recipes</h2>
+            <h2 className="h2 text-gray-800 mb-12">Popular Recipes</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {sampleRecipes.map((recipe) => (
                 <Card 
@@ -296,50 +294,50 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="vintage-hero w-full mx-auto text-center bg-vintage-light-beige/10 backdrop-blur-sm rounded-3xl p-16 shadow-2xl border border-vintage-warm-brown/10 hover:shadow-3xl transition-all duration-500">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-vintage-light-beige mb-4">
+              <h2 className="text-4xl font-bold text-gray-800 mb-4">
                 How It Works
               </h2>
-              <p className="text-vintage-light-beige/80 text-lg max-w-2xl mx-auto">
+              <p className="text-gray-800/80 text-lg max-w-2xl mx-auto">
                 Get started with Ingredo in just three simple steps
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Step 1 */}
-            <div className="group bg-vintage-dark-green/20 backdrop-blur-sm rounded-2xl p-6 border border-vintage-warm-brown/20 hover:bg-vintage-dark-green/30 transition-all duration-300">
+            <div className="group bg-blue-100 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-blue-200 transition-all duration-300">
               <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
                 1
               </div>
-              <h3 className="text-xl font-semibold text-vintage-light-beige mb-3 text-center">
+              <h3 className="text-xl font-semibold text-gray-800 mb-3 text-center">
                 Add Your Ingredients
               </h3>
-              <p className="text-vintage-light-beige/80 leading-relaxed text-left">
+              <p className="text-gray-800/80 leading-relaxed text-left">
                 Simply type or select the ingredients you have in your kitchen. Our smart system will recognize them instantly.
               </p>
             </div>
 
             {/* Step 2 */}
-            <div className="group bg-vintage-dark-green/20 backdrop-blur-sm rounded-2xl p-6 border border-vintage-warm-brown/20 hover:bg-vintage-dark-green/30 transition-all duration-300">
+            <div className="group bg-blue-100 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-blue-200 transition-all duration-300">
               <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
                 2
               </div>
-              <h3 className="text-xl font-semibold text-vintage-light-beige mb-3 text-center">
+              <h3 className="text-xl font-semibold text-gray-800 mb-3 text-center">
                 Discover Recipes
               </h3>
-              <p className="text-vintage-light-beige/80 leading-relaxed text-left">
+              <p className="text-gray-800/80 leading-relaxed text-left">
                 Browse through perfectly matched recipes or explore creative suggestions based on your available ingredients.
               </p>
             </div>
 
             {/* Step 3 */}
-            <div className="group bg-vintage-dark-green/20 backdrop-blur-sm rounded-2xl p-6 border border-vintage-warm-brown/20 hover:bg-vintage-dark-green/30 transition-all duration-300">
+            <div className="group bg-blue-100 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-blue-200 transition-all duration-300">
               <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
                 3
               </div>
-              <h3 className="text-xl font-semibold text-vintage-light-beige mb-3 text-center">
+              <h3 className="text-xl font-semibold text-gray-800 mb-3 text-center">
                 Start Cooking
               </h3>
-              <p className="text-vintage-light-beige/80 leading-relaxed text-left">
+              <p className="text-gray-800/80 leading-relaxed text-left">
                 Follow step-by-step instructions and create delicious meals while reducing food waste in your kitchen.
               </p>
             </div>

@@ -200,8 +200,8 @@ export function SearchResults({
       <Card className={className}>
         <CardContent className="p-8 text-center">
           <div className="flex flex-col items-center justify-center">
-            <Search className="h-12 w-12 mb-4 text-vintage-light-beige" />
-            <h3 className="text-lg font-medium mb-2 text-vintage-light-beige">Search failed</h3>
+            <Search className="h-12 w-12 mb-4 text-gray-800" />
+            <h3 className="text-lg font-medium mb-2 text-gray-800">Search failed</h3>
             <p className="text-muted-foreground mb-4">
               We couldn't find any recipes. Please try again.
             </p>

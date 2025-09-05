@@ -54,20 +54,18 @@ export default function Search() {
       {/* Unified Iridescence Background */}
       <div className="fixed inset-0 z-0">
         <Iridescence
-          color={[0.26, 0.29, 0.22]} // vintage-dark-green in RGB (0-1 range)
+          color={[0.12, 0.25, 0.69]} // vibrant blue in RGB (0-1 range)
           mouseReact={true}
           amplitude={0.15}
           speed={0.8}
         />
-        {/* Dark overlay for better visibility */}
-        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(65, 74, 55, 0.6)' }}></div>
       </div>
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="h1 text-vintage-light-beige mb-4">Find Recipes</h1>
+          <h1 className="h1 text-gray-800 mb-4">Find Recipes</h1>
           <p className="lead vintage-text-muted text-center">
             Add ingredients you have and discover delicious recipes you can make
           </p>

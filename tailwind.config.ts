@@ -61,6 +61,11 @@ export default {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+        vintage: {
+          "dark-green": "var(--vintage-dark-green)", // Now vibrant blue
+          "warm-brown": "var(--vintage-warm-brown)", // Now warm amber
+          "light-beige": "var(--vintage-light-beige)", // Now clean white
+        },
       },
       fontFamily: {
         sans: ["var(--font-sans)"],

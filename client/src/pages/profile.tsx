@@ -111,13 +111,11 @@ export default function Profile() {
       {/* Unified Iridescence Background */}
       <div className="fixed inset-0 z-0">
         <Iridescence
-          color={[0.26, 0.29, 0.22]} // vintage-dark-green in RGB (0-1 range)
+          color={[0.12, 0.25, 0.69]} // vibrant blue in RGB (0-1 range)
           mouseReact={true}
           amplitude={0.15}
           speed={0.8}
         />
-        {/* Dark overlay for better visibility */}
-        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(65, 74, 55, 0.6)' }}></div>
       </div>
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
@@ -146,36 +144,34 @@ export default function Profile() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card>
-            <CardContent className="p-4 text-center">
-              <Heart className="h-6 w-6 text-accent mx-auto mb-2" />
-              <div className="text-2xl font-bold">{profile.stats.savedRecipes}</div>
-              <div className="text-sm text-muted-foreground">Saved Recipes</div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <Card className="bg-gradient-to-br from-pink-50 to-red-50 border-pink-200 hover:shadow-lg transition-all duration-300">
+            <CardContent className="p-6 text-center">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-red-500 mb-3">
+                <Heart className="h-6 w-6 text-white" />
+              </div>
+              <div className="text-3xl font-bold text-gray-800 mb-1">{profile.stats.savedRecipes}</div>
+              <div className="text-sm font-medium text-gray-600">Saved Recipes</div>
             </CardContent>
           </Card>
           
-          <Card>
-            <CardContent className="p-4 text-center">
-              <ChefHat className="h-6 w-6 text-primary mx-auto mb-2" />
-              <div className="text-2xl font-bold">{profile.stats.cookedRecipes}</div>
-              <div className="text-sm text-muted-foreground">Recipes Cooked</div>
+          <Card className="bg-gradient-to-br from-orange-50 to-yellow-50 border-orange-200 hover:shadow-lg transition-all duration-300">
+            <CardContent className="p-6 text-center">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-yellow-500 mb-3">
+                <ChefHat className="h-6 w-6 text-white" />
+              </div>
+              <div className="text-3xl font-bold text-gray-800 mb-1">{profile.stats.cookedRecipes}</div>
+              <div className="text-sm font-medium text-gray-600">Recipes Cooked</div>
             </CardContent>
           </Card>
           
-          <Card>
-            <CardContent className="p-4 text-center">
-              <BookOpen className="h-6 w-6 text-secondary-foreground mx-auto mb-2" />
-              <div className="text-2xl font-bold">{profile.stats.collections}</div>
-              <div className="text-sm text-muted-foreground">Collections</div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-4 text-center">
-              <TrendingUp className="h-6 w-6 text-accent mx-auto mb-2" />
-              <div className="text-2xl font-bold">{profile.stats.followers}</div>
-              <div className="text-sm text-muted-foreground">Followers</div>
+          <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 hover:shadow-lg transition-all duration-300">
+            <CardContent className="p-6 text-center">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 mb-3">
+                <BookOpen className="h-6 w-6 text-white" />
+              </div>
+              <div className="text-3xl font-bold text-gray-800 mb-1">{profile.stats.collections}</div>
+              <div className="text-sm font-medium text-gray-600">Collections</div>
             </CardContent>
           </Card>
         </div>

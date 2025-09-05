@@ -25,7 +25,7 @@ export function AppShell({ children }: AppShellProps) {
   const navigation = [
     { name: "Discover", href: "/", current: location === "/" },
     { name: "Search", href: "/search", current: location === "/search" },
-    { name: "My Recipes", href: "/profile", current: location === "/profile" },
+    { name: "My Collection", href: "/profile", current: location === "/profile" },
   ];
 
   const handleSearch = (e: React.FormEvent) => {
@@ -47,10 +47,10 @@ export function AppShell({ children }: AppShellProps) {
               <img 
                 src="/logo.png" 
                 alt="Ingredo Logo" 
-                className="w-16 h-16 rounded-xl group-hover:opacity-80 transition-opacity duration-200 shadow-md"
+                className="w-16 h-16 rounded-xl group-hover:opacity-80 transition-opacity duration-200"
               />
               <span 
-                className="ml-3 text-3xl font-bold text-vintage-dark-green group-hover:text-vintage-warm-brown transition-colors duration-200"
+                className="ml-3 text-3xl font-bold text-blue-600 group-hover:text-amber-500 transition-colors duration-200"
                 style={{ fontFamily: 'var(--font-display)' }}
               >
                 Ingredo
@@ -64,8 +64,8 @@ export function AppShell({ children }: AppShellProps) {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    "text-sm font-medium text-vintage-dark-green hover:text-vintage-warm-brown transition-colors duration-200 uppercase tracking-wide",
-                    item.current ? "text-vintage-warm-brown" : ""
+                    "text-sm font-medium text-blue-600 hover:text-amber-500 transition-colors duration-200 uppercase tracking-wide",
+                    item.current ? "text-amber-500" : ""
                   )}
                   style={{ fontFamily: 'var(--font-sans)' }}
                   data-testid={`nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
@@ -95,10 +95,10 @@ export function AppShell({ children }: AppShellProps) {
               {/* Profile Menu */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" data-testid="profile-menu" className="h-8 w-8 text-vintage-dark-green hover:text-vintage-warm-brown transition-colors duration-200">
-                    <Avatar className="h-6 w-6">
-                      <AvatarFallback className="bg-vintage-warm-brown text-vintage-light-beige text-xs">
-                        <User className="h-3 w-3" />
+                  <Button variant="ghost" size="icon" data-testid="profile-menu" className="h-10 w-10 text-blue-600 hover:text-amber-500 transition-colors duration-200">
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback className="bg-amber-500 text-white text-sm">
+                        <User className="h-4 w-4" />
                       </AvatarFallback>
                     </Avatar>
                   </Button>
