@@ -82,7 +82,7 @@ export default function Home() {
         
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="vintage-hero w-full mx-auto text-center bg-vintage-light-beige/10 backdrop-blur-sm rounded-3xl p-16 shadow-2xl border border-vintage-warm-brown/10 hover:shadow-3xl transition-all duration-500">
-            <h1 className="display-text text-gray-800 mb-8 drop-shadow-2xl font-extrabold">
+            <h1 className="display-text text-white mb-8 drop-shadow-2xl font-extrabold">
               Cook with what you have
             </h1>
             <p className="lead text-gray-800/98 mb-10 max-w-3xl mx-auto text-center drop-shadow-lg text-xl font-medium">
@@ -125,7 +125,7 @@ export default function Home() {
                       className="count-up-text"
                     />
                   </div>
-                  <div className="text-gray-800/90 text-lg">Recipes Available</div>
+                  <div className="text-white/90 text-lg">Recipes Available</div>
                 </div>
                 <div className="text-center">
                   <div className="text-5xl font-bold text-vintage-warm-brown mb-2">
@@ -135,7 +135,7 @@ export default function Home() {
                       className="count-up-text"
                     />
                   </div>
-                  <div className="text-gray-800/90 text-lg">Ingredients Supported</div>
+                  <div className="text-white/90 text-lg">Ingredients Supported</div>
                 </div>
                 <div className="text-center">
                   <div className="text-5xl font-bold text-vintage-warm-brown mb-2">
@@ -145,7 +145,7 @@ export default function Home() {
                       className="count-up-text"
                     />%
                   </div>
-                  <div className="text-gray-800/90 text-lg">User Satisfaction</div>
+                  <div className="text-white/90 text-lg">User Satisfaction</div>
                 </div>
               </div>
 
@@ -171,14 +171,14 @@ export default function Home() {
       <section className="section-padding relative z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto">
-            <h2 className="h2 text-gray-800 mb-12">Why Ingredo?</h2>
+            <h2 className="h2 text-white mb-12">Why Ingredo?</h2>
             <div className="grid md:grid-cols-3 gap-8">
               <Card className="shadow-sm hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
                   <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
                     <ChefHat className="h-6 w-6" style={{ color: '#FF6B35' }} />
                   </div>
-                  <h3 className="h5 text-gray-800 mb-2">Smart Recipe Matching</h3>
+                  <h3 className="text-xl font-semibold text-orange-500 mb-2">Smart Recipe Matching</h3>
                   <p className="text-gray-800/90">Our AI finds recipes that maximize your available ingredients and minimize shopping needs.</p>
                 </CardContent>
               </Card>
@@ -188,7 +188,7 @@ export default function Home() {
                   <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
                     <Recycle className="h-6 w-6" style={{ color: '#4CAF50' }} />
                   </div>
-                  <h3 className="h5 text-gray-800 mb-2">Reduce Food Waste</h3>
+                  <h3 className="text-xl font-semibold text-orange-500 mb-2">Reduce Food Waste</h3>
                   <p className="text-gray-800/90">Use what you have before it spoils. Track expiration dates and get timely recipe suggestions.</p>
                 </CardContent>
               </Card>
@@ -198,7 +198,7 @@ export default function Home() {
                   <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
                     <Heart className="h-6 w-6" style={{ color: '#E91E63' }} />
                   </div>
-                  <h3 className="h5 text-gray-800 mb-2">Save Favorites</h3>
+                  <h3 className="text-xl font-semibold text-orange-500 mb-2">Save Favorites</h3>
                   <p className="text-gray-800/90">Build your personal cookbook with recipes you love and organize them into collections.</p>
                 </CardContent>
               </Card>
@@ -211,7 +211,7 @@ export default function Home() {
       <section className="section-padding relative z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto">
-            <h2 className="h2 text-gray-800 mb-12">Popular Recipes</h2>
+            <h2 className="h2 text-white mb-12">Popular Recipes</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {sampleRecipes.map((recipe) => (
                 <Card 
@@ -294,17 +294,17 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="vintage-hero w-full mx-auto text-center bg-vintage-light-beige/10 backdrop-blur-sm rounded-3xl p-16 shadow-2xl border border-vintage-warm-brown/10 hover:shadow-3xl transition-all duration-500">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-800 mb-4">
+              <h2 className="text-4xl font-bold text-white mb-4">
                 How It Works
               </h2>
-              <p className="text-gray-800/80 text-lg max-w-2xl mx-auto">
+              <p className="text-white/90 text-lg max-w-2xl mx-auto">
                 Get started with Ingredo in just three simple steps
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Step 1 */}
-            <div className="group bg-blue-100 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-blue-200 transition-all duration-300">
+            <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-white transition-all duration-300">
               <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
                 1
               </div>
@@ -317,7 +317,7 @@ export default function Home() {
             </div>
 
             {/* Step 2 */}
-            <div className="group bg-blue-100 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-blue-200 transition-all duration-300">
+            <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-white transition-all duration-300">
               <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
                 2
               </div>
@@ -330,7 +330,7 @@ export default function Home() {
             </div>
 
             {/* Step 3 */}
-            <div className="group bg-blue-100 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-blue-200 transition-all duration-300">
+            <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-white transition-all duration-300">
               <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
                 3
               </div>

@@ -201,16 +201,16 @@ export function AppShell({ children }: AppShellProps) {
                 <div className="w-6 h-6 bg-primary rounded-md flex items-center justify-center">
                   <Leaf className="h-3 w-3 text-primary-foreground" />
                 </div>
-                <span className="font-bold text-foreground">Ingredo</span>
+                <span className="font-bold text-white">Ingredo</span>
               </div>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-white/80 text-sm">
                 Discover recipes based on ingredients you have. Cook smarter, waste less.
               </p>
             </div>
 
             <div>
-              <h4 className="font-semibold text-foreground mb-4">Product</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+              <h4 className="font-semibold text-white mb-4">Product</h4>
+              <ul className="space-y-2 text-sm text-white/80">
                 <li><Link href="/features" className="hover:text-foreground transition-colors">Features</Link></li>
                 <li><Link href="/pricing" className="hover:text-foreground transition-colors">Pricing</Link></li>
                 <li><Link href="/api" className="hover:text-foreground transition-colors">API</Link></li>
@@ -218,8 +218,8 @@ export function AppShell({ children }: AppShellProps) {
             </div>
 
             <div>
-              <h4 className="font-semibold text-foreground mb-4">Company</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+              <h4 className="font-semibold text-white mb-4">Company</h4>
+              <ul className="space-y-2 text-sm text-white/80">
                 <li><Link href="/about" className="hover:text-foreground transition-colors">About</Link></li>
                 <li><Link href="/blog" className="hover:text-foreground transition-colors">Blog</Link></li>
                 <li><Link href="/careers" className="hover:text-foreground transition-colors">Careers</Link></li>
@@ -227,8 +227,8 @@ export function AppShell({ children }: AppShellProps) {
             </div>
 
             <div>
-              <h4 className="font-semibold text-foreground mb-4">Support</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+              <h4 className="font-semibold text-white mb-4">Support</h4>
+              <ul className="space-y-2 text-sm text-white/80">
                 <li><Link href="/help" className="hover:text-foreground transition-colors">Help Center</Link></li>
                 <li><Link href="/contact" className="hover:text-foreground transition-colors">Contact</Link></li>
                 <li><Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link></li>
@@ -237,11 +237,11 @@ export function AppShell({ children }: AppShellProps) {
           </div>
 
           <div className="border-t border-border mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center">
-            <p className="text-muted-foreground text-sm">
+            <p className="text-white/80 text-sm">
               © 2024 Ingredo. All rights reserved.
             </p>
             <div className="flex space-x-4 mt-4 sm:mt-0">
-              <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="#" className="text-white/80 hover:text-white transition-colors">
                 <span className="sr-only">Twitter</span>
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
