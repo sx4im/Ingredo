@@ -1,0 +1,34 @@
+{
+    "name": "@types/connect-pg-simple",
+    "version": "7.0.3",
+    "description": "TypeScript definitions for connect-pg-simple",
+    "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/connect-pg-simple",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Pasi Eronen",
+            "githubUsername": "pasieronen",
+            "url": "https://github.com/pasieronen"
+        },
+        {
+            "name": "Samar Mohan",
+            "githubUsername": "samarmohan",
+            "url": "https://github.com/samarmohan"
+        }
+    ],
+    "main": "",
+    "types": "index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/connect-pg-simple"
+    },
+    "scripts": {},
+    "dependencies": {
+        "@types/express": "*",
+        "@types/express-session": "*",
+        "@types/pg": "*"
+    },
+    "typesPublisherContentHash": "e1073fae93a34480e6df14816e8032f8213c5f8eb747277c8f4ce6b1aa8b9783",
+    "typeScriptVersion": "4.5"
+}

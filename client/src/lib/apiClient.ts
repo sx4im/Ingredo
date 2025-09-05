@@ -1,4 +1,5 @@
 import { toast } from "@/hooks/use-toast";
+import { createMockApiClient } from "./mockApi";
 
 class APIError extends Error {
   status: number;
@@ -32,7 +33,11 @@ async function handleResponse(response: Response) {
   return response;
 }
 
-export const apiClient = {
+// Use mock API in development, real API in production
+const isDevelopment = import.meta.env.DEV;
+const mockClient = createMockApiClient();
+
+export const apiClient = isDevelopment ? mockClient : {
   async get<T>(url: string): Promise<T> {
     const response = await fetch(url, {
       method: "GET",

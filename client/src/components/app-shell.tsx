@@ -40,15 +40,17 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
+      <div className="w-full px-4 py-2">
+        <header className="mx-auto max-w-7xl bg-vintage-light-beige rounded-lg">
+          <div className="px-6 py-3">
+            <div className="flex h-12 items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2" data-testid="logo-link">
-              <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
-                <Leaf className="h-4 w-4 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-bold text-foreground">Ingredo</span>
+            <Link href="/" className="flex items-center group" data-testid="logo-link">
+              <img 
+                src="/logo.png" 
+                alt="Ingredo Logo" 
+                className="w-16 h-16 rounded-lg group-hover:opacity-80 transition-opacity duration-200"
+              />
             </Link>
 
             {/* Desktop Navigation */}
@@ -58,9 +60,10 @@ export function AppShell({ children }: AppShellProps) {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    "text-sm font-medium transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm",
-                    item.current ? "text-foreground" : "text-muted-foreground"
+                    "text-sm font-medium text-vintage-dark-green hover:text-vintage-warm-brown transition-colors duration-200 uppercase tracking-wide",
+                    item.current ? "text-vintage-warm-brown" : ""
                   )}
+                  style={{ fontFamily: 'var(--font-sans)' }}
                   data-testid={`nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   {item.name}
@@ -71,13 +74,13 @@ export function AppShell({ children }: AppShellProps) {
             {/* Search Bar (Desktop) */}
             <div className="hidden lg:block flex-1 max-w-md mx-8">
               <form onSubmit={handleSearch} className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-vintage-warm-brown h-4 w-4" />
                 <Input
                   type="search"
                   placeholder="Search ingredients..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9"
+                  className="pl-10 h-10 bg-transparent border-b border-vintage-warm-brown/30 focus:border-vintage-dark-green rounded-none text-sm font-medium focus:outline-none"
                   data-testid="search-input"
                 />
               </form>
@@ -92,6 +95,7 @@ export function AppShell({ children }: AppShellProps) {
                 onClick={toggleTheme}
                 aria-label="Toggle theme"
                 data-testid="theme-toggle"
+                className="h-8 w-8 text-vintage-dark-green hover:text-vintage-warm-brown transition-colors duration-200"
               >
                 {theme === "light" ? (
                   <Moon className="h-4 w-4" />
@@ -103,10 +107,10 @@ export function AppShell({ children }: AppShellProps) {
               {/* Profile Menu */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" data-testid="profile-menu">
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-accent text-accent-foreground">
-                        <User className="h-4 w-4" />
+                  <Button variant="ghost" size="icon" data-testid="profile-menu" className="h-8 w-8 text-vintage-dark-green hover:text-vintage-warm-brown transition-colors duration-200">
+                    <Avatar className="h-6 w-6">
+                      <AvatarFallback className="bg-vintage-warm-brown text-vintage-light-beige text-xs">
+                        <User className="h-3 w-3" />
                       </AvatarFallback>
                     </Avatar>
                   </Button>
@@ -180,19 +184,20 @@ export function AppShell({ children }: AppShellProps) {
           {/* Mobile Search Bar */}
           <div className="lg:hidden pb-4">
             <form onSubmit={handleSearch} className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-vintage-warm-brown h-4 w-4" />
               <Input
                 type="search"
                 placeholder="Search ingredients..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
+                className="pl-9 h-10 bg-transparent border-b border-vintage-warm-brown/30 focus:border-vintage-dark-green rounded-none text-sm font-medium focus:outline-none"
                 data-testid="mobile-search-input"
               />
             </form>
           </div>
-        </div>
-      </header>
+          </div>
+        </header>
+      </div>
 
       {/* Main Content */}
       <main className="flex-1">

@@ -1,44 +1,51 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Source+Sans+Pro:wght@300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: hsl(0 0% 100%);
-  --foreground: hsl(222.2 84% 4.9%);
-  --card: hsl(0 0% 100%);
-  --card-foreground: hsl(222.2 84% 4.9%);
-  --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(222.2 84% 4.9%);
-  --primary: hsl(142.1 76.2% 36.3%);
-  --primary-foreground: hsl(355.7 100% 97.3%);
-  --secondary: hsl(210 40% 96%);
-  --secondary-foreground: hsl(222.2 84% 4.9%);
-  --muted: hsl(210 40% 96%);
-  --muted-foreground: hsl(215.4 16.3% 46.9%);
-  --accent: hsl(24.6 95% 53.1%);
-  --accent-foreground: hsl(0 0% 98%);
-  --destructive: hsl(0 84.2% 60.2%);
-  --destructive-foreground: hsl(210 40% 98%);
-  --border: hsl(214.3 31.8% 91.4%);
-  --input: hsl(214.3 31.8% 91.4%);
-  --ring: hsl(142.1 76.2% 36.3%);
-  --chart-1: hsl(142.1 76.2% 36.3%);
-  --chart-2: hsl(24.6 95% 53.1%);
-  --chart-3: hsl(222.2 84% 4.9%);
-  --chart-4: hsl(210 40% 96%);
-  --chart-5: hsl(215.4 16.3% 46.9%);
-  --sidebar: hsl(0 0% 100%);
-  --sidebar-foreground: hsl(222.2 84% 4.9%);
-  --sidebar-primary: hsl(142.1 76.2% 36.3%);
-  --sidebar-primary-foreground: hsl(355.7 100% 97.3%);
-  --sidebar-accent: hsl(210 40% 96%);
-  --sidebar-accent-foreground: hsl(142.1 76.2% 36.3%);
-  --sidebar-border: hsl(214.3 31.8% 91.4%);
-  --sidebar-ring: hsl(142.1 76.2% 36.3%);
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-  --font-serif: Georgia, serif;
-  --font-mono: Menlo, monospace;
+  /* Vintage Color Palette */
+  --vintage-dark-green: #414A37;
+  --vintage-warm-brown: #99744A;
+  --vintage-light-beige: #DBC2A6;
+  
+  /* Main theme colors using vintage palette */
+  --background: #DBC2A6; /* Light beige background */
+  --foreground: #414A37; /* Dark green text */
+  --card: #DBC2A6; /* Light beige cards */
+  --card-foreground: #414A37; /* Dark green text on cards */
+  --popover: #DBC2A6; /* Light beige popovers */
+  --popover-foreground: #414A37; /* Dark green text on popovers */
+  --primary: #414A37; /* Dark green primary */
+  --primary-foreground: #DBC2A6; /* Light beige text on primary */
+  --secondary: #99744A; /* Warm brown secondary */
+  --secondary-foreground: #DBC2A6; /* Light beige text on secondary */
+  --muted: #F5F0E8; /* Very light beige for muted backgrounds */
+  --muted-foreground: #6B6B6B; /* Muted text color */
+  --accent: #99744A; /* Warm brown accent */
+  --accent-foreground: #DBC2A6; /* Light beige text on accent */
+  --destructive: #DC2626; /* Red for destructive actions */
+  --destructive-foreground: #DBC2A6; /* Light beige text on destructive */
+  --border: #C4B5A0; /* Light brown borders */
+  --input: #F5F0E8; /* Very light beige input backgrounds */
+  --ring: #414A37; /* Dark green focus rings */
+  --chart-1: #414A37; /* Dark green for charts */
+  --chart-2: #99744A; /* Warm brown for charts */
+  --chart-3: #6B6B6B; /* Muted color for charts */
+  --chart-4: #C4B5A0; /* Light brown for charts */
+  --chart-5: #F5F0E8; /* Very light beige for charts */
+  --sidebar: #DBC2A6; /* Light beige sidebar */
+  --sidebar-foreground: #414A37; /* Dark green sidebar text */
+  --sidebar-primary: #414A37; /* Dark green sidebar primary */
+  --sidebar-primary-foreground: #DBC2A6; /* Light beige text on sidebar primary */
+  --sidebar-accent: #99744A; /* Warm brown sidebar accent */
+  --sidebar-accent-foreground: #DBC2A6; /* Light beige text on sidebar accent */
+  --sidebar-border: #C4B5A0; /* Light brown sidebar borders */
+  --sidebar-ring: #414A37; /* Dark green sidebar focus rings */
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-serif: 'Crimson Text', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Source Sans Pro', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, monospace;
   --radius: 0.5rem;
   --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.05);
   --shadow-xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.05);
@@ -53,41 +60,43 @@
 }
 
 .dark {
-  --background: hsl(222.2 84% 4.9%);
-  --foreground: hsl(210 40% 98%);
-  --card: hsl(222.2 84% 4.9%);
-  --card-foreground: hsl(210 40% 98%);
-  --popover: hsl(222.2 84% 4.9%);
-  --popover-foreground: hsl(210 40% 98%);
-  --primary: hsl(142.1 70.6% 45.3%);
-  --primary-foreground: hsl(144.9 80.4% 10%);
-  --secondary: hsl(217.2 32.6% 17.5%);
-  --secondary-foreground: hsl(210 40% 98%);
-  --muted: hsl(217.2 32.6% 17.5%);
-  --muted-foreground: hsl(215 20.2% 65.1%);
-  --accent: hsl(24.6 95% 53.1%);
-  --accent-foreground: hsl(0 0% 98%);
-  --destructive: hsl(0 62.8% 30.6%);
-  --destructive-foreground: hsl(210 40% 98%);
-  --border: hsl(217.2 32.6% 17.5%);
-  --input: hsl(217.2 32.6% 17.5%);
-  --ring: hsl(142.4 71.8% 29.2%);
-  --chart-1: hsl(142.1 70.6% 45.3%);
-  --chart-2: hsl(24.6 95% 53.1%);
-  --chart-3: hsl(210 40% 98%);
-  --chart-4: hsl(217.2 32.6% 17.5%);
-  --chart-5: hsl(215 20.2% 65.1%);
-  --sidebar: hsl(222.2 84% 4.9%);
-  --sidebar-foreground: hsl(210 40% 98%);
-  --sidebar-primary: hsl(142.4 71.8% 29.2%);
-  --sidebar-primary-foreground: hsl(210 40% 98%);
-  --sidebar-accent: hsl(217.2 32.6% 17.5%);
-  --sidebar-accent-foreground: hsl(142.1 70.6% 45.3%);
-  --sidebar-border: hsl(217.2 32.6% 17.5%);
-  --sidebar-ring: hsl(142.4 71.8% 29.2%);
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-  --font-serif: Georgia, serif;
-  --font-mono: Menlo, monospace;
+  /* Dark mode using vintage palette - darker, richer tones */
+  --background: #2A2F24; /* Very dark green background */
+  --foreground: #DBC2A6; /* Light beige text */
+  --card: #414A37; /* Dark green cards */
+  --card-foreground: #DBC2A6; /* Light beige text on cards */
+  --popover: #414A37; /* Dark green popovers */
+  --popover-foreground: #DBC2A6; /* Light beige text on popovers */
+  --primary: #99744A; /* Warm brown primary in dark mode */
+  --primary-foreground: #2A2F24; /* Very dark green text on primary */
+  --secondary: #6B5B47; /* Darker warm brown secondary */
+  --secondary-foreground: #DBC2A6; /* Light beige text on secondary */
+  --muted: #3A4034; /* Dark muted green */
+  --muted-foreground: #A69B8A; /* Muted light beige */
+  --accent: #99744A; /* Warm brown accent */
+  --accent-foreground: #2A2F24; /* Very dark green text on accent */
+  --destructive: #DC2626; /* Red for destructive actions */
+  --destructive-foreground: #DBC2A6; /* Light beige text on destructive */
+  --border: #5A6350; /* Medium dark green borders */
+  --input: #3A4034; /* Dark muted green input backgrounds */
+  --ring: #99744A; /* Warm brown focus rings */
+  --chart-1: #99744A; /* Warm brown for charts */
+  --chart-2: #DBC2A6; /* Light beige for charts */
+  --chart-3: #A69B8A; /* Muted light beige for charts */
+  --chart-4: #5A6350; /* Medium dark green for charts */
+  --chart-5: #3A4034; /* Dark muted green for charts */
+  --sidebar: #2A2F24; /* Very dark green sidebar */
+  --sidebar-foreground: #DBC2A6; /* Light beige sidebar text */
+  --sidebar-primary: #99744A; /* Warm brown sidebar primary */
+  --sidebar-primary-foreground: #2A2F24; /* Very dark green text on sidebar primary */
+  --sidebar-accent: #6B5B47; /* Darker warm brown sidebar accent */
+  --sidebar-accent-foreground: #DBC2A6; /* Light beige text on sidebar accent */
+  --sidebar-border: #5A6350; /* Medium dark green sidebar borders */
+  --sidebar-ring: #99744A; /* Warm brown sidebar focus rings */
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-serif: 'Crimson Text', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Source Sans Pro', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, monospace;
   --radius: 0.5rem;
   --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.2);
   --shadow-xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.2);
@@ -107,6 +116,160 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
     font-family: var(--font-sans);
+    line-height: 1.6;
+  }
+
+  /* Professional Typography Hierarchy */
+  h1, .h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-align: center;
+  }
+
+  h2, .h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    text-align: center;
+  }
+
+  h3, .h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    line-height: 1.3;
+    text-align: left;
+  }
+
+  h4, .h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.25rem, 2.5vw, 1.875rem);
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  h5, .h5 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  h6, .h6 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    line-height: 1.5;
+    text-align: left;
+  }
+
+  /* Display text for hero sections */
+  .display-text {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    text-align: center;
+  }
+
+  /* Subtitle text */
+  .subtitle {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
+    line-height: 1.4;
+    text-align: left;
+    color: var(--muted-foreground);
+  }
+
+  /* Lead text for introductions */
+  .lead {
+    font-family: var(--font-serif);
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+    line-height: 1.6;
+    text-align: left;
+    font-weight: 400;
+  }
+
+  /* Body text improvements */
+  p {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  /* Button text styling */
+  button, .btn {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: 0.025em;
+  }
+
+  /* Card titles */
+  .card-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    text-align: left;
+  }
+
+  /* Recipe card titles */
+  .recipe-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.125rem;
+    line-height: 1.3;
+  }
+
+  /* Enhanced centering utilities */
+  .center-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .center-text {
+    text-align: center;
+  }
+
+  /* Section spacing improvements */
+  .section-padding {
+    padding: 5rem 0;
+  }
+
+  /* Hero section improvements */
+  .hero-section {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Card improvements */
+  .vintage-card-enhanced {
+    background: var(--vintage-light-beige);
+    border: 2px solid var(--vintage-warm-brown);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(65, 74, 55, 0.15);
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  .vintage-card-enhanced:hover {
+    box-shadow: 0 16px 48px rgba(65, 74, 55, 0.25);
+    transform: translateY(-4px);
   }
 
   /* Focus visible styles for better accessibility */
@@ -170,6 +333,130 @@
 /* Component-specific styles */
 .component-showcase {
   background: linear-gradient(135deg, var(--muted) 0%, hsl(var(--accent) / 0.1) 100%);
+}
+
+/* Vintage aesthetic styles */
+.vintage-card {
+  background: var(--vintage-light-beige);
+  border: 2px solid var(--vintage-warm-brown);
+  box-shadow: 0 4px 12px rgba(65, 74, 55, 0.15);
+  transition: all 0.3s ease;
+}
+
+.vintage-card:hover {
+  box-shadow: 0 8px 24px rgba(65, 74, 55, 0.25);
+  transform: translateY(-2px);
+}
+
+.vintage-button {
+  background: var(--vintage-dark-green);
+  color: var(--vintage-light-beige);
+  border: 2px solid var(--vintage-dark-green);
+  transition: all 0.3s ease;
+}
+
+.vintage-button:hover {
+  background: var(--vintage-warm-brown);
+  border-color: var(--vintage-warm-brown);
+  transform: translateY(-1px);
+}
+
+.vintage-button-secondary {
+  background: transparent;
+  color: var(--vintage-dark-green);
+  border: 2px solid var(--vintage-dark-green);
+}
+
+.vintage-button-secondary:hover {
+  background: var(--vintage-dark-green);
+  color: var(--vintage-light-beige);
+}
+
+.vintage-accent {
+  background: var(--vintage-warm-brown);
+  color: var(--vintage-light-beige);
+}
+
+.vintage-text-primary {
+  color: var(--vintage-dark-green);
+}
+
+.vintage-text-secondary {
+  color: var(--vintage-warm-brown);
+}
+
+.vintage-text-muted {
+  color: var(--muted-foreground);
+}
+
+/* Recipe card specific vintage styles */
+.recipe-card-vintage {
+  background: var(--vintage-light-beige);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(65, 74, 55, 0.1);
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.recipe-card-vintage:hover {
+  box-shadow: 0 8px 24px rgba(65, 74, 55, 0.2);
+  transform: translateY(-4px);
+  border-color: var(--vintage-warm-brown);
+}
+
+/* Enhanced vintage styling for better visual hierarchy */
+.vintage-section {
+  background: linear-gradient(135deg, var(--vintage-light-beige) 0%, #F5F0E8 100%);
+  border: 2px solid var(--vintage-warm-brown);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 16px rgba(65, 74, 55, 0.1);
+}
+
+.vintage-hero {
+  background: linear-gradient(135deg, var(--vintage-dark-green) 0%, #2A2F24 100%);
+  color: var(--vintage-light-beige);
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 8px 32px rgba(65, 74, 55, 0.3);
+}
+
+.vintage-cta {
+  background: var(--vintage-warm-brown);
+  color: var(--vintage-light-beige);
+  border: 2px solid var(--vintage-warm-brown);
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.vintage-cta:hover {
+  background: var(--vintage-dark-green);
+  border-color: var(--vintage-dark-green);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(65, 74, 55, 0.3);
+}
+
+.recipe-card-vintage .match-badge {
+  background: var(--vintage-dark-green);
+  color: var(--vintage-light-beige);
+}
+
+.recipe-card-vintage .creative-badge {
+  background: var(--vintage-warm-brown);
+  color: var(--vintage-light-beige);
+}
+
+.recipe-card-vintage .missing-ingredient {
+  background: #DC2626;
+  color: var(--vintage-light-beige);
+}
+
+.recipe-card-vintage .all-ingredients {
+  background: #059669;
+  color: var(--vintage-light-beige);
 }
 
 /* Slider styles for range inputs */

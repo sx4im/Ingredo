@@ -370,7 +370,7 @@ export function IngredientInput({
               setTimeout(() => setShowSuggestions(false), 150);
             }}
             placeholder={ingredients.length === 0 ? placeholder : ""}
-            className="flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
+            className="flex-1 bg-transparent outline-none placeholder:text-muted-foreground pr-10"
             disabled={ingredients.length >= maxItems}
             aria-label="Add ingredients"
             data-testid="ingredient-input"
@@ -382,7 +382,7 @@ export function IngredientInput({
             variant="ghost"
             size="sm"
             onClick={openImageModal}
-            className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
             aria-label="Add photo"
             data-testid="add-photo-button"
           >
