@@ -81,11 +81,11 @@ export default function Home() {
       <section className="relative w-full h-screen flex items-center justify-center z-10">
         
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="vintage-hero w-full mx-auto text-center bg-vintage-light-beige/10 backdrop-blur-sm rounded-3xl p-16 shadow-2xl border border-vintage-warm-brown/10 hover:shadow-3xl transition-all duration-500">
+          <div className="w-full mx-auto text-center p-16">
             <h1 className="display-text text-white mb-8 drop-shadow-2xl font-extrabold">
               Cook with what you have
             </h1>
-            <p className="lead text-gray-800/98 mb-10 max-w-3xl mx-auto text-center drop-shadow-lg text-xl font-medium">
+            <p className="lead text-white mb-10 max-w-3xl mx-auto text-center drop-shadow-lg text-xl font-medium">
               Turn the ingredients you already have into amazing meals. Discover personalized recipes that help you save time, reduce food waste, and enjoy delicious possibilities every day.
             </p>
 
@@ -292,7 +292,7 @@ export default function Home() {
       <section className="section-padding relative z-10" id="how-it-works">
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="vintage-hero w-full mx-auto text-center bg-vintage-light-beige/10 backdrop-blur-sm rounded-3xl p-16 shadow-2xl border border-vintage-warm-brown/10 hover:shadow-3xl transition-all duration-500">
+          <div className="w-full mx-auto text-center p-16">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-white mb-4">
                 How It Works
