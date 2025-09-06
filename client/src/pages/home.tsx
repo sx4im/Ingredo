@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Chip } from "@/components/ui/chip";
 import Iridescence from "@/components/Iridescence";
 import CountUp from "@/components/CountUp";
+import TextPressure from "@/components/TextPressure";
 import { type IngredientChip } from "@shared/schema";
 import { Search, ChefHat, Recycle, Heart, Plus, Star, Bookmark, ArrowRight, Clock, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -82,9 +83,20 @@ export default function Home() {
         
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="w-full mx-auto text-center p-16">
-            <h1 className="display-text text-white mb-8 drop-shadow-2xl font-extrabold">
-              Cook with what you have
-            </h1>
+            <div style={{position: 'relative', height: '140px', marginBottom: '0rem'}}>
+              <TextPressure
+                text="Cook with what you have"
+                flex={true}
+                alpha={false}
+                stroke={false}
+                width={true}
+                weight={true}
+                italic={true}
+                textColor="#ffffff"
+                strokeColor="#ff0000"
+                minFontSize={36}
+              />
+            </div>
             <p className="lead text-white mb-10 max-w-3xl mx-auto text-center drop-shadow-lg text-xl font-medium">
               Turn the ingredients you already have into amazing meals. Discover personalized recipes that help you save time, reduce food waste, and enjoy delicious possibilities every day.
             </p>
@@ -157,7 +169,7 @@ export default function Home() {
                   style={{ maxWidth: '300px' }}
                 >
                   Explore All Recipes 
-                  <ArrowRight className="button-icon ml-2" style={{ color: 'white' }} />
+                  <ArrowRight className="button-icon ml-2" style={{ color: 'var(--vintage-warm-brown)' }} />
                   </Link>
               </div>
             </div>
