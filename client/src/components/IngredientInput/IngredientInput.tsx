@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { apiClient } from "@/lib/apiClient";
 import { type IngredientChip, type UploadedImage } from "@shared/schema";
-import { X, GripVertical, Camera } from "lucide-react";
+import { X, GripVertical, Camera, Search } from "lucide-react";
 import { ImageUploader } from "@/components/ImageUploader";
 
 interface IngredientSuggestion {
@@ -74,8 +74,8 @@ function SortableChip({ chip, onRemove }: SortableChipProps) {
       ref={setNodeRef}
       style={style}
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors",
-        "bg-primary text-primary-foreground hover:bg-primary/80",
+        "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-semibold transition-colors min-w-fit max-w-48",
+        "bg-orange-500 text-white hover:bg-orange-600",
         isDragging && "opacity-50"
       )}
       data-testid={`ingredient-chip-${chip.name.toLowerCase()}`}
@@ -91,7 +91,7 @@ function SortableChip({ chip, onRemove }: SortableChipProps) {
       <span>{displayText}</span>
       <button
         onClick={() => onRemove(chip.id)}
-        className="ml-1 rounded-full hover:bg-primary-foreground/20 p-0.5"
+        className="ml-1 rounded-full hover:bg-white/20 p-0.5"
         aria-label={`Remove ${chip.name}`}
         data-testid={`remove-chip-${chip.name.toLowerCase()}`}
       >
@@ -323,7 +323,10 @@ export function IngredientInput({
   return (
     <div className="space-y-2">
       <div className="relative">
-        <div className="relative flex min-h-[40px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+        <div className="relative flex min-h-[40px] w-full border border-vintage-warm-brown/50 focus-within:border-vintage-warm-brown bg-transparent px-3 py-2 text-sm rounded-md flex-wrap gap-1">
+          {/* Search Icon */}
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-vintage-warm-brown h-4 w-4" />
+          
           {/* Chips */}
           {ingredients.length > 0 && (
             <DndContext
@@ -335,7 +338,7 @@ export function IngredientInput({
                 items={ingredients.map(ing => ing.id)}
                 strategy={horizontalListSortingStrategy}
               >
-                <div className="flex flex-wrap gap-1 mr-2">
+                <div className="flex flex-wrap gap-1.5 mr-2 max-w-full overflow-hidden">
                   {ingredients.map((chip) => (
                     <SortableChip
                       key={chip.id}
@@ -370,7 +373,7 @@ export function IngredientInput({
               setTimeout(() => setShowSuggestions(false), 150);
             }}
             placeholder={ingredients.length === 0 ? placeholder : ""}
-            className="flex-1 bg-transparent outline-none placeholder:text-muted-foreground pr-10"
+            className="flex-1 bg-transparent outline-none placeholder:text-muted-foreground pl-10 pr-10 text-sm font-medium"
             disabled={ingredients.length >= maxItems}
             aria-label="Add ingredients"
             data-testid="ingredient-input"
@@ -382,7 +385,7 @@ export function IngredientInput({
             variant="ghost"
             size="sm"
             onClick={openImageModal}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-vintage-warm-brown"
             aria-label="Add photo"
             data-testid="add-photo-button"
           >

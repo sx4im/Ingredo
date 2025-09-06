@@ -27,8 +27,8 @@ export function EmptyState({
         <div className="text-muted-foreground mb-4">
           {icon}
         </div>
-        <h3 className="text-lg font-medium mb-2">{title}</h3>
-        <p className="text-muted-foreground mb-4">{description}</p>
+        <h3 className="text-lg font-medium mb-2 text-center">{title}</h3>
+        <p className="text-black mb-4">{description}</p>
         {action && (
           <Button onClick={action.onClick} data-testid="empty-state-action">
             {action.label}

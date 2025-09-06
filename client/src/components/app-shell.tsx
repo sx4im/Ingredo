@@ -84,7 +84,7 @@ export function AppShell({ children }: AppShellProps) {
                   placeholder="Search ingredients..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 h-10 bg-transparent border-b border-vintage-warm-brown/30 focus:border-vintage-dark-green rounded-none text-sm font-medium focus:outline-none"
+                  className="pl-10 h-10 bg-transparent border-b border-vintage-warm-brown/50 focus:border-vintage-warm-brown rounded-none text-sm font-medium focus:outline-none"
                   data-testid="search-input"
                 />
               </form>
@@ -95,10 +95,10 @@ export function AppShell({ children }: AppShellProps) {
               {/* Profile Menu */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" data-testid="profile-menu" className="h-10 w-10 text-blue-600 hover:text-amber-500 transition-colors duration-200">
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-amber-500 text-white text-sm">
-                        <User className="h-4 w-4" />
+                  <Button variant="ghost" size="icon" data-testid="profile-menu" className="h-12 w-12 rounded-full p-0 hover:bg-transparent">
+                    <Avatar className="h-10 w-10">
+                      <AvatarFallback className="bg-orange-500 text-white text-sm rounded-full">
+                        <User className="h-5 w-5" />
                       </AvatarFallback>
                     </Avatar>
                   </Button>
@@ -178,7 +178,7 @@ export function AppShell({ children }: AppShellProps) {
                 placeholder="Search ingredients..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 h-10 bg-transparent border-b border-vintage-warm-brown/30 focus:border-vintage-dark-green rounded-none text-sm font-medium focus:outline-none"
+                className="pl-9 h-10 bg-transparent border-b border-vintage-warm-brown/50 focus:border-vintage-warm-brown rounded-none text-sm font-medium focus:outline-none"
                 data-testid="mobile-search-input"
               />
             </form>

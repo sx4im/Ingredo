@@ -358,8 +358,8 @@ export function ImageUploader({
             )}
             
             <div>
-              <h3 className="text-lg font-semibold mb-2">
-                {isDragOver ? "Drop images here" : "Upload ingredient photos"}
+              <h3 className="text-lg font-semibold mb-2 text-center">
+                {isDragOver ? "Drop images here" : "Snap your Snacks"}
               </h3>
               <p className="text-muted-foreground text-sm mb-4">
                 Take photos of ingredients or drag and drop images here

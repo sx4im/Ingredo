@@ -129,15 +129,12 @@ export default function Profile() {
             </AvatarFallback>
           </Avatar>
           
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold mb-2">{profile.name}</h1>
-            <p className="text-muted-foreground mb-4">{profile.email}</p>
-            <p className="text-sm text-muted-foreground">
-              Member since {new Date(profile.joinDate).toLocaleDateString()}
-            </p>
+          <div className="flex-1 text-left">
+            <h1 className="text-3xl font-bold mb-2 text-white text-left">{profile.name}</h1>
+            <p className="text-white mb-4">{profile.email}</p>
           </div>
 
-          <Button data-testid="edit-profile">
+          <Button data-testid="edit-profile" onClick={() => alert('Edit Profile functionality coming soon!')} className="bg-orange-500 hover:bg-orange-600 text-white">
             <Settings className="mr-2 h-4 w-4" />
             Edit Profile
           </Button>
@@ -187,7 +184,7 @@ export default function Profile() {
           {/* Saved Recipes */}
           <TabsContent value="saved" className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Saved Recipes</h2>
+              <h2 className="text-2xl font-bold text-white">Saved Recipes</h2>
               <span className="text-muted-foreground">
                 {savedRecipes?.length || 0} recipes
               </span>
@@ -258,7 +255,7 @@ export default function Profile() {
           {/* Recent Recipes */}
           <TabsContent value="recent" className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Recently Cooked</h2>
+              <h2 className="text-2xl font-bold text-white">Recently Cooked</h2>
               <span className="text-muted-foreground">
                 {recentRecipes?.length || 0} recipes
               </span>
@@ -329,7 +326,7 @@ export default function Profile() {
           {/* Collections */}
           <TabsContent value="collections" className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">My Collections</h2>
+              <h2 className="text-2xl font-bold text-white">My Collections</h2>
               <Button data-testid="create-collection">
                 <BookOpen className="mr-2 h-4 w-4" />
                 New Collection

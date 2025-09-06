@@ -96,7 +96,7 @@ export default function Home() {
                 data-testid="start-cooking-button"
               >
                   Start Cooking
-                <ArrowRight className="button-icon ml-2" style={{ color: 'var(--vintage-warm-brown)' }} />
+                <ArrowRight className="button-icon ml-2" style={{ color: 'var(--vintage-dark-green)' }} />
                 </Link>
                               <button 
                   onClick={() => {
@@ -105,10 +105,10 @@ export default function Home() {
                       element.scrollIntoView({ behavior: 'smooth' });
                     }
                   }}
-                  className="animated-button-secondary text-xl px-8 py-4"
+                  className="animated-button text-xl px-8 py-4"
                 data-testid="learn-more-button"
               >
-                  <ArrowRight className="button-icon mr-2" style={{ color: 'var(--vintage-warm-brown)' }} />
+                  <ArrowRight className="button-icon mr-2" style={{ color: 'var(--vintage-dark-green)' }} />
                 Learn More
                 </button>
             </div>
@@ -117,7 +117,7 @@ export default function Home() {
             <div className="max-w-4xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
                 <div className="text-center">
-                  <div className="text-5xl font-bold text-vintage-warm-brown mb-2">
+                  <div className="text-5xl font-bold text-white mb-2">
                     <CountUp 
                       to={2847} 
                       duration={2.5} 
@@ -128,7 +128,7 @@ export default function Home() {
                   <div className="text-white/90 text-lg">Recipes Available</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-5xl font-bold text-vintage-warm-brown mb-2">
+                  <div className="text-5xl font-bold text-white mb-2">
                     <CountUp 
                       to={156} 
                       duration={2} 
@@ -138,7 +138,7 @@ export default function Home() {
                   <div className="text-white/90 text-lg">Ingredients Supported</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-5xl font-bold text-vintage-warm-brown mb-2">
+                  <div className="text-5xl font-bold text-white mb-2">
                     <CountUp 
                       to={98} 
                       duration={2.2} 
@@ -153,11 +153,11 @@ export default function Home() {
               <div className="text-center">
                 <Link 
                   href="/search" 
-                  className="animated-button explore-button font-extrabold"
+                  className="animated-button-secondary explore-button font-extrabold"
                   style={{ maxWidth: '300px' }}
                 >
                   Explore All Recipes 
-                  <ArrowRight className="button-icon ml-2" style={{ color: 'var(--vintage-warm-brown)' }} />
+                  <ArrowRight className="button-icon ml-2" style={{ color: 'white' }} />
                   </Link>
               </div>
             </div>

@@ -73,11 +73,11 @@ export default function Search() {
 
         {/* Ingredient Search */}
         <Card className="mb-8">
-          <CardContent className="p-6">
+          <CardContent className="p-6" >
             <IngredientInput
               initialIngredients={selectedIngredients}
               onChange={handleIngredientsChange}
-              placeholder="Type ingredients you have..."
+              placeholder="Search ingredients..."
               maxItems={15}
             />
           </CardContent>

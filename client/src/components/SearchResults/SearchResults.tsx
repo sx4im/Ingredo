@@ -183,7 +183,7 @@ export function SearchResults({
   if (ingredients.length === 0) {
     return (
       <EmptyState
-        icon={<Search className="mx-auto h-12 w-12 mb-4 opacity-50" />}
+        icon={<Search className="mx-auto h-12 w-12 mb-4 text-orange-500" />}
         title="Start by adding ingredients"
         description="Search for ingredients you have and we'll find recipes you can make!"
         action={{
@@ -200,9 +200,9 @@ export function SearchResults({
       <Card className={className}>
         <CardContent className="p-8 text-center">
           <div className="flex flex-col items-center justify-center">
-            <Search className="h-12 w-12 mb-4 text-gray-800" />
+            <Search className="h-12 w-12 mb-4 text-orange-500" />
             <h3 className="text-lg font-medium mb-2 text-gray-800">Search failed</h3>
-            <p className="text-muted-foreground mb-4">
+            <p className="text-black mb-4">
               We couldn't find any recipes. Please try again.
             </p>
             <Button onClick={() => refetchMatched()}>
