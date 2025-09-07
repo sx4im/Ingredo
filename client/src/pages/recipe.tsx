@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import Iridescence from "@/components/Iridescence";
 import { 
   Clock, 
   Users, 
@@ -312,14 +311,19 @@ export default function Recipe() {
   if (isLoading) {
     return (
       <div className="relative min-h-screen">
-        <div className="fixed inset-0 z-0">
-          <Iridescence
-            color={[0.12, 0.25, 0.69]}
-            mouseReact={true}
-            amplitude={0.15}
-            speed={0.8}
-          />
-        </div>
+        <div
+          className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: 'url(/bg3.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
+        <div
+          className="fixed inset-0 z-0"
+          style={{ backgroundColor: 'rgba(30, 64, 175, 0.8)' }}
+        />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
           <div className="max-w-6xl mx-auto space-y-8">
           <Skeleton className="h-64 w-full rounded-lg" />
@@ -337,14 +341,19 @@ export default function Recipe() {
   if (error || !recipe) {
     return (
       <div className="relative min-h-screen">
-        <div className="fixed inset-0 z-0">
-          <Iridescence
-            color={[0.12, 0.25, 0.69]}
-            mouseReact={true}
-            amplitude={0.15}
-            speed={0.8}
-          />
-        </div>
+        <div
+          className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: 'url(/bg3.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
+        <div
+          className="fixed inset-0 z-0"
+          style={{ backgroundColor: 'rgba(30, 64, 175, 0.8)' }}
+        />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         <Card className="max-w-md mx-auto">
           <CardContent className="p-8 text-center">
@@ -361,16 +370,21 @@ export default function Recipe() {
 
   return (
     <div className="relative min-h-screen">
-      {/* Unified Iridescence Background */}
-      <div className="fixed inset-0 z-0">
-        <Iridescence
-          color={[0.26, 0.29, 0.22]}
-          mouseReact={true}
-          amplitude={0.15}
-          speed={0.8}
-        />
-        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(65, 74, 55, 0.6)' }}></div>
-      </div>
+      {/* Background Image */}
+      <div
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url(/bg3.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+      {/* Blue Overlay */}
+      <div
+        className="fixed inset-0 z-0"
+        style={{ backgroundColor: 'rgba(30, 64, 175, 0.8)' }}
+      />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         <div className="max-w-6xl mx-auto">

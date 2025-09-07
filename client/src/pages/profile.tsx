@@ -17,7 +17,6 @@ import {
   Settings,
   ChefHat
 } from "lucide-react";
-import Iridescence from "@/components/Iridescence";
 
 interface UserProfile {
   id: string;
@@ -108,15 +107,21 @@ export default function Profile() {
 
   return (
     <div className="relative min-h-screen">
-      {/* Unified Iridescence Background */}
-      <div className="fixed inset-0 z-0">
-        <Iridescence
-          color={[0.12, 0.25, 0.69]} // vibrant blue in RGB (0-1 range)
-          mouseReact={true}
-          amplitude={0.15}
-          speed={0.8}
-        />
-      </div>
+      {/* Background Image */}
+      <div
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url(/bg3.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+      {/* Blue Overlay */}
+      <div
+        className="fixed inset-0 z-0"
+        style={{ backgroundColor: 'rgba(30, 64, 175, 0.8)' }}
+      />
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         <div className="max-w-6xl mx-auto">
