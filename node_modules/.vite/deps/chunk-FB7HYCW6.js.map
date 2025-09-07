@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["optional-peer-dep:__vite-optional-peer-dep:@emotion/is-prop-valid:framer-motion"],
+  "sourcesContent": ["throw new Error(`Could not resolve \"@emotion/is-prop-valid\" imported by \"framer-motion\". Is it installed?`)"],
+  "mappings": ";;;;;AAAA;AAAA;AAAA,UAAM,IAAI,MAAM,0FAA0F;AAAA;AAAA;",
+  "names": []
+}

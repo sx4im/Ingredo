@@ -167,7 +167,7 @@ export default function AIRecipeEditor({ isOpen, onClose, recipe, onSave }: AIRe
 
     setIsSaving(true);
     try {
-      const response = await apiClient.post('/api/recipe', {
+      const response = await apiClient.post<AIRecipe>('/api/recipe', {
         ...editedRecipe,
         source: 'ingredo_generated',
         slug: editedRecipe.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
@@ -178,7 +178,7 @@ export default function AIRecipeEditor({ isOpen, onClose, recipe, onSave }: AIRe
         description: "Your AI-generated recipe has been saved successfully!",
       });
       
-      onSave(response.data);
+      onSave(response);
       setIsEditing(false);
       setHasUnsavedChanges(false);
       onClose();
