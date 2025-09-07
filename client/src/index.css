@@ -675,10 +675,4 @@ html {
 .count-up-text {
   display: inline-block;
   font-variant-numeric: tabular-nums;
-  transition: all 0.3s ease;
-}
-
-.count-up-text:hover {
-  transform: scale(1.05);
-  text-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
 }
