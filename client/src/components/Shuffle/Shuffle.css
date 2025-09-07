@@ -1,0 +1,39 @@
+.shuffle-parent {
+  display: inline-block;
+  white-space: normal;
+  word-wrap: break-word;
+  will-change: transform;
+  line-height: 1.1; /* keep line height consistent before/after split to avoid jump */
+  font-size: 4rem !important;
+  font-family: var(--font-display) !important;
+  text-transform: none;
+  visibility: hidden; /* hidden until initialized to avoid flash/jump */
+  font-weight: 700 !important;
+  letter-spacing: -0.02em;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.shuffle-parent.is-ready {
+  visibility: visible;
+}
+
+.shuffle-char-wrapper {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: baseline;
+  position: relative;
+}
+
+.shuffle-char-wrapper > span {
+  display: inline-flex;
+  will-change: transform;
+}
+
+.shuffle-char {
+  line-height: 1.1;
+  display: inline-block;
+  text-align: center;
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}

@@ -39,18 +39,30 @@ export function AppShell({ children }: AppShellProps) {
     <div className="min-h-screen flex flex-col">
       {/* Header */}
       <div className="w-full px-4 py-2 relative z-50">
-        <header className="mx-auto max-w-7xl bg-vintage-light-beige rounded-lg border-2 border-vintage-warm-brown/20 shadow-lg">
-          <div className="px-6 py-3">
+        <header className="mx-auto max-w-7xl rounded-md border-2 border-white/20 shadow-lg backdrop-blur-md bg-white/10 relative overflow-hidden">
+          {/* Background Image */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: 'url(/bg.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          />
+          {/* Blue Overlay */}
+          <div className="absolute inset-0 bg-blue-600/70" />
+          <div className="px-6 py-3 relative z-10">
             <div className="flex h-12 items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center group" data-testid="logo-link">
+            <Link href="/" className="flex items-center" data-testid="logo-link">
               <img 
                 src="/logo.png" 
                 alt="Ingredo Logo" 
-                className="w-16 h-16 rounded-xl group-hover:opacity-80 transition-opacity duration-200"
+                className="w-16 h-16 rounded-xl"
               />
               <span 
-                className="ml-3 text-3xl font-bold text-blue-600 group-hover:text-amber-500 transition-colors duration-200"
+                className="ml-3 text-3xl font-bold text-white"
                 style={{ fontFamily: 'var(--font-display)' }}
               >
                 Ingredo
@@ -64,8 +76,8 @@ export function AppShell({ children }: AppShellProps) {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    "text-sm font-medium text-blue-600 hover:text-amber-500 transition-colors duration-200 uppercase tracking-wide",
-                    item.current ? "text-amber-500" : ""
+                    "text-sm font-medium text-white hover:text-amber-300 transition-colors duration-200 uppercase tracking-wide",
+                    item.current ? "text-amber-300" : ""
                   )}
                   style={{ fontFamily: 'var(--font-sans)' }}
                   data-testid={`nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
@@ -78,13 +90,13 @@ export function AppShell({ children }: AppShellProps) {
             {/* Search Bar (Desktop) */}
             <div className="hidden lg:block flex-1 max-w-md mx-8">
               <form onSubmit={handleSearch} className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-vintage-warm-brown h-4 w-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white h-4 w-4" />
                 <Input
                   type="search"
                   placeholder="Search ingredients..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 h-10 bg-transparent border-b border-vintage-warm-brown/50 focus:border-vintage-warm-brown rounded-none text-sm font-medium focus:outline-none"
+                  className="pl-10 h-10 bg-transparent border-b border-white/50 focus:border-white rounded-none text-sm font-medium focus:outline-none text-white placeholder-white/70 !text-white [&::placeholder]:!text-white/70"
                   data-testid="search-input"
                 />
               </form>
@@ -170,15 +182,15 @@ export function AppShell({ children }: AppShellProps) {
           </div>
 
           {/* Mobile Search Bar */}
-          <div className="lg:hidden pb-4">
+          <div className="lg:hidden pb-4 relative z-10">
             <form onSubmit={handleSearch} className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-vintage-warm-brown h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white h-4 w-4" />
               <Input
                 type="search"
                 placeholder="Search ingredients..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 h-10 bg-transparent border-b border-vintage-warm-brown/50 focus:border-vintage-warm-brown rounded-none text-sm font-medium focus:outline-none"
+                className="pl-9 h-10 bg-transparent border-b border-white/50 focus:border-white rounded-none text-sm font-medium focus:outline-none text-white placeholder-white/70 !text-white [&::placeholder]:!text-white/70"
                 data-testid="mobile-search-input"
               />
             </form>

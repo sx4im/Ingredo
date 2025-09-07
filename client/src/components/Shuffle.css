@@ -1,0 +1,34 @@
+.shuffle-parent {
+  display: inline-block;
+  white-space: normal;
+  word-wrap: break-word;
+  will-change: transform;
+  line-height: 1; /* keep line height consistent before/after split to avoid jump */
+  font-size: 4rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: #ffffff;
+  visibility: hidden; /* hidden until initialized to avoid flash/jump */
+}
+
+.shuffle-parent.is-ready {
+  visibility: visible;
+}
+
+.shuffle-char-wrapper {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: baseline;
+  position: relative;
+}
+
+.shuffle-char-wrapper > span {
+  display: inline-flex;
+  will-change: transform;
+}
+
+.shuffle-char {
+  line-height: 1;
+  display: inline-block;
+  text-align: center;
+}

@@ -5,9 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Chip } from "@/components/ui/chip";
-import Iridescence from "@/components/Iridescence";
 import CountUp from "@/components/CountUp";
-import TextPressure from "@/components/TextPressure";
+import Shuffle from "@/components/Shuffle";
 import { type IngredientChip } from "@shared/schema";
 import { Search, ChefHat, Recycle, Heart, Plus, Star, Bookmark, ArrowRight, Clock, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -68,33 +67,41 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen">
-      {/* Unified Iridescence Background for entire discover section */}
-      <div className="fixed inset-0 z-0">
-        <Iridescence
-          color={[0.12, 0.25, 0.69]} // vibrant blue in RGB (0-1 range)
-          mouseReact={true}
-          amplitude={0.15}
-          speed={0.8}
-        />
-      </div>
+      {/* Background Image for entire page */}
+      <div 
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url(/bg.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+      {/* Blue Overlay for entire page */}
+      <div className="fixed inset-0 z-0 bg-blue-600/70" />
 
       {/* Hero Section */}
       <section className="relative w-full h-screen flex items-center justify-center z-10">
         
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="w-full mx-auto text-center p-16">
-            <div style={{position: 'relative', height: '140px', marginBottom: '0rem'}}>
-              <TextPressure
+            <div style={{position: 'relative', height: '130px', marginBottom: '-2rem'}}>
+              <Shuffle
                 text="Cook with what you have"
-                flex={true}
-                alpha={false}
-                stroke={false}
-                width={true}
-                weight={true}
-                italic={true}
-                textColor="#ffffff"
-                strokeColor="#ff0000"
-                minFontSize={36}
+                shuffleDirection="right"
+                duration={0.8}
+                animationMode="evenodd"
+                shuffleTimes={2}
+                ease="power3.out"
+                stagger={0.05}
+                threshold={0.1}
+                triggerOnce={true}
+                triggerOnHover={true}
+                respectReducedMotion={true}
+                onShuffleComplete={() => {}}
+                colorFrom="#ffffff"
+                colorTo="#ffffff"
+                style={{ fontSize: '3.5rem', fontWeight: '700' }}
               />
             </div>
             <p className="lead text-white mb-10 max-w-3xl mx-auto text-center drop-shadow-lg text-xl font-medium">
@@ -175,9 +182,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-
       </section>
-
 
       {/* Features Section */}
       <section className="section-padding relative z-10">
