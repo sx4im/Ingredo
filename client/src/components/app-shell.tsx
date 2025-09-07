@@ -51,9 +51,9 @@ export function AppShell({ children }: AppShellProps) {
               />
                 <span
                   className="ml-3 text-3xl font-bold text-gray-900"
-                  style={{ fontFamily: 'var(--font-display)' }}
+                  style={{ fontFamily: 'Asimovian, cursive' }}
                 >
-                  Ingredo
+                  ingredo
                 </span>
             </Link>
 

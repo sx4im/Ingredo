@@ -6,7 +6,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import CountUp from "@/components/CountUp";
 import Shuffle from "@/components/Shuffle";
-import VariableProximity from "@/components/VariableProximity";
 import { type IngredientChip } from "@shared/schema";
 import { Search, ChefHat, Recycle, Heart, Plus, Star, Bookmark, ArrowRight, Clock, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -19,7 +18,6 @@ export default function Home() {
   ]);
   const [hoveredRecipe, setHoveredRecipe] = React.useState<number | null>(null);
   const { toast } = useToast();
-  const paragraphRef = React.useRef<HTMLDivElement>(null);
 
   const handleIngredientsChange = (newIngredients: IngredientChip[]) => {
     setIngredients(newIngredients);
@@ -108,21 +106,9 @@ export default function Home() {
                 style={{ fontSize: '3.5rem', fontWeight: '600', textShadow: 'none' }}
               />
             </div>
-            <div 
-              ref={paragraphRef}
-              className="mb-10 max-w-4xl mx-auto text-center"
-            >
-              <VariableProximity
-                label="Turn the ingredients you already have into amazing meals. Discover personalized recipes that help you save time, reduce food waste, and enjoy delicious possibilities every day."
-                className="variable-proximity-demo"
-                fromFontVariationSettings="'wght' 300, 'opsz' 8"
-                toFontVariationSettings="'wght' 900, 'opsz' 50"
-                containerRef={paragraphRef}
-                radius={120}
-                falloff="gaussian"
-                style={{ fontSize: '1.25rem', fontWeight: '500', color: '#ffffff' }}
-              />
-            </div>
+            <p className="lead text-white mb-10 max-w-4xl mx-auto text-center drop-shadow-lg text-xl font-medium">
+              Turn the ingredients you already have into amazing meals. Discover personalized recipes that help you save time, reduce food waste, and enjoy delicious possibilities every day.
+            </p>
 
             <div className="flex flex-col sm:flex-row gap-8 justify-center mb-16">
               <Link 
