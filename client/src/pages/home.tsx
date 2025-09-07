@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Chip } from "@/components/ui/chip";
 import CountUp from "@/components/CountUp";
 import Shuffle from "@/components/Shuffle";
 import { type IngredientChip } from "@shared/schema";
@@ -78,7 +77,10 @@ export default function Home() {
         }}
       />
       {/* Blue Overlay for entire page */}
-      <div className="fixed inset-0 z-0 bg-blue-600/70" />
+      <div 
+        className="fixed inset-0 z-0" 
+        style={{ backgroundColor: 'rgba(30, 64, 175, 0.8)' }}
+      />
 
       {/* Hero Section */}
       <section className="relative w-full h-screen flex items-center justify-center z-10">
