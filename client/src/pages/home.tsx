@@ -106,7 +106,7 @@ export default function Home() {
                 style={{ fontSize: '3.5rem', fontWeight: '600', textShadow: 'none' }}
               />
             </div>
-            <p className="lead text-white mb-10 max-w-4xl mx-auto text-center drop-shadow-lg text-xl font-medium">
+            <p className="lead text-white mb-10 max-w-3xl mx-auto text-center drop-shadow-lg text-xl font-medium">
               Turn the ingredients you already have into amazing meals. Discover personalized recipes that help you save time, reduce food waste, and enjoy delicious possibilities every day.
             </p>
 
