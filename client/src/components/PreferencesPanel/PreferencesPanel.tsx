@@ -248,57 +248,57 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
   const activeFilters = renderActiveFilters();
 
   return (
-    <Card className={cn("w-full", className)}>
+    <Card className={cn("w-full border border-gray-300 shadow-lg", className)}>
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger asChild>
-          <CardHeader className="pb-3 cursor-pointer hover:bg-muted/50 transition-colors">
-            <CardTitle className="flex items-center justify-between text-base">
+          <CardHeader className="pb-3 cursor-pointer hover:bg-gray-50 transition-colors border-b border-gray-200">
+            <CardTitle className="flex items-center justify-between text-base font-semibold">
               <div className="flex items-center gap-2">
-                <Filter className="h-4 w-4" />
-                Filters
+                <Filter className="h-5 w-5 text-gray-700" />
+                <span className="text-gray-800">Filters</span>
                 {activeFilterCount > 0 && (
-                  <Badge variant="secondary" className="h-5 text-xs">
+                  <Badge variant="secondary" className="h-6 text-xs bg-blue-100 text-blue-800 border-blue-200">
                     {activeFilterCount}
                   </Badge>
                 )}
               </div>
               <ChevronDown 
-                className={cn("h-4 w-4 transition-transform", isOpen && "rotate-180")} 
+                className={cn("h-5 w-5 text-gray-600 transition-transform", isOpen && "rotate-180")} 
               />
             </CardTitle>
           </CardHeader>
         </CollapsibleTrigger>
 
         <CollapsibleContent>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 bg-gray-50/30">
             {/* Active Filters */}
             {activeFilters.length > 0 && (
-              <div className="space-y-2">
+              <div className="space-y-3 p-4 bg-white rounded-lg border border-gray-200">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Active Filters</span>
+                  <span className="text-sm font-semibold text-gray-700">Active Filters</span>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={clearAllFilters}
-                    className="h-auto py-1 px-2 text-xs"
+                    className="h-auto py-1 px-3 text-xs text-orange-600 hover:text-orange-700 hover:bg-orange-50 border border-orange-200"
                     data-testid="clear-all-filters"
                   >
                     Clear All
                   </Button>
                 </div>
-                <div className="flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-2">
                   {activeFilters.map((filter, index) => (
                     <Badge 
                       key={index}
                       variant="secondary" 
-                      className="text-xs gap-1"
+                      className="text-xs gap-1 bg-orange-50 text-orange-800 border border-orange-200 hover:bg-orange-100"
                     >
                       {filter.label}
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={filter.onRemove}
-                        className="h-auto w-auto p-0 hover:bg-transparent"
+                        className="h-auto w-auto p-0 hover:bg-transparent hover:text-orange-600"
                       >
                         <X className="h-3 w-3" />
                       </Button>
@@ -308,18 +308,21 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
               </div>
             )}
 
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-6 md:grid-cols-2 mt-6">
               {/* Diet */}
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">Diet</Label>
+              <div className="space-y-3 p-4 bg-white rounded-lg border border-gray-200">
+                <Label className="text-sm font-semibold text-gray-700">Diet</Label>
                 <Select
                   value={filters.diet}
                   onValueChange={(value) => updateFilter("diet", value as SearchFilters["diet"])}
                 >
-                  <SelectTrigger data-testid="diet-select">
+                  <SelectTrigger 
+                    data-testid="diet-select"
+                    className="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  >
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="border border-gray-200 shadow-lg">
                     <SelectItem value="any">Any</SelectItem>
                     <SelectItem value="vegan">Vegan</SelectItem>
                     <SelectItem value="vegetarian">Vegetarian</SelectItem>
@@ -330,25 +333,25 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
               </div>
 
               {/* Servings */}
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">Servings</Label>
+              <div className="space-y-3 p-4 bg-white rounded-lg border border-gray-200">
+                <Label className="text-sm font-semibold text-gray-700">Servings</Label>
                 <Input
                   type="number"
                   min={1}
                   max={12}
                   value={filters.servings}
                   onChange={(e) => updateFilter("servings", parseInt(e.target.value) || 4)}
-                  className="w-full"
+                  className="w-full border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                   data-testid="servings-input"
                 />
               </div>
             </div>
 
             {/* Max Cook Time */}
-            <div className="space-y-3">
+            <div className="space-y-4 p-4 bg-white rounded-lg border border-gray-200 mt-6">
               <div className="flex justify-between items-center">
-                <Label className="text-sm font-medium">Max Cook Time</Label>
-                <span className="text-sm text-muted-foreground">{filters.maxCookTime} minutes</span>
+                <Label className="text-sm font-semibold text-gray-700">Max Cook Time</Label>
+                <span className="text-sm font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">{filters.maxCookTime} minutes</span>
               </div>
               <Slider
                 value={[filters.maxCookTime]}
@@ -362,8 +365,8 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
             </div>
 
             {/* Difficulty */}
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">Difficulty</Label>
+            <div className="space-y-4 p-4 bg-white rounded-lg border border-gray-200 mt-6">
+              <Label className="text-sm font-semibold text-gray-700">Difficulty</Label>
               <RadioGroup
                 value={filters.difficulty}
                 onValueChange={(value) => updateFilter("difficulty", value as SearchFilters["difficulty"])}
@@ -371,35 +374,54 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
                 data-testid="difficulty-radio"
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="any" id="any" />
-                  <Label htmlFor="any" className="text-sm">Any</Label>
+                  <RadioGroupItem 
+                    value="any" 
+                    id="any" 
+                    className="border border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-200"
+                  />
+                  <Label htmlFor="any" className="text-sm font-medium text-gray-700">Any</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="easy" id="easy" />
-                  <Label htmlFor="easy" className="text-sm">Easy</Label>
+                  <RadioGroupItem 
+                    value="easy" 
+                    id="easy" 
+                    className="border border-gray-300 text-green-600 focus:ring-2 focus:ring-green-200"
+                  />
+                  <Label htmlFor="easy" className="text-sm font-medium text-gray-700">Easy</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="medium" id="medium" />
-                  <Label htmlFor="medium" className="text-sm">Medium</Label>
+                  <RadioGroupItem 
+                    value="medium" 
+                    id="medium" 
+                    className="border border-gray-300 text-yellow-600 focus:ring-2 focus:ring-yellow-200"
+                  />
+                  <Label htmlFor="medium" className="text-sm font-medium text-gray-700">Medium</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="hard" id="hard" />
-                  <Label htmlFor="hard" className="text-sm">Hard</Label>
+                  <RadioGroupItem 
+                    value="hard" 
+                    id="hard" 
+                    className="border border-gray-300 text-red-600 focus:ring-2 focus:ring-red-200"
+                  />
+                  <Label htmlFor="hard" className="text-sm font-medium text-gray-700">Hard</Label>
                 </div>
               </RadioGroup>
             </div>
 
             {/* Cuisine */}
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Cuisine</Label>
+            <div className="space-y-3 p-4 bg-white rounded-lg border border-gray-200 mt-6">
+              <Label className="text-sm font-semibold text-gray-700">Cuisine</Label>
               <Select
                 value={filters.cuisine || "any"}
                 onValueChange={(value) => updateFilter("cuisine", value === "any" ? undefined : value)}
               >
-                <SelectTrigger data-testid="cuisine-select">
+                <SelectTrigger 
+                  data-testid="cuisine-select"
+                  className="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                >
                   <SelectValue placeholder="Any cuisine" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="border border-gray-200 shadow-lg">
                   <SelectItem value="any">Any cuisine</SelectItem>
                   {CUISINE_OPTIONS.map(cuisine => (
                     <SelectItem key={cuisine} value={cuisine}>{cuisine}</SelectItem>
@@ -409,16 +431,21 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
             </div>
 
             {/* Allergies */}
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">Avoid Allergens</Label>
-              <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-4 p-4 bg-white rounded-lg border border-gray-200 mt-6">
+              <Label className="text-sm font-semibold text-gray-700">Avoid Allergens</Label>
+              <div className="grid grid-cols-2 gap-3">
                 {ALLERGY_OPTIONS.map(allergy => (
                   <Button
                     key={allergy.value}
                     variant={filters.allergies.includes(allergy.value) ? "default" : "outline"}
                     size="sm"
                     onClick={() => toggleAllergy(allergy.value)}
-                    className="justify-start text-sm h-8"
+                    className={cn(
+                      "justify-start text-sm h-10 font-medium transition-all duration-200",
+                      filters.allergies.includes(allergy.value)
+                        ? "bg-orange-500 hover:bg-orange-600 text-white border-orange-500 shadow-md"
+                        : "border border-gray-300 text-gray-700 hover:border-orange-300 hover:bg-orange-50 hover:text-orange-700"
+                    )}
                     data-testid={`allergy-${allergy.value}`}
                   >
                     {allergy.label}
@@ -428,10 +455,10 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
             </div>
 
             {/* Allow Substitutions */}
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label className="text-sm font-medium">Allow Substitutions</Label>
-                <p className="text-xs text-muted-foreground">
+            <div className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 mt-6">
+              <div className="space-y-1">
+                <Label className="text-sm font-semibold text-gray-700">Allow Substitutions</Label>
+                <p className="text-xs text-gray-600">
                   Allow ingredient substitutions in recipes
                 </p>
               </div>
@@ -439,6 +466,7 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
                 checked={filters.allowSubstitutions}
                 onCheckedChange={(checked) => updateFilter("allowSubstitutions", checked)}
                 data-testid="substitutions-switch"
+                className="data-[state=checked]:bg-green-600"
               />
             </div>
           </CardContent>

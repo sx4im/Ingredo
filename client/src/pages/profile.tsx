@@ -15,8 +15,12 @@ import {
   Clock, 
   Star, 
   Settings,
-  ChefHat
+  ChefHat,
+  ShoppingCart,
+  Filter,
+  SortAsc
 } from "lucide-react";
+import { ShoppingListManager } from "@/components/ShoppingList/ShoppingListManager";
 
 interface UserProfile {
   id: string;
@@ -180,19 +184,35 @@ export default function Profile() {
 
         {/* Content Tabs */}
         <Tabs defaultValue="saved" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="saved" data-testid="tab-saved">Saved Recipes</TabsTrigger>
             <TabsTrigger value="recent" data-testid="tab-recent">Recently Cooked</TabsTrigger>
             <TabsTrigger value="collections" data-testid="tab-collections">Collections</TabsTrigger>
+            <TabsTrigger value="shopping" data-testid="tab-shopping">Shopping Lists</TabsTrigger>
           </TabsList>
 
           {/* Saved Recipes */}
           <TabsContent value="saved" className="space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold text-white">Saved Recipes</h2>
-              <span className="text-muted-foreground">
-                {savedRecipes?.length || 0} recipes
-              </span>
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => alert('Filter functionality coming soon!')}
+                >
+                  <Filter className="h-4 w-4 mr-2" />
+                  Filter
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => alert('Sort functionality coming soon!')}
+                >
+                  <SortAsc className="h-4 w-4 mr-2" />
+                  Sort
+                </Button>
+              </div>
             </div>
             
             {savedLoading ? (
@@ -332,7 +352,10 @@ export default function Profile() {
           <TabsContent value="collections" className="space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold text-white">My Collections</h2>
-              <Button data-testid="create-collection">
+              <Button 
+                data-testid="create-collection"
+                onClick={() => alert('Create collection functionality coming soon!')}
+              >
                 <BookOpen className="mr-2 h-4 w-4" />
                 New Collection
               </Button>
@@ -390,12 +413,20 @@ export default function Profile() {
                   <p className="text-muted-foreground mb-4">
                     Create collections to organize your favorite recipes!
                   </p>
-                  <Button data-testid="create-first-collection">
+                  <Button 
+                    data-testid="create-first-collection"
+                    onClick={() => alert('Create collection functionality coming soon!')}
+                  >
                     Create Your First Collection
                   </Button>
                 </CardContent>
               </Card>
             )}
+          </TabsContent>
+
+          {/* Shopping Lists */}
+          <TabsContent value="shopping" className="space-y-4">
+            <ShoppingListManager />
           </TabsContent>
         </Tabs>
         </div>

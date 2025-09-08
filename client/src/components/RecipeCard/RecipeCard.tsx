@@ -13,8 +13,11 @@ import {
   ChefHat, 
   AlertCircle,
   CheckCircle2,
-  X
+  X,
+  Heart
 } from "lucide-react";
+import { apiClient } from "@/lib/apiClient";
+import { toast } from "@/hooks/use-toast";
 
 export interface RecipeCardData {
   id: string;
@@ -45,19 +48,25 @@ interface RecipeCardProps {
   recipe: RecipeCardData;
   onSave?: (recipeId: string) => void;
   onUseSuggestion?: (recipeId: string) => void;
+  onFavorite?: (recipeId: string, isFavorited: boolean) => void;
   className?: string;
   priority?: boolean;
+  isFavorited?: boolean;
 }
 
 export function RecipeCard({ 
   recipe, 
   onSave, 
   onUseSuggestion, 
+  onFavorite,
   className,
-  priority = false 
+  priority = false,
+  isFavorited = false
 }: RecipeCardProps) {
   const [isHovered, setIsHovered] = React.useState(false);
   const [isSaved, setIsSaved] = React.useState(false);
+  const [isFavoritedState, setIsFavoritedState] = React.useState(isFavorited);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handleSave = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -70,6 +79,38 @@ export function RecipeCard({
     e.preventDefault();
     e.stopPropagation();
     onUseSuggestion?.(recipe.id);
+  };
+
+  const handleFavorite = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (isLoading) return;
+    
+    setIsLoading(true);
+    try {
+      const newFavoritedState = !isFavoritedState;
+      const endpoint = newFavoritedState ? `/api/recipe/${recipe.id}/save` : `/api/recipe/${recipe.id}/unsave`;
+      
+      await apiClient.post(endpoint);
+      setIsFavoritedState(newFavoritedState);
+      onFavorite?.(recipe.id, newFavoritedState);
+      
+      toast({
+        title: newFavoritedState ? "Recipe saved!" : "Recipe removed from favorites",
+        description: newFavoritedState 
+          ? "Added to your favorites" 
+          : "Removed from your favorites"
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update favorites. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const getDifficultyColor = (difficulty: string) => {
@@ -137,6 +178,17 @@ export function RecipeCard({
                 >
                   <Bookmark className={cn("h-4 w-4 mr-1", isSaved && "fill-current")} />
                   {isSaved ? "Saved" : "Save"}
+                </Button>
+                <Button
+                  size="sm"
+                  variant={isFavoritedState ? "default" : "secondary"}
+                  className="h-8 px-3"
+                  onClick={handleFavorite}
+                  disabled={isLoading}
+                  data-testid={`favorite-recipe-${recipe.id}`}
+                >
+                  <Heart className={cn("h-4 w-4 mr-1", isFavoritedState && "fill-current")} />
+                  {isFavoritedState ? "Favorited" : "Favorite"}
                 </Button>
                 <Button
                   size="sm"

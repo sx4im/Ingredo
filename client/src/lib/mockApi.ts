@@ -12,6 +12,31 @@ import {
 // Simulate API delay
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+// In-memory storage for shopping lists
+let shoppingListsStorage: Array<{
+  id: string;
+  name: string;
+  recipeIds: string[];
+  createdAt: string;
+  items: any[];
+}> = [
+  // Add some initial data for demonstration
+  {
+    id: "list_demo_1",
+    name: "Weekly Groceries",
+    recipeIds: ["1", "2"],
+    createdAt: "2024-01-15T10:30:00Z",
+    items: []
+  },
+  {
+    id: "list_demo_2", 
+    name: "Dinner Party",
+    recipeIds: ["3"],
+    createdAt: "2024-01-14T15:45:00Z",
+    items: []
+  }
+];
+
 export const mockApi = {
   // Recipe endpoints
   async getRecipes(params: URLSearchParams) {
@@ -257,6 +282,98 @@ export const mockApi = {
       image_id: data.image_id,
       recognized: mockRecognized.slice(0, data.max_suggestions)
     };
+  },
+
+  // Favorites endpoints
+  async saveRecipe(recipeId: string) {
+    await delay(200);
+    return { success: true, recipeId, saved: true };
+  },
+
+  async unsaveRecipe(recipeId: string) {
+    await delay(200);
+    return { success: true, recipeId, saved: false };
+  },
+
+  // Shopping list endpoints
+  async createShoppingList(data: { name: string; recipeIds: string[] }) {
+    await delay(300);
+    const shoppingListId = `list_${Date.now()}`;
+    const newList = {
+      id: shoppingListId,
+      name: data.name,
+      recipeIds: data.recipeIds,
+      createdAt: new Date().toISOString(),
+      items: []
+    };
+    
+    // Store the list in memory
+    shoppingListsStorage.push(newList);
+    
+    return newList;
+  },
+
+  async getShoppingLists() {
+    await delay(200);
+    // Return stored lists with summary data
+    return shoppingListsStorage.map(list => ({
+      id: list.id,
+      name: list.name,
+      itemCount: list.items.length,
+      recipeCount: list.recipeIds.length,
+      createdAt: list.createdAt
+    }));
+  },
+
+  async getShoppingList(listId: string) {
+    await delay(200);
+    
+    // Find the list in storage
+    const list = shoppingListsStorage.find(l => l.id === listId);
+    
+    if (!list) {
+      throw new Error('Shopping list not found');
+    }
+    
+    // Get recipe details for the stored recipe IDs
+    const recipes = list.recipeIds.map(recipeId => {
+      const recipe = mockRecipes.find(r => r.id === recipeId);
+      return recipe ? { id: recipe.id, title: recipe.title } : { id: recipeId, title: 'Unknown Recipe' };
+    });
+    
+    return {
+      id: list.id,
+      name: list.name,
+      recipes: recipes,
+      items: list.items,
+      createdAt: list.createdAt
+    };
+  },
+
+  async updateShoppingListItem(listId: string, itemId: string, data: { amount?: string; unit?: string }) {
+    await delay(200);
+    return { success: true, itemId, ...data };
+  },
+
+  async deleteShoppingListItem(listId: string, itemId: string) {
+    await delay(200);
+    return { success: true, itemId };
+  },
+
+  async exportShoppingList(listId: string, format: 'csv' | 'email') {
+    await delay(500);
+    if (format === 'csv') {
+      return {
+        success: true,
+        downloadUrl: `https://api.example.com/shopping-lists/${listId}/export.csv`,
+        filename: `shopping-list-${listId}.csv`
+      };
+    } else {
+      return {
+        success: true,
+        message: "Shopping list sent to your email successfully"
+      };
+    }
   }
 };
 
@@ -287,10 +404,16 @@ export const createMockApiClient = () => ({
         return mockApi.getAdminUsers() as Promise<T>;
       case '/api/admin/recipes':
         return mockApi.getAdminRecipes() as Promise<T>;
+      case '/api/shopping-lists':
+        return mockApi.getShoppingLists() as Promise<T>;
       default:
         if (pathname.startsWith('/api/recipes/') && !pathname.includes('ingredients=')) {
           const slug = pathname.split('/').pop();
           return mockApi.getRecipe(slug!) as Promise<T>;
+        }
+        if (pathname.startsWith('/api/shopping-lists/') && !pathname.includes('/export')) {
+          const listId = pathname.split('/').pop();
+          return mockApi.getShoppingList(listId!) as Promise<T>;
         }
         throw new Error(`Mock API endpoint not found: ${pathname}`);
     }
@@ -307,7 +430,21 @@ export const createMockApiClient = () => ({
         return mockApi.completeUpload(data as any) as Promise<T>;
       case '/api/recognize-image':
         return mockApi.recognizeImage(data as any) as Promise<T>;
+      case '/api/shopping-lists':
+        return mockApi.createShoppingList(data as any) as Promise<T>;
       default:
+        if (pathname.startsWith('/api/recipe/') && pathname.endsWith('/save')) {
+          const recipeId = pathname.split('/')[3];
+          return mockApi.saveRecipe(recipeId) as Promise<T>;
+        }
+        if (pathname.startsWith('/api/recipe/') && pathname.endsWith('/unsave')) {
+          const recipeId = pathname.split('/')[3];
+          return mockApi.unsaveRecipe(recipeId) as Promise<T>;
+        }
+        if (pathname.startsWith('/api/shopping-list/') && pathname.endsWith('/export')) {
+          const listId = pathname.split('/')[3];
+          return mockApi.exportShoppingList(listId, (data as any)?.format || 'csv') as Promise<T>;
+        }
         throw new Error(`Mock API endpoint not found: ${pathname}`);
     }
   },
@@ -317,10 +454,30 @@ export const createMockApiClient = () => ({
   },
   
   async patch<T>(url: string, data?: unknown): Promise<T> {
+    const urlObj = new URL(url, 'http://localhost:5000');
+    const pathname = urlObj.pathname;
+    
+    if (pathname.startsWith('/api/shopping-list/') && pathname.includes('/items/')) {
+      const parts = pathname.split('/');
+      const listId = parts[3];
+      const itemId = parts[5];
+      return mockApi.updateShoppingListItem(listId, itemId, data as any) as Promise<T>;
+    }
+    
     throw new Error(`Mock API PATCH not implemented for: ${url}`);
   },
   
   async delete<T>(url: string): Promise<T> {
+    const urlObj = new URL(url, 'http://localhost:5000');
+    const pathname = urlObj.pathname;
+    
+    if (pathname.startsWith('/api/shopping-list/') && pathname.includes('/items/')) {
+      const parts = pathname.split('/');
+      const listId = parts[3];
+      const itemId = parts[5];
+      return mockApi.deleteShoppingListItem(listId, itemId) as Promise<T>;
+    }
+    
     throw new Error(`Mock API DELETE not implemented for: ${url}`);
   }
 });
