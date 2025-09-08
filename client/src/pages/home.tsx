@@ -192,35 +192,29 @@ export default function Home() {
           <div className="max-w-6xl mx-auto">
             <h2 className="h2 text-white mb-12">Why Ingredo?</h2>
             <div className="grid md:grid-cols-3 gap-8">
-              <Card className="shadow-sm hover:shadow-md transition-shadow">
-                <CardContent className="p-6">
-                  <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
-                    <ChefHat className="h-6 w-6" style={{ color: '#FF6B35' }} />
-                  </div>
-                  <h3 className="text-xl font-semibold text-orange-500 mb-2">Smart Recipe Matching</h3>
-                  <p className="text-gray-800/90">Our AI finds recipes that maximize your available ingredients and minimize shopping needs.</p>
-                </CardContent>
-              </Card>
+              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-white transition-all duration-300">
+                <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
+                  <ChefHat className="h-6 w-6" style={{ color: '#FF6B35' }} />
+                </div>
+                <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--foreground)' }}>Smart Recipe Matching</h3>
+                <p className="text-gray-800/90">Our AI finds recipes that maximize your available ingredients and minimize shopping needs.</p>
+              </div>
 
-              <Card className="shadow-sm hover:shadow-md transition-shadow">
-                <CardContent className="p-6">
-                  <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
-                    <Recycle className="h-6 w-6" style={{ color: '#4CAF50' }} />
-                  </div>
-                  <h3 className="text-xl font-semibold text-orange-500 mb-2">Reduce Food Waste</h3>
-                  <p className="text-gray-800/90">Use what you have before it spoils. Track expiration dates and get timely recipe suggestions.</p>
-                </CardContent>
-              </Card>
+              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-white transition-all duration-300">
+                <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
+                  <Recycle className="h-6 w-6" style={{ color: '#4CAF50' }} />
+                </div>
+                <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--foreground)' }}>Reduce Food Waste</h3>
+                <p className="text-gray-800/90">Use what you have before it spoils. Track expiration dates and get timely recipe suggestions.</p>
+              </div>
 
-              <Card className="shadow-sm hover:shadow-md transition-shadow">
-                <CardContent className="p-6">
-                  <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
-                    <Heart className="h-6 w-6" style={{ color: '#E91E63' }} />
-                  </div>
-                  <h3 className="text-xl font-semibold text-orange-500 mb-2">Save Favorites</h3>
-                  <p className="text-gray-800/90">Build your personal cookbook with recipes you love and organize them into collections.</p>
-                </CardContent>
-              </Card>
+              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-white transition-all duration-300">
+                <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
+                  <Heart className="h-6 w-6" style={{ color: '#E91E63' }} />
+                </div>
+                <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--foreground)' }}>Save Favorites</h3>
+                <p className="text-gray-800/90">Build your personal cookbook with recipes you love and organize them into collections.</p>
+              </div>
             </div>
           </div>
         </div>

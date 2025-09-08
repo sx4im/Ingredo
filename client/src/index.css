@@ -21,7 +21,7 @@
   --secondary: #f97316; /* Bright orange secondary */
   --secondary-foreground: #ffffff; /* White text on secondary */
   --muted: #f8fafc; /* Very light gray for muted backgrounds */
-  --muted-foreground: #1e40af; /* Bright blue text color */
+  --muted-foreground: #1e293b; /* Bright orange text color */
   --accent: #f97316; /* Bright orange accent */
   --accent-foreground: #ffffff; /* White text on accent */
   --destructive: #ef4444; /* Red for destructive actions */
@@ -675,4 +675,26 @@ html {
 .count-up-text {
   display: inline-block;
   font-variant-numeric: tabular-nums;
+}
+
+/* Static Footer Text Styles */
+.static-text {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.portfolio-link {
+  color: white;
+  text-decoration: none;
+  border-bottom: 2px dotted white;
+  transition: all 0.3s ease;
+  padding: 0 2px;
+}
+
+.portfolio-link:hover {
+  color: #f97316;
+  border-bottom-color: #f97316;
+  text-shadow: 0 0 8px rgba(249, 115, 22, 0.5);
 }
