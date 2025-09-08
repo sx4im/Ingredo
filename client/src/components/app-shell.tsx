@@ -196,7 +196,19 @@ export function AppShell({ children }: AppShellProps) {
       <footer className="border-t border-white relative z-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col lg:flex-row justify-between items-center">
-            {/* Left side - Social icons */}
+            {/* Left side - Crafted by text */}
+            <div className="static-text mb-4 lg:mb-0">
+              CRAFTED BY <a 
+                href="https://saimshafique.vercel.app/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="portfolio-link"
+              >
+                SAIM SHAFIQUE
+              </a>
+            </div>
+            
+            {/* Right side - Social icons */}
             <div className="flex space-x-4 mb-4 lg:mb-0">
               <Link href="https://github.com/sx4im" className="text-white/80 hover:text-white transition-colors">
                 <span className="sr-only">GitHub</span>
@@ -223,18 +235,6 @@ export function AppShell({ children }: AppShellProps) {
                   <path fillRule="evenodd" d="M12.017 0H7.983C3.582 0 0 3.582 0 7.983v4.034C0 16.418 3.582 20 7.983 20h4.034C16.418 20 20 16.418 20 12.017V7.983C20 3.582 16.418 0 12.017 0zM10 13.5a3.5 3.5 0 110-7 3.5 3.5 0 010 7zm6.5-6.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clipRule="evenodd" />
                 </svg>
               </Link>
-            </div>
-            
-            {/* Right side - Crafted by text */}
-            <div className="static-text mb-4 lg:mb-0">
-              CRAFTED BY <a 
-                href="https://saimshafique.vercel.app/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="portfolio-link"
-              >
-                SAIM SHAFIQUE
-              </a>
             </div>
           </div>
         </div>

@@ -71,7 +71,7 @@ export default function Search() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="h1 text-white mb-4">Find Recipes</h1>
-          <p className="lead text-white/90 text-center">
+          <p className="text-white/90 text-center text-base font-medium">
             Add ingredients you have and discover delicious recipes you can make
           </p>
         </div>

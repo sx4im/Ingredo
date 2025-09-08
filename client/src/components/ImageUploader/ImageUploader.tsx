@@ -123,6 +123,7 @@ export function ImageUploader({
   const [isDragOver, setIsDragOver] = useState(false);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   // Sign upload mutation
@@ -306,6 +307,10 @@ export function ImageUploader({
     fileInputRef.current?.click();
   };
 
+  const openCamera = () => {
+    cameraInputRef.current?.click();
+  };
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       handleFiles(e.target.files);
@@ -381,16 +386,7 @@ export function ImageUploader({
                   variant="outline"
                   onClick={(e) => {
                     e.stopPropagation();
-                    // On mobile, this will open the camera
-                    const input = document.createElement('input');
-                    input.type = 'file';
-                    input.accept = 'image/*';
-                    input.capture = 'environment';
-                    input.onchange = (event) => {
-                      const files = (event.target as HTMLInputElement).files;
-                      if (files) handleFiles(files);
-                    };
-                    input.click();
+                    openCamera();
                   }}
                   disabled={uploads.length + uploadedImages.length >= maxImages}
                 >
@@ -415,6 +411,17 @@ export function ImageUploader({
         onChange={handleFileSelect}
         className="hidden"
         data-testid="file-input"
+      />
+
+      <input
+        ref={cameraInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        multiple
+        onChange={handleFileSelect}
+        className="hidden"
+        data-testid="camera-input"
       />
 
       {/* Upload Progress */}
