@@ -27,10 +27,20 @@
       transition: opacity 0.8s ease-out, transform 0.8s ease-out;
     ">
       <div style="text-align: center; animation: fadeInUp 1s ease-out;">
-        <!-- Animated Logo -->
-        <div style="margin-bottom: 3rem; animation: pulse 2s ease-in-out infinite; height: 6rem; display: flex; align-items: center; justify-content: center;">
+        <!-- New Animated Loader from Uiverse.io -->
+        <div class="loader">
+          <div class="loader__bar"></div>
+          <div class="loader__bar"></div>
+          <div class="loader__bar"></div>
+          <div class="loader__bar"></div>
+          <div class="loader__bar"></div>
+          <div class="loader__ball"></div>
+        </div>
+
+        <!-- Small Logo Text Below Loader -->
+        <div style="margin-top: 1rem;">
           <h1 style="
-            font-size: 5rem;
+            font-size: 2rem;
             font-weight: bold;
             margin: 0;
             padding: 0;
@@ -43,94 +53,13 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: gradientShift 3s ease-in-out infinite;
-            height: auto;
-            overflow: visible;
           ">
             ingredo
           </h1>
         </div>
 
-
-        <!-- Continuous Moving Progress Bar -->
-        <div style="width: 25rem; margin: 0 auto 2rem;">
-          <div style="
-            height: 1rem;
-            background: white;
-            border-radius: 0.5rem;
-            overflow: hidden;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
-            position: relative;
-            border: 2px solid var(--vintage-warm-brown);
-          ">
-            <div id="progress-bar" style="
-              height: 100%;
-              width: 0%;
-              background: linear-gradient(90deg, var(--vintage-warm-brown), #f97316, var(--vintage-light-beige));
-              background-size: 200% 100%;
-              border-radius: 0.5rem;
-              position: absolute;
-              top: 0;
-              left: 0;
-              box-shadow: 0 0 10px rgba(249, 115, 22, 0.3);
-              animation: moving 2.5s ease-in-out;
-            ">
-              <div style="
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-                animation: shimmer 1.5s infinite;
-              "></div>
-            </div>
-          </div>
-        </div>
-
         <!-- Progress Text with Animation -->
-        <p id="progress-text" style="
-          font-size: 1rem;
-          color: var(--vintage-light-beige);
-          text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-          margin: 0;
-          font-weight: 500;
-          animation: fadeInOut 2s ease-in-out infinite;
-        ">
-          Loading images... 0/3
-        </p>
-
-        <!-- Loading Dots Animation -->
-        <div style="margin-top: 1rem;">
-          <span style="
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: var(--vintage-warm-brown);
-            border-radius: 50%;
-            margin: 0 4px;
-            animation: bounce 1.4s ease-in-out infinite both;
-          "></span>
-          <span style="
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: #f97316;
-            border-radius: 50%;
-            margin: 0 4px;
-            animation: bounce 1.4s ease-in-out infinite both;
-            animation-delay: 0.2s;
-          "></span>
-          <span style="
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: var(--vintage-light-beige);
-            border-radius: 50%;
-            margin: 0 4px;
-            animation: bounce 1.4s ease-in-out infinite both;
-            animation-delay: 0.4s;
-          "></span>
-        </div>
+       
       </div>
     </div>
 
@@ -147,11 +76,346 @@
     <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
 
     <style>
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+      /* From Uiverse.io by Nawsome */
+      .loader {
+        position: relative;
+        width: 75px;
+        height: 100px;
+        margin: 0 auto;
       }
-      
+
+      .loader__bar {
+        position: absolute;
+        bottom: 0;
+        width: 10px;
+        height: 50%;
+        background: #fefefe;
+        transform-origin: center bottom;
+        box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+      }
+
+      .loader__bar:nth-child(1) {
+        left: 0px;
+        transform: scale(1, 0.2);
+        -webkit-animation: barUp1 4s infinite;
+        animation: barUp1 4s infinite;
+      }
+
+      .loader__bar:nth-child(2) {
+        left: 15px;
+        transform: scale(1, 0.4);
+        -webkit-animation: barUp2 4s infinite;
+        animation: barUp2 4s infinite;
+      }
+
+      .loader__bar:nth-child(3) {
+        left: 30px;
+        transform: scale(1, 0.6);
+        -webkit-animation: barUp3 4s infinite;
+        animation: barUp3 4s infinite;
+      }
+
+      .loader__bar:nth-child(4) {
+        left: 45px;
+        transform: scale(1, 0.8);
+        -webkit-animation: barUp4 4s infinite;
+        animation: barUp4 4s infinite;
+      }
+
+      .loader__bar:nth-child(5) {
+        left: 60px;
+        transform: scale(1, 1);
+        -webkit-animation: barUp5 4s infinite;
+        animation: barUp5 4s infinite;
+      }
+
+      .loader__ball {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        width: 10px;
+        height: 10px;
+        background: #f97316;
+        border-radius: 50%;
+        -webkit-animation: ball624 4s infinite;
+        animation: ball624 4s infinite;
+      }
+
+      @keyframes ball624 {
+        0% {
+          transform: translate(0, 0);
+        }
+
+        5% {
+          transform: translate(8px, -14px);
+        }
+
+        10% {
+          transform: translate(15px, -10px);
+        }
+
+        17% {
+          transform: translate(23px, -24px);
+        }
+
+        20% {
+          transform: translate(30px, -20px);
+        }
+
+        27% {
+          transform: translate(38px, -34px);
+        }
+
+        30% {
+          transform: translate(45px, -30px);
+        }
+
+        37% {
+          transform: translate(53px, -44px);
+        }
+
+        40% {
+          transform: translate(60px, -40px);
+        }
+
+        50% {
+          transform: translate(60px, 0);
+        }
+
+        57% {
+          transform: translate(53px, -14px);
+        }
+
+        60% {
+          transform: translate(45px, -10px);
+        }
+
+        67% {
+          transform: translate(37px, -24px);
+        }
+
+        70% {
+          transform: translate(30px, -20px);
+        }
+
+        77% {
+          transform: translate(22px, -34px);
+        }
+
+        80% {
+          transform: translate(15px, -30px);
+        }
+
+        87% {
+          transform: translate(7px, -44px);
+        }
+
+        90% {
+          transform: translate(0, -40px);
+        }
+
+        100% {
+          transform: translate(0, 0);
+        }
+      }
+
+      @-webkit-keyframes barUp1 {
+        0% {
+          transform: scale(1, 0.2);
+        }
+
+        40% {
+          transform: scale(1, 0.2);
+        }
+
+        50% {
+          transform: scale(1, 1);
+        }
+
+        90% {
+          transform: scale(1, 1);
+        }
+
+        100% {
+          transform: scale(1, 0.2);
+        }
+      }
+
+      @keyframes barUp1 {
+        0% {
+          transform: scale(1, 0.2);
+        }
+
+        40% {
+          transform: scale(1, 0.2);
+        }
+
+        50% {
+          transform: scale(1, 1);
+        }
+
+        90% {
+          transform: scale(1, 1);
+        }
+
+        100% {
+          transform: scale(1, 0.2);
+        }
+      }
+
+      @-webkit-keyframes barUp2 {
+        0% {
+          transform: scale(1, 0.4);
+        }
+
+        40% {
+          transform: scale(1, 0.4);
+        }
+
+        50% {
+          transform: scale(1, 0.8);
+        }
+
+        90% {
+          transform: scale(1, 0.8);
+        }
+
+        100% {
+          transform: scale(1, 0.4);
+        }
+      }
+
+      @keyframes barUp2 {
+        0% {
+          transform: scale(1, 0.4);
+        }
+
+        40% {
+          transform: scale(1, 0.4);
+        }
+
+        50% {
+          transform: scale(1, 0.8);
+        }
+
+        90% {
+          transform: scale(1, 0.8);
+        }
+
+        100% {
+          transform: scale(1, 0.4);
+        }
+      }
+
+      @-webkit-keyframes barUp3 {
+        0% {
+          transform: scale(1, 0.6);
+        }
+
+        100% {
+          transform: scale(1, 0.6);
+        }
+      }
+
+      @keyframes barUp3 {
+        0% {
+          transform: scale(1, 0.6);
+        }
+
+        100% {
+          transform: scale(1, 0.6);
+        }
+      }
+
+      @-webkit-keyframes barUp4 {
+        0% {
+          transform: scale(1, 0.8);
+        }
+
+        40% {
+          transform: scale(1, 0.8);
+        }
+
+        50% {
+          transform: scale(1, 0.4);
+        }
+
+        90% {
+          transform: scale(1, 0.4);
+        }
+
+        100% {
+          transform: scale(1, 0.8);
+        }
+      }
+
+      @keyframes barUp4 {
+        0% {
+          transform: scale(1, 0.8);
+        }
+
+        40% {
+          transform: scale(1, 0.8);
+        }
+
+        50% {
+          transform: scale(1, 0.4);
+        }
+
+        90% {
+          transform: scale(1, 0.4);
+        }
+
+        100% {
+          transform: scale(1, 0.8);
+        }
+      }
+
+      @-webkit-keyframes barUp5 {
+        0% {
+          transform: scale(1, 1);
+        }
+
+        40% {
+          transform: scale(1, 1);
+        }
+
+        50% {
+          transform: scale(1, 0.2);
+        }
+
+        90% {
+          transform: scale(1, 0.2);
+        }
+
+        100% {
+          transform: scale(1, 1);
+        }
+      }
+
+      @keyframes barUp5 {
+        0% {
+          transform: scale(1, 1);
+        }
+
+        40% {
+          transform: scale(1, 1);
+        }
+
+        50% {
+          transform: scale(1, 0.2);
+        }
+
+        90% {
+          transform: scale(1, 0.2);
+        }
+
+        100% {
+          transform: scale(1, 1);
+        }
+      }
+
+      /* Keep existing animations for logo and other elements */
       @keyframes pulse {
         0%, 100% { transform: scale(1); }
         50% { transform: scale(1.05); }
@@ -173,34 +437,9 @@
         50% { background-position: 100% 50%; }
       }
       
-      @keyframes shimmer {
-        0% { left: -100%; }
-        100% { left: 100%; }
-      }
-      
       @keyframes fadeInOut {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.6; }
-      }
-      
-      @keyframes bounce {
-        0%, 80%, 100% {
-          transform: scale(0);
-        }
-        40% {
-          transform: scale(1);
-        }
-      }
-
-      @keyframes moving {
-        0% {
-          width: 0%;
-          left: 0;
-        }
-        100% {
-          width: 100%;
-          left: 0;
-        }
       }
     </style>
 
@@ -257,7 +496,7 @@
           console.warn('Preloader timeout - completing anyway');
           completeLoading();
         }
-      }, 8000);
+      }, 6000);
 
       // Hide preloader when React app is ready
       window.addEventListener('load', () => {

@@ -87,7 +87,7 @@ export default function Home() {
         
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="w-full mx-auto text-center p-16">
-            <div style={{position: 'relative', height: '130px', marginBottom: '-2rem'}}>
+            <div style={{position: 'relative', height: '130px',  marginBottom: '-2rem'}}>
               <Shuffle
                 text="Cook with what you have"
                 shuffleDirection="right"
