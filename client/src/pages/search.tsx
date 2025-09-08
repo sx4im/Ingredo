@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { IngredientInput } from "@/components/IngredientInput";
 import { PreferencesPanel } from "@/components/PreferencesPanel";
 import { SearchResults } from "@/components/SearchResults";
+import { ScrollReveal, FadeUp, SlowFadeUp } from "@/components/ScrollReveal";
 import { type IngredientChip, type SearchFilters } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { Search as SearchIcon } from "lucide-react";
@@ -69,37 +70,45 @@ export default function Search() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="h1 text-white mb-4">Find Recipes</h1>
-          <p className="text-white/90 text-center text-base font-medium">
-            Add ingredients you have and discover delicious recipes you can make
-          </p>
-        </div>
+        <SlowFadeUp>
+          <div className="text-center mb-8">
+            <h1 className="h1 text-white mb-4">Find Recipes</h1>
+            <p className="text-white/90 text-center text-base font-medium">
+              Add ingredients you have and discover delicious recipes you can make
+            </p>
+          </div>
+        </SlowFadeUp>
 
         {/* Ingredient Search */}
-        <Card className="mb-8">
-          <CardContent className="p-6" >
-            <IngredientInput
-              initialIngredients={selectedIngredients}
-              onChange={handleIngredientsChange}
-              placeholder="Search ingredients..."
-              maxItems={15}
-            />
-          </CardContent>
-        </Card>
+        <ScrollReveal preset="fadeUp" >
+          <Card className="mb-8">
+            <CardContent className="p-6" >
+              <IngredientInput
+                initialIngredients={selectedIngredients}
+                onChange={handleIngredientsChange}
+                placeholder="Search ingredients..."
+                maxItems={15}
+              />
+            </CardContent>
+          </Card>
+        </ScrollReveal>
 
         {/* Filters */}
-        <div className="mb-8">
-          <PreferencesPanel onFiltersChange={handleFiltersChange} />
-        </div>
+        <ScrollReveal preset="fadeUp" >
+          <div className="mb-8">
+            <PreferencesPanel onFiltersChange={handleFiltersChange} />
+          </div>
+        </ScrollReveal>
 
         {/* Search Results */}
-        <SearchResults
-          ingredients={selectedIngredients.map(ing => ing.name)}
-          filters={searchFilters}
-          onRecipeSave={handleRecipeSave}
-          onUseSuggestion={handleUseSuggestion}
-        />
+        <ScrollReveal preset="fadeUp" >
+          <SearchResults
+            ingredients={selectedIngredients.map(ing => ing.name)}
+            filters={searchFilters}
+            onRecipeSave={handleRecipeSave}
+            onUseSuggestion={handleUseSuggestion}
+          />
+        </ScrollReveal>
               </div>
       </div>
     </div>

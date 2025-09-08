@@ -38,8 +38,8 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <div className="w-full px-4 py-2 relative z-50">
-        <header className="mx-auto max-w-7xl rounded-md border border-gray-200 shadow-sm bg-white/95 backdrop-blur-sm relative">
+      <div className="w-full px-4 py-2 relative z-50 navbar-container">
+        <header className="mx-auto max-w-7xl rounded-md border border-gray-200 shadow-sm bg-white backdrop-blur-sm relative">
           <div className="px-6 py-3 relative z-10">
             <div className="flex h-12 items-center justify-between">
             {/* Logo */}

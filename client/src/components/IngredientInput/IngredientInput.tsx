@@ -26,6 +26,7 @@ import { apiClient } from "@/lib/apiClient";
 import { type IngredientChip, type UploadedImage } from "@shared/schema";
 import { X, GripVertical, Camera, Search } from "lucide-react";
 import { ImageUploader } from "@/components/ImageUploader";
+import { Portal } from "@/components/ui/portal";
 
 interface IngredientSuggestion {
   name: string;
@@ -395,11 +396,17 @@ export function IngredientInput({
 
         {/* Suggestions Dropdown */}
         {showSuggestions && suggestions.length > 0 && (
-          <div
-            ref={suggestionsRef}
-            className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-48 overflow-auto"
-            role="listbox"
-          >
+          <Portal>
+            <div
+              ref={suggestionsRef}
+              className="fixed z-[10001] w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-48 overflow-auto"
+              role="listbox"
+              style={{
+                left: inputRef.current?.getBoundingClientRect().left || 0,
+                top: (inputRef.current?.getBoundingClientRect().bottom || 0) + 4,
+                width: inputRef.current?.getBoundingClientRect().width || 'auto'
+              }}
+            >
             {suggestions.slice(0, 8).map((suggestion, index) => (
               <button
                 key={suggestion.name}
@@ -423,7 +430,8 @@ export function IngredientInput({
                 </div>
               </button>
             ))}
-          </div>
+            </div>
+          </Portal>
         )}
       </div>
 
@@ -440,27 +448,29 @@ export function IngredientInput({
 
       {/* Image Upload Modal */}
       {showImageUploader && (
-        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm">
-          <div className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-4xl translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">Upload ingredient photos</h2>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowImageUploader(false)}
-              >
-                <X className="h-4 w-4" />
-              </Button>
+        <Portal>
+          <div className="fixed inset-0 z-[10000] bg-background/80 backdrop-blur-sm">
+            <div className="fixed left-[50%] top-[50%] z-[10000] grid w-full max-w-4xl translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-semibold">Upload ingredient photos</h2>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowImageUploader(false)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              <ImageUploader
+                maxImages={3}
+                maxSizeMB={5}
+                onUploadComplete={handleImageUploadComplete}
+                onAttach={handleImageAttach}
+                autoDetect={true}
+              />
             </div>
-            <ImageUploader
-              maxImages={3}
-              maxSizeMB={5}
-              onUploadComplete={handleImageUploadComplete}
-              onAttach={handleImageAttach}
-              autoDetect={true}
-            />
           </div>
-        </div>
+        </Portal>
       )}
     </div>
   );

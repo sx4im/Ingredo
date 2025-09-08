@@ -677,6 +677,157 @@ html {
   font-variant-numeric: tabular-nums;
 }
 
+/* Scroll Reveal Animation Styles */
+.scroll-reveal-hidden {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scroll-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered animation delays */
+.scroll-reveal-stagger-1 { animation-delay: 0.1s; }
+.scroll-reveal-stagger-2 { animation-delay: 0.2s; }
+.scroll-reveal-stagger-3 { animation-delay: 0.3s; }
+.scroll-reveal-stagger-4 { animation-delay: 0.4s; }
+.scroll-reveal-stagger-5 { animation-delay: 0.5s; }
+.scroll-reveal-stagger-6 { animation-delay: 0.6s; }
+
+/* Enhanced scroll reveal animations */
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes rotateIn {
+  from {
+    opacity: 0;
+    transform: rotate(-10deg) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes fadeInSlow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Animation classes */
+.animate-slide-in-bottom {
+  animation: slideInFromBottom 1s ease-out forwards;
+}
+
+.animate-slide-in-top {
+  animation: slideInFromTop 1s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInFromLeft 1s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInFromRight 1s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 1.2s ease-out forwards;
+}
+
+.animate-rotate-in {
+  animation: rotateIn 1s ease-out forwards;
+}
+
+.animate-fade-in-slow {
+  animation: fadeInSlow 1.5s ease-out forwards;
+}
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced focus styles for better accessibility */
+.scroll-reveal-element:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Navbar specific styles to ensure visibility */
+.navbar-container {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  position: relative !important;
+  z-index: 9999 !important;
+}
+
+.navbar-container * {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 /* Static Footer Text Styles */
 .static-text {
   color: white;

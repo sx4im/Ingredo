@@ -16,6 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmptyState } from "@/components/ui/empty-state";
 import { RecipeCard, type RecipeCardData } from "@/components/RecipeCard";
 import { RecipeCardGridSkeleton } from "@/components/RecipeCard/RecipeCardSkeleton";
+import { ScrollReveal, FadeUp, Staggered } from "@/components/ScrollReveal";
 import { apiClient } from "@/lib/apiClient";
 import { type SearchFilters } from "@shared/schema";
 import { 
@@ -273,25 +274,28 @@ export function SearchResults({
       ) : sortedRecipes.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sortedRecipes.map((recipe, index) => (
-            <RecipeCard
-              key={`${recipe.id}-${activeMode}`}
-              recipe={recipe}
-              onSave={onRecipeSave}
-              onUseSuggestion={onUseSuggestion}
-              priority={index < 3} // Prioritize first 3 images
-            />
+            <ScrollReveal key={`${recipe.id}-${activeMode}`} preset="fadeUp" delay={index * 100}>
+              <RecipeCard
+                recipe={recipe}
+                onSave={onRecipeSave}
+                onUseSuggestion={onUseSuggestion}
+                priority={index < 3} // Prioritize first 3 images
+              />
+            </ScrollReveal>
           ))}
         </div>
       ) : (
-        <EmptyState
-          icon={<Search className="mx-auto h-12 w-12 mb-4 opacity-50" />}
-          title="No recipes found"
-          description={`${getEmptyStateSuggestions()}. Try adjusting your filters or adding more ingredients.`}
-          action={{
-            label: activeMode === 'match' ? "Generate Creative Recipes" : "Clear Filters",
-            onClick: activeMode === 'match' ? handleGenerateCreative : () => {}
-          }}
-        />
+        <FadeUp>
+          <EmptyState
+            icon={<Search className="mx-auto h-12 w-12 mb-4 opacity-50" />}
+            title="No recipes found"
+            description={`${getEmptyStateSuggestions()}. Try adjusting your filters or adding more ingredients.`}
+            action={{
+              label: activeMode === 'match' ? "Generate Creative Recipes" : "Clear Filters",
+              onClick: activeMode === 'match' ? handleGenerateCreative : () => {}
+            }}
+          />
+        </FadeUp>
       )}
 
       {/* Creative generation loading */}
