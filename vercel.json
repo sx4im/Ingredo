@@ -5,7 +5,8 @@
       "src": "package.json",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["dist/**", "server/**", "shared/**"]
+        "includeFiles": ["dist/**", "server/**", "shared/**"],
+        "maxDuration": 30
       }
     },
     {
@@ -26,11 +27,6 @@
       "dest": "/dist/public/$1"
     }
   ],
-  "functions": {
-    "dist/vercel.js": {
-      "maxDuration": 30
-    }
-  },
   "env": {
     "NODE_ENV": "production"
   }
