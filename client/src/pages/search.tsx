@@ -64,7 +64,7 @@ export default function Search() {
       {/* Blue Overlay */}
       <div
         className="fixed inset-0 z-0"
-        style={{ backgroundColor: 'rgba(30, 64, 175, 0.8)' }}
+        style={{ backgroundColor: 'rgba(30, 64, 175, 0.4)' }}
       />
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">

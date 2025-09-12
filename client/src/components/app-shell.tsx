@@ -49,10 +49,7 @@ export function AppShell({ children }: AppShellProps) {
                 alt="Ingredo Logo" 
                 className="w-16 h-16 rounded-xl"
               />
-                <span
-                  className="ml-3 text-3xl font-bold"
-                  style={{ fontFamily: 'Knewave, cursive', color: '#2C3E50' }}
-                >
+                <span className="ml-3 logo-text">
                   ingredo
                 </span>
             </Link>

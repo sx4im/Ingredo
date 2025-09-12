@@ -80,7 +80,7 @@ export default function Home() {
       {/* Blue Overlay for entire page */}
       <div 
         className="fixed inset-0 z-0" 
-        style={{ backgroundColor: 'rgba(30, 64, 175, 0.8)' }}
+        style={{ backgroundColor: 'rgba(30, 64, 175, 0.4)' }}
       />
 
       {/* Hero Section */}
