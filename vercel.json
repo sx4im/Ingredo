@@ -8,13 +8,6 @@
         "includeFiles": ["dist/**", "server/**", "shared/**"],
         "maxDuration": 30
       }
-    },
-    {
-      "src": "client/**",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "../dist/public"
-      }
     }
   ],
   "routes": [
