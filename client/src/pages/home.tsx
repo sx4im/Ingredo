@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import CountUp from "@/components/CountUp";
-import Shuffle from "@/components/Shuffle";
 import { ScrollReveal, FadeUp, FadeLeft, FadeRight, SlowFadeUp } from "@/components/ScrollReveal";
 import { type IngredientChip } from "@shared/schema";
 import { Search, ChefHat, Recycle, Heart, Plus, Star, Bookmark, ArrowRight, Clock, Users } from "lucide-react";
@@ -84,56 +83,48 @@ export default function Home() {
       />
 
       {/* Hero Section */}
-      <section className="relative w-full h-screen flex items-center justify-center z-10">
+      <section className="relative w-full min-h-screen flex items-center justify-center z-10 py-4 sm:py-8 lg:py-16">
         
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="w-full mx-auto text-center p-16">
+          <div className="w-full mx-auto text-center px-2 sm:px-8 lg:px-16 py-4 sm:py-8 lg:py-16">
             <SlowFadeUp>
-              <div style={{position: 'relative', height: '130px',  marginBottom: '-2rem'}}>
-                <Shuffle
-                  text="Cook with what you have"
-                  shuffleDirection="right"
-                  duration={1.2}
-                  animationMode="evenodd"
-                  shuffleTimes={3}
-                  ease="power2.out"
-                  stagger={0.03}
-                  threshold={0.05}
-                  triggerOnce={true}
-                  triggerOnHover={true}
-                  respectReducedMotion={true}
-                  onShuffleComplete={() => {}}
-                  colorFrom="#ffffff"
-                  colorTo="#ffffff"
-                  style={{ fontSize: '3.5rem', fontWeight: '600', textShadow: 'none' }}
-                />
-              </div>
+              <h1 
+                className="text-white font-semibold mb-4 sm:mb-6 max-w-4xl mx-auto px-2"
+                style={{ 
+                  fontSize: 'clamp(1.8rem, 4.5vw, 3.5rem)', 
+                  fontWeight: '600', 
+                  textShadow: 'none',
+                  lineHeight: '1.1'
+                }}
+              >
+                Cook with what you have
+              </h1>
             </SlowFadeUp>
             
             <ScrollReveal preset="fadeUp" >
-              <p className="lead text-white mb-10 max-w-3xl mx-auto text-center drop-shadow-lg text-xl font-medium">
+              <p className="lead text-white mb-6 sm:mb-8 lg:mb-10 max-w-4xl mx-auto text-center drop-shadow-lg text-base sm:text-lg lg:text-xl font-medium leading-relaxed px-2">
                 Turn the ingredients you already have into amazing meals. Discover personalized recipes that help you save time, reduce food waste, and enjoy delicious possibilities every day.
               </p>
             </ScrollReveal>
 
             <ScrollReveal preset="fadeUp" >
-              <div className="flex flex-col sm:flex-row gap-8 justify-center mb-16">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8 justify-center mb-8 sm:mb-12 lg:mb-16 px-4">
                 <Link 
                   href="/search" 
-                  className="animated-button text-xl px-8 py-4"
+                  className="animated-button text-lg sm:text-xl px-8 py-4 w-full sm:w-auto"
                   data-testid="start-cooking-button"
                 >
                     Start Cooking
                   <ArrowRight className="button-icon ml-2" style={{ color: 'var(--vintage-dark-green)' }} />
                   </Link>
-                                <button 
+                <button 
                     onClick={() => {
                       const element = document.getElementById('how-it-works');
                       if (element) {
                         element.scrollIntoView({ behavior: 'smooth' });
                       }
                     }}
-                    className="animated-button text-xl px-8 py-4"
+                    className="animated-button text-lg sm:text-xl px-8 py-4 w-full sm:w-auto"
                   data-testid="learn-more-button"
                 >
                     <ArrowRight className="button-icon mr-2" style={{ color: 'var(--vintage-dark-green)' }} />
@@ -144,11 +135,11 @@ export default function Home() {
 
             {/* Simple Stats Section */}
             <ScrollReveal preset="fadeUp" >
-              <div className="max-w-4xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+              <div className="max-w-4xl mx-auto px-4">
+                <div className="grid grid-cols-3 gap-2 sm:gap-6 lg:gap-8 mb-8 sm:mb-12">
                   <ScrollReveal preset="fadeUp" >
                     <div className="text-center">
-                      <div className="text-5xl font-bold text-white mb-2">
+                      <div className="text-xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-1 sm:mb-2">
                         <CountUp 
                           to={2847} 
                           duration={2.5} 
@@ -156,41 +147,41 @@ export default function Home() {
                           className="count-up-text"
                         />
                       </div>
-                      <div className="text-white/90 text-lg">Recipes Available</div>
+                      <div className="text-white/90 text-xs sm:text-sm lg:text-base xl:text-lg">Recipes Available</div>
                     </div>
                   </ScrollReveal>
                   <ScrollReveal preset="fadeUp" >
                     <div className="text-center">
-                      <div className="text-5xl font-bold text-white mb-2">
+                      <div className="text-xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-1 sm:mb-2">
                         <CountUp 
                           to={156} 
                           duration={2} 
                           className="count-up-text"
                         />
                       </div>
-                      <div className="text-white/90 text-lg">Ingredients Supported</div>
+                      <div className="text-white/90 text-xs sm:text-sm lg:text-base xl:text-lg">Ingredients Supported</div>
                     </div>
                   </ScrollReveal>
                   <ScrollReveal preset="fadeUp" >
                     <div className="text-center">
-                      <div className="text-5xl font-bold text-white mb-2">
+                      <div className="text-xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-1 sm:mb-2">
                         <CountUp 
                           to={98} 
                           duration={2.2} 
                           className="count-up-text"
                         />%
                       </div>
-                      <div className="text-white/90 text-lg">User Satisfaction</div>
+                      <div className="text-white/90 text-xs sm:text-sm lg:text-base xl:text-lg">User Satisfaction</div>
                     </div>
                   </ScrollReveal>
                 </div>
 
                 {/* Simple Call to Action */}
                 <ScrollReveal preset="fadeUp" >
-                  <div className="text-center">
+                  <div className="text-center px-4">
                     <Link 
                       href="/search" 
-                      className="animated-button-secondary explore-button font-extrabold"
+                      className="animated-button-secondary explore-button font-extrabold text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-4 inline-block"
                       style={{ maxWidth: '300px' }}
                     >
                       Explore All Recipes 

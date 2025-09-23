@@ -814,18 +814,29 @@ html {
   border-radius: 4px;
 }
 
-/* Navbar specific styles to ensure visibility */
-.navbar-container {
-  opacity: 1 !important;
-  visibility: visible !important;
-  display: block !important;
-  position: relative !important;
-  z-index: 9999 !important;
+/* Navbar specific styles - hide on mobile devices */
+@media (max-width: 1023px) {
+  .navbar-container {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
 }
 
-.navbar-container * {
-  opacity: 1 !important;
-  visibility: visible !important;
+/* Show navbar only on large screens */
+@media (min-width: 1024px) {
+  .navbar-container {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    position: relative !important;
+    z-index: 9999 !important;
+  }
+
+  .navbar-container * {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
 }
 
 /* Logo Text Styles */

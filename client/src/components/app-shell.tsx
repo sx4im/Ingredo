@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Leaf, Search, Menu, User, Heart, BookOpen, Settings, LogOut } from "lucide-react";
+import { Leaf, Search, Menu, User, Heart, BookOpen, Settings, LogOut, X } from "lucide-react";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -21,6 +21,7 @@ interface AppShellProps {
 export function AppShell({ children }: AppShellProps) {
   const [location] = useLocation();
   const [searchQuery, setSearchQuery] = React.useState("");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   const navigation = [
     { name: "Discover", href: "/", current: location === "/" },
@@ -37,8 +38,8 @@ export function AppShell({ children }: AppShellProps) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <div className="w-full px-4 py-2 relative z-50 navbar-container">
+      {/* Desktop Header - Hidden on mobile and tablet devices */}
+      <div className="w-full px-4 py-2 relative z-50 navbar-container hidden lg:block">
         <header className="mx-auto max-w-7xl rounded-md border border-gray-200 shadow-sm bg-white backdrop-blur-sm relative">
           <div className="px-6 py-3 relative z-10">
             <div className="flex h-12 items-center justify-between">
@@ -47,15 +48,15 @@ export function AppShell({ children }: AppShellProps) {
               <img 
                 src="/logo.png" 
                 alt="Ingredo Logo" 
-                className="w-16 h-16 rounded-xl"
+                className="w-12 h-12 lg:w-16 lg:h-16 rounded-xl"
               />
-                <span className="ml-3 logo-text">
+                <span className="ml-3 logo-text text-xl lg:text-2xl">
                   ingredo
                 </span>
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
+            <nav className="flex items-center space-x-8">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
@@ -132,56 +133,120 @@ export function AppShell({ children }: AppShellProps) {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-
-              {/* Mobile Menu */}
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="md:hidden"
-                    data-testid="mobile-menu-toggle"
-                  >
-                    <Menu className="h-4 w-4" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent>
-                  <div className="flex flex-col space-y-4 mt-8">
-                    {navigation.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className={cn(
-                          "text-sm font-medium transition-colors hover:text-foreground p-2 rounded-md",
-                          item.current ? "text-foreground bg-accent" : "text-muted-foreground"
-                        )}
-                        data-testid={`mobile-nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                </SheetContent>
-              </Sheet>
             </div>
-          </div>
-
-          {/* Mobile Search Bar */}
-          <div className="lg:hidden pb-4 relative z-10">
-            <form onSubmit={handleSearch} className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input
-                type="search"
-                placeholder="Search ingredients..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 h-10 bg-gray-50 border border-gray-200 focus:border-blue-500 rounded-md text-sm font-medium focus:outline-none text-gray-900 placeholder-gray-500"
-                data-testid="mobile-search-input"
-              />
-            </form>
           </div>
           </div>
         </header>
+      </div>
+
+      {/* Mobile Menu Button - Only visible on mobile and tablet devices */}
+      <div className="lg:hidden fixed top-4 right-4 z-50">
+        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+          <SheetTrigger asChild>
+            <Button 
+              variant="default" 
+              size="icon" 
+              className="h-12 w-12 rounded-full shadow-lg bg-white hover:bg-gray-50 border border-gray-200 transition-all duration-200"
+              data-testid="mobile-menu-toggle"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-5 w-5 text-gray-700" />
+              ) : (
+                <Menu className="h-5 w-5 text-gray-700" />
+              )}
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-80">
+            <div className="flex flex-col h-full">
+              {/* Mobile Header */}
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center">
+                  <img 
+                    src="/logo.png" 
+                    alt="Ingredo Logo" 
+                    className="w-10 h-10 rounded-xl"
+                  />
+                  <span className="ml-3 logo-text text-xl">
+                    ingredo
+                  </span>
+                </div>
+              </div>
+
+              {/* Mobile Search */}
+              <div className="mb-8">
+                <form onSubmit={handleSearch} className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input
+                    type="search"
+                    placeholder="Search ingredients..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 h-11 bg-gray-50 border border-gray-200 focus:border-blue-500 rounded-lg text-sm font-medium focus:outline-none text-gray-900 placeholder-gray-500 w-full"
+                    data-testid="mobile-search-input"
+                  />
+                </form>
+              </div>
+
+              {/* Mobile Navigation */}
+              <div className="flex-1">
+                <nav className="space-y-2">
+                  {navigation.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={cn(
+                        "flex items-center px-4 py-3 text-lg font-medium transition-colors hover:bg-gray-100 rounded-lg",
+                        item.current ? "text-blue-600 bg-blue-50" : "text-gray-700"
+                      )}
+                      data-testid={`mobile-nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </nav>
+
+                {/* Mobile Profile Section */}
+                <div className="mt-8 pt-8 border-t border-gray-200">
+                  <div className="space-y-2">
+                    <Link
+                      href="/profile"
+                      className="flex items-center px-4 py-3 text-lg font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
+                    >
+                      <User className="mr-3 h-5 w-5" />
+                      Profile
+                    </Link>
+                    <Link
+                      href="/favorites"
+                      className="flex items-center px-4 py-3 text-lg font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
+                    >
+                      <Heart className="mr-3 h-5 w-5" />
+                      Favorites
+                    </Link>
+                    <Link
+                      href="/collections"
+                      className="flex items-center px-4 py-3 text-lg font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
+                    >
+                      <BookOpen className="mr-3 h-5 w-5" />
+                      Collections
+                    </Link>
+                    <Link
+                      href="/settings"
+                      className="flex items-center px-4 py-3 text-lg font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
+                    >
+                      <Settings className="mr-3 h-5 w-5" />
+                      Settings
+                    </Link>
+                    <button className="flex items-center px-4 py-3 text-lg font-medium text-gray-700 hover:bg-gray-100 rounded-lg w-full text-left">
+                      <LogOut className="mr-3 h-5 w-5" />
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
 
       {/* Main Content */}
