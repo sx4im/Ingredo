@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-interface UseScrollRevealOptions {
+export interface UseScrollRevealOptions {
   threshold?: number;
   rootMargin?: string;
   triggerOnce?: boolean;

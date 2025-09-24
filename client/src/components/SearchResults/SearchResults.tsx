@@ -274,7 +274,7 @@ export function SearchResults({
       ) : sortedRecipes.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sortedRecipes.map((recipe, index) => (
-            <ScrollReveal key={`${recipe.id}-${activeMode}`} preset="fadeUp" delay={index * 100}>
+            <ScrollReveal key={`${recipe.id}-${activeMode}`} preset="fadeUp">
               <RecipeCard
                 recipe={recipe}
                 onSave={onRecipeSave}

@@ -248,10 +248,10 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
   const activeFilters = renderActiveFilters();
 
   return (
-    <Card className={cn("w-full border border-gray-300 shadow-lg", className)}>
-      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <Card className={cn("w-full border border-gray-300 shadow-lg rounded-lg overflow-hidden", className)}>
         <CollapsibleTrigger asChild>
-          <CardHeader className="pb-3 cursor-pointer hover:bg-gray-50 transition-colors border-b border-gray-200">
+          <CardHeader className="pb-3 cursor-pointer hover:bg-gray-50 transition-colors border-b border-gray-200 rounded-t-lg">
             <CardTitle className="flex items-center justify-between text-base font-semibold">
               <div className="flex items-center gap-2">
                 <Filter className="h-5 w-5 text-gray-700" />
@@ -471,7 +471,7 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
             </div>
           </CardContent>
         </CollapsibleContent>
-      </Collapsible>
-    </Card>
+      </Card>
+    </Collapsible>
   );
 }

@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Leaf, Search, Menu, User, Heart, BookOpen, Settings, LogOut, X } from "lucide-react";
+import { Leaf, Menu, User, Heart, Settings, LogOut, X, Package, ShoppingCart } from "lucide-react";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -20,52 +20,44 @@ interface AppShellProps {
 
 export function AppShell({ children }: AppShellProps) {
   const [location] = useLocation();
-  const [searchQuery, setSearchQuery] = React.useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   const navigation = [
     { name: "Discover", href: "/", current: location === "/" },
     { name: "Search", href: "/search", current: location === "/search" },
-    { name: "My Collection", href: "/profile", current: location === "/profile" },
+    { name: "Dashboard", href: "/dashboard", current: location === "/dashboard" },
+    { name: "Pantry", href: "/pantry", current: location === "/pantry" },
+    { name: "Shopping", href: "/shopping", current: location === "/shopping" },
+    { name: "Favorites", href: "/favorites", current: location === "/favorites" },
   ];
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
-    }
-  };
 
   return (
     <div className="min-h-screen flex flex-col">
       {/* Desktop Header - Hidden on mobile and tablet devices */}
       <div className="w-full px-4 py-2 relative z-50 navbar-container hidden lg:block">
-        <header className="mx-auto max-w-7xl rounded-md border border-gray-200 shadow-sm bg-white backdrop-blur-sm relative">
-          <div className="px-6 py-3 relative z-10">
-            <div className="flex h-12 items-center justify-between">
+        <header className="compact-navbar rounded-md border border-gray-200 shadow-sm bg-white backdrop-blur-sm relative">
+          <div className="px-4 py-3 relative z-10">
+            <div className="flex h-14 items-center justify-center gap-4">
             {/* Logo */}
             <Link href="/" className="flex items-center" data-testid="logo-link">
               <img 
-                src="/logo.png" 
+                src="/logo2.png" 
                 alt="Ingredo Logo" 
-                className="w-12 h-12 lg:w-16 lg:h-16 rounded-xl"
+                className="app-logo rounded-xl"
               />
-                <span className="ml-3 logo-text text-xl lg:text-2xl">
-                  ingredo
-                </span>
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="flex items-center space-x-8">
+            <nav className="flex items-center gap-2">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    "text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 uppercase tracking-wide",
-                    item.current ? "text-blue-600" : ""
+                    "nav-button",
+                    item.current ? "active" : ""
                   )}
-                  style={{ fontFamily: 'var(--font-sans)' }}
                   data-testid={`nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   {item.name}
@@ -73,23 +65,8 @@ export function AppShell({ children }: AppShellProps) {
               ))}
             </nav>
 
-            {/* Search Bar (Desktop) */}
-            <div className="hidden lg:block flex-1 max-w-md mx-8">
-              <form onSubmit={handleSearch} className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <Input
-                  type="search"
-                  placeholder="Search ingredients..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 h-10 bg-gray-50 border border-gray-200 focus:border-blue-500 rounded-md text-sm font-medium focus:outline-none text-gray-900 placeholder-gray-500"
-                  data-testid="search-input"
-                />
-              </form>
-            </div>
-
             {/* Right Actions */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center">
               {/* Profile Menu */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -114,17 +91,23 @@ export function AppShell({ children }: AppShellProps) {
                       Favorites
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/collections" data-testid="menu-collections">
-                      <BookOpen className="mr-2 h-4 w-4" />
-                      Collections
-                    </Link>
-                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link href="/settings" data-testid="menu-settings">
                       <Settings className="mr-2 h-4 w-4" />
                       Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/pantry" data-testid="menu-pantry">
+                      <Package className="mr-2 h-4 w-4" />
+                      Pantry
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/shopping" data-testid="menu-shopping">
+                      <ShoppingCart className="mr-2 h-4 w-4" />
+                      Shopping List
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem data-testid="menu-logout">
@@ -139,54 +122,51 @@ export function AppShell({ children }: AppShellProps) {
         </header>
       </div>
 
+      {/* Mobile Logo - Only visible on discover page for mobile and tablet devices */}
+      {location === "/" && (
+        <div className="lg:hidden fixed top-4 left-4 z-50 h-16 flex items-center">
+          <Link href="/" className="flex items-center">
+            <img 
+              src="/logo2.png" 
+              alt="Ingredo Logo" 
+              className="app-logo-mobile-large rounded-xl"
+            />
+          </Link>
+        </div>
+      )}
+
       {/* Mobile Menu Button - Only visible on mobile and tablet devices */}
-      <div className="lg:hidden fixed top-4 right-4 z-50">
+      <div className={`lg:hidden fixed top-4 right-6 z-[9999] h-16 flex items-center transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
           <SheetTrigger asChild>
             <Button 
-              variant="default" 
+              variant="ghost" 
               size="icon" 
-              className="h-12 w-12 rounded-full shadow-lg bg-white hover:bg-gray-50 border border-gray-200 transition-all duration-200"
+              className="mobile-menu-button transition-all duration-200"
               data-testid="mobile-menu-toggle"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              {isMobileMenuOpen ? (
-                <X className="h-5 w-5 text-gray-700" />
-              ) : (
-                <Menu className="h-5 w-5 text-gray-700" />
-              )}
+              <Menu className="mobile-menu-icon stroke-2" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-80">
+          <SheetContent side="right" className="w-80 [&>button]:hidden">
             <div className="flex flex-col h-full">
               {/* Mobile Header */}
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center">
                   <img 
-                    src="/logo.png" 
+                    src="/logo2.png" 
                     alt="Ingredo Logo" 
-                    className="w-10 h-10 rounded-xl"
+                    className="app-logo-mobile rounded-xl"
                   />
-                  <span className="ml-3 logo-text text-xl">
-                    ingredo
-                  </span>
                 </div>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-3 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <X className="h-8 w-8 text-gray-600" />
+                </button>
               </div>
 
-              {/* Mobile Search */}
-              <div className="mb-8">
-                <form onSubmit={handleSearch} className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input
-                    type="search"
-                    placeholder="Search ingredients..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 h-11 bg-gray-50 border border-gray-200 focus:border-blue-500 rounded-lg text-sm font-medium focus:outline-none text-gray-900 placeholder-gray-500 w-full"
-                    data-testid="mobile-search-input"
-                  />
-                </form>
-              </div>
 
               {/* Mobile Navigation */}
               <div className="flex-1">
@@ -196,10 +176,11 @@ export function AppShell({ children }: AppShellProps) {
                       key={item.name}
                       href={item.href}
                       className={cn(
-                        "flex items-center px-4 py-3 text-lg font-medium transition-colors hover:bg-gray-100 rounded-lg",
-                        item.current ? "text-blue-600 bg-blue-50" : "text-gray-700"
+                        "flex items-center px-4 py-3 text-lg font-medium transition-colors rounded-full",
+                        item.current ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-gray-100"
                       )}
                       data-testid={`mobile-nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {item.name}
                     </Link>
@@ -212,27 +193,15 @@ export function AppShell({ children }: AppShellProps) {
                     <Link
                       href="/profile"
                       className="flex items-center px-4 py-3 text-lg font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <User className="mr-3 h-5 w-5" />
                       Profile
                     </Link>
                     <Link
-                      href="/favorites"
-                      className="flex items-center px-4 py-3 text-lg font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
-                    >
-                      <Heart className="mr-3 h-5 w-5" />
-                      Favorites
-                    </Link>
-                    <Link
-                      href="/collections"
-                      className="flex items-center px-4 py-3 text-lg font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
-                    >
-                      <BookOpen className="mr-3 h-5 w-5" />
-                      Collections
-                    </Link>
-                    <Link
                       href="/settings"
                       className="flex items-center px-4 py-3 text-lg font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <Settings className="mr-3 h-5 w-5" />
                       Settings
@@ -259,12 +228,12 @@ export function AppShell({ children }: AppShellProps) {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col lg:flex-row justify-between items-center">
             {/* Left side - Crafted by text */}
-            <div className="static-text mb-4 lg:mb-0">
+            <div className="static-text mb-7 lg:mb-0 ">
               CRAFTED BY <a 
-                href="https://saimshafique.vercel.app/" 
+                href="https://saimshafique.com/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="portfolio-link"
+                className="portfolio-link font-bold"
               >
                 SAIM SHAFIQUE
               </a>

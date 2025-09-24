@@ -5,7 +5,7 @@ interface ScrollRevealProps extends UseScrollRevealOptions {
   children: React.ReactNode;
   className?: string;
   preset?: keyof typeof scrollRevealPresets;
-  as?: keyof JSX.IntrinsicElements;
+  as?: React.ElementType;
 }
 
 export function ScrollReveal({ 

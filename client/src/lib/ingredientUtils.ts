@@ -181,7 +181,7 @@ export function aggregateIngredients(
         normalizedName,
         totalAmount: totalAmount.toString(),
         unit: amounts[0].unit,
-        recipes: [...new Set(amounts.map(a => a.recipeId))],
+        recipes: Array.from(new Set(amounts.map(a => a.recipeId))),
         conversions: []
       });
       return;
@@ -225,7 +225,7 @@ export function aggregateIngredients(
       normalizedName,
       totalAmount: totalAmount.toString(),
       unit: mostCommonUnit,
-      recipes: [...new Set(amounts.map(a => a.recipeId))],
+      recipes: Array.from(new Set(amounts.map(a => a.recipeId))),
       conversions
     });
   });
