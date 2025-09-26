@@ -70,7 +70,7 @@ export default function Home() {
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: 'url(/bg.webp)',
+          backgroundImage: 'url(/discover.webp)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
@@ -179,11 +179,11 @@ export default function Home() {
                 {/* Simple Call to Action */}
                 <ScrollReveal preset="fadeUp" >
                   <div className="text-center px-4">
-                    <Link 
-                      href="/search" 
-                      className="animated-button-secondary explore-button font-extrabold text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-4 inline-block"
-                      style={{ maxWidth: '300px' }}
-                    >
+                <Link 
+                  href="/search" 
+                  className="animated-button-secondary explore-button font-extrabold text-lg sm:text-xl px-8 py-4 inline-block"
+                  style={{ maxWidth: '300px' }}
+                >
                       Explore All Recipes 
                       <ArrowRight className="button-icon ml-2" style={{ color: 'var(--vintage-warm-brown)' }} />
                       </Link>
@@ -229,7 +229,7 @@ export default function Home() {
                     <Heart className="h-6 w-6" style={{ color: '#E91E63' }} />
                   </div>
                   <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--foreground)' }}>Save Favorites</h3>
-                  <p className="text-gray-800/90">Build your personal cookbook with recipes you love and organize them into collections.</p>
+                  <p className="text-gray-800/90">Build your personal digital cookbook with recipes you love and neatly organize them into collections.</p>
                 </div>
               </ScrollReveal>
             </div>
@@ -389,7 +389,7 @@ export default function Home() {
               <div className="text-center mt-12">
                 <Link 
                   href="/search" 
-                  className="animated-button explore-button font-extrabold"
+                  className="animated-button explore-button font-extrabold text-lg sm:text-xl px-8 py-4"
                   style={{ maxWidth: '300px' }}
                 >
                   Get Started Now

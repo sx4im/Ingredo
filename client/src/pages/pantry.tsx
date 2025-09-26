@@ -187,7 +187,7 @@ export default function Pantry() {
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: 'url(/bg.webp)',
+          backgroundImage: 'url(/pantry.webp)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'

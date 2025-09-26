@@ -135,7 +135,7 @@ export default function Signup() {
     <div className="relative min-h-screen flex items-center justify-center p-4">
       {/* Background with gradient and particles */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50" />
-      <div className="absolute inset-0 bg-[url('/bg2.jpg')] bg-cover bg-center opacity-20" />
+      <div className="absolute inset-0 bg-[url('/signup.webp')] bg-cover bg-center opacity-20" />
       
       {/* Floating particles animation */}
       <div className="absolute inset-0 overflow-hidden">
@@ -175,7 +175,7 @@ export default function Signup() {
               transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
               className="mx-auto w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-4"
             >
-              <img src="/logo.png" alt="Ingredo" className="w-10 h-10" />
+              <img src="/logo.webp" alt="Ingredo" className="w-10 h-10" />
             </motion.div>
             <CardTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
               Join Ingredo

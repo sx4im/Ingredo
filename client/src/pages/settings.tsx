@@ -138,7 +138,7 @@ export default function Settings() {
     <div className="relative min-h-screen">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50" />
-      <div className="absolute inset-0 bg-[url('/bg.webp')] bg-cover bg-center opacity-5" />
+      <div className="absolute inset-0 bg-[url('/settings.webp')] bg-cover bg-center opacity-5" />
       
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-4xl mx-auto">

@@ -116,7 +116,7 @@ export default function Profile() {
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: 'url(/bg3.webp)',
+          backgroundImage: 'url(/profile.webp)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
