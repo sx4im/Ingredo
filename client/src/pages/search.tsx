@@ -55,7 +55,7 @@ export default function Search() {
       <div
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: 'url(/bg2.jpg)',
+          backgroundImage: 'url(/bg2.webp)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'

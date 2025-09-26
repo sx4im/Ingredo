@@ -113,10 +113,10 @@ export default function Profile() {
   return (
     <div className="relative min-h-screen">
       {/* Background Image */}
-      <div
+      <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: 'url(/bg3.jpg)',
+          backgroundImage: 'url(/bg3.webp)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
