@@ -159,7 +159,7 @@ export default function Login() {
               transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
               className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4"
             >
-              <img src="/logo.webp" alt="Ingredo" className="w-10 h-10" />
+              <img src="/logo.webp" alt="Ingredo" className="w-8 h-8 sm:w-10 sm:h-10" />
             </motion.div>
             <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Welcome back

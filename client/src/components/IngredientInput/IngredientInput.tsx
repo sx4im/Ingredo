@@ -324,7 +324,7 @@ export function IngredientInput({
   return (
     <div className="space-y-2">
       <div className="relative">
-        <div className="relative flex min-h-[40px] w-full border border-vintage-warm-brown/50 focus-within:border-vintage-warm-brown bg-transparent px-3 py-2 text-sm rounded-md flex-wrap gap-1">
+        <div className="relative flex min-h-[40px] w-full border border-vintage-warm-brown/50 focus-within:border-vintage-warm-brown focus-within:ring-0 focus-within:ring-offset-0 bg-transparent px-3 py-2 text-sm rounded-md flex-wrap gap-1">
           {/* Search Icon */}
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-vintage-warm-brown h-4 w-4" />
           
@@ -374,7 +374,7 @@ export function IngredientInput({
               setTimeout(() => setShowSuggestions(false), 150);
             }}
             placeholder={ingredients.length === 0 ? placeholder : ""}
-            className="flex-1 bg-transparent outline-none placeholder:text-muted-foreground pl-10 pr-10 text-sm font-medium"
+            className="flex-1 bg-transparent outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-muted-foreground pl-10 pr-10 text-sm font-medium"
             disabled={ingredients.length >= maxItems}
             aria-label="Add ingredients"
             data-testid="ingredient-input"

@@ -23,7 +23,7 @@ import {
   Target,
   BookOpen,
   Settings,
-  Bell
+  Bell,
 } from "lucide-react";
 
 interface QuickStats {
@@ -57,6 +57,7 @@ export default function Dashboard() {
     shoppingList, 
     getExpiringItems 
   } = useAppStore();
+  
 
   const [quickStats] = React.useState<QuickStats>({
     savedRecipes: favoriteRecipes.length,
@@ -136,9 +137,10 @@ export default function Dashboard() {
           backgroundRepeat: 'no-repeat'
         }}
       />
+      
       {/* Blue Overlay */}
       <div 
-        className="fixed inset-0 z-10" 
+        className="fixed inset-0 z-10"
         style={{ backgroundColor: 'rgba(30, 64, 175, 0.4)' }}
       />
       
@@ -153,10 +155,10 @@ export default function Dashboard() {
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                <h1 className="text-3xl font-bold text-white mb-2 text-left">
                   {getGreeting()}, {user?.name?.split(' ')[0] || 'Chef'}! 
                 </h1>
-                <p className="text-gray-600">
+                <p className="text-white text-left">
                   Ready to cook something amazing today?
                 </p>
               </div>

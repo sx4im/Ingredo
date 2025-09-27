@@ -3,6 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 :root {
   /* Modern Professional Color Palette */
   --vintage-dark-green: #1e40af; /* Vibrant blue */
@@ -871,28 +872,28 @@ html {
 
 /* Large mobile logo for discover page */
 .app-logo-mobile-large {
-  width: 110px;
-  height: 110px;
+  width: 70px;
+  height: 70px;
   object-fit: contain;
   transition: transform 0.3s ease;
 }
 
 /* Mobile menu button styles */
 .mobile-menu-button {
-  width: 60px !important;
-  height: 60px !important;
+  width: 45px !important;
+  height: 45px !important;
   z-index: 9999 !important;
   position: relative;
   background-color: white !important;
   border: 2px solid #e5e7eb !important;
-  border-radius: 12px !important;
+  border-radius: 2px !important;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
 }
 
 
 .mobile-menu-icon {
-  width: 30px !important;
-  height: 30px !important;
+  width: 24px !important;
+  height: 24px !important;
   color: #374151 !important;
 }
 
@@ -961,4 +962,31 @@ html {
   color: #f97316;
   border-bottom-color: #f97316;
   text-shadow: 0 0 8px rgba(249, 115, 22, 0.5);
+}
+
+/* Profile Dropdown Hover Styles */
+.profile-icon-button {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.profile-icon-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: transparent;
+  border: 2px solid var(--vintage-warm-brown);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.profile-icon-button:hover::before {
+  width: 48px;
+  height: 48px;
+  opacity: 1;
 }

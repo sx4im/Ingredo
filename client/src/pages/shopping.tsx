@@ -26,7 +26,7 @@ import {
   Grid,
   Edit,
   Copy,
-  Printer
+  Printer,
 } from "lucide-react";
 
 interface ShoppingListItem {
@@ -263,9 +263,10 @@ export default function Shopping() {
           backgroundRepeat: 'no-repeat'
         }}
       />
+      
       {/* Blue Overlay */}
       <div 
-        className="fixed inset-0 z-10" 
+        className="fixed inset-0 z-10"
         style={{ backgroundColor: 'rgba(30, 64, 175, 0.4)' }}
       />
       
@@ -280,10 +281,10 @@ export default function Shopping() {
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  Shopping List 🛒
+                <h1 className="text-3xl font-bold text-white mb-2 text-left">
+                  Shopping List 
                 </h1>
-                <p className="text-gray-600">
+                <p className="text-white text-left">
                   Plan your shopping and never forget an ingredient
                 </p>
               </div>
@@ -562,10 +563,12 @@ export default function Shopping() {
                     }
                   </p>
                   {shoppingList.length === 0 && (
-                    <Button onClick={() => setShowAddDialog(true)} className="bg-blue-600 hover:bg-blue-700">
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Your First Item
-                    </Button>
+                    <div className="flex justify-center">
+                      <Button onClick={() => setShowAddDialog(true)} className="bg-blue-600 hover:bg-blue-700">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Your First Item
+                      </Button>
+                    </div>
                   )}
                 </CardContent>
               </Card>

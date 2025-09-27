@@ -18,7 +18,7 @@ import {
   ChefHat,
   ShoppingCart,
   Filter,
-  SortAsc
+  SortAsc,
 } from "lucide-react";
 import { ShoppingListManager } from "@/components/ShoppingList/ShoppingListManager";
 import { ScrollReveal, FadeUp, FadeLeft, FadeRight, SlowFadeUp } from "@/components/ScrollReveal";
@@ -58,6 +58,7 @@ interface Collection {
 }
 
 export default function Profile() {
+
   const { data: profile, isLoading: profileLoading } = useQuery<UserProfile>({
     queryKey: ['/api/profile'],
   });
@@ -122,6 +123,7 @@ export default function Profile() {
           backgroundRepeat: 'no-repeat'
         }}
       />
+      
       {/* Blue Overlay */}
       <div
         className="fixed inset-0 z-0"

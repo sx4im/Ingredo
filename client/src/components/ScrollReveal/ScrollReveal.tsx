@@ -83,3 +83,40 @@ export const Staggered = ({ children, className, ...props }: ScrollRevealProps) 
     {children}
   </ScrollReveal>
 );
+
+// Modern animation components
+export const ModernFadeUp = ({ children, className, ...props }: ScrollRevealProps) => (
+  <ScrollReveal preset="modernFadeUp" className={className} {...props}>
+    {children}
+  </ScrollReveal>
+);
+
+export const ModernFadeDown = ({ children, className, ...props }: ScrollRevealProps) => (
+  <ScrollReveal preset="modernFadeDown" className={className} {...props}>
+    {children}
+  </ScrollReveal>
+);
+
+export const ModernFadeLeft = ({ children, className, ...props }: ScrollRevealProps) => (
+  <ScrollReveal preset="modernFadeLeft" className={className} {...props}>
+    {children}
+  </ScrollReveal>
+);
+
+export const ModernFadeRight = ({ children, className, ...props }: ScrollRevealProps) => (
+  <ScrollReveal preset="modernFadeRight" className={className} {...props}>
+    {children}
+  </ScrollReveal>
+);
+
+export const QuickFadeUp = ({ children, className, ...props }: ScrollRevealProps) => (
+  <ScrollReveal preset="quickFadeUp" className={className} {...props}>
+    {children}
+  </ScrollReveal>
+);
+
+export const QuickFadeDown = ({ children, className, ...props }: ScrollRevealProps) => (
+  <ScrollReveal preset="quickFadeDown" className={className} {...props}>
+    {children}
+  </ScrollReveal>
+);

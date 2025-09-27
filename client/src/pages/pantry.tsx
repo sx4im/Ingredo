@@ -23,7 +23,7 @@ import {
   SortAsc,
   SortDesc,
   Grid,
-  List
+  List,
 } from "lucide-react";
 
 interface PantryItem {
@@ -193,9 +193,10 @@ export default function Pantry() {
           backgroundRepeat: 'no-repeat'
         }}
       />
+      
       {/* Blue Overlay */}
       <div 
-        className="fixed inset-0 z-10" 
+        className="fixed inset-0 z-10"
         style={{ backgroundColor: 'rgba(30, 64, 175, 0.4)' }}
       />
       
@@ -210,10 +211,10 @@ export default function Pantry() {
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                <h1 className="text-3xl font-bold text-white mb-2 text-left">
                   My Pantry 
                 </h1>
-                <p className="text-gray-600">
+                <p className="text-white text-left">
                   Manage your ingredients and track expiry dates
                 </p>
               </div>

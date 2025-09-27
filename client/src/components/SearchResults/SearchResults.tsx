@@ -16,7 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmptyState } from "@/components/ui/empty-state";
 import { RecipeCard, type RecipeCardData } from "@/components/RecipeCard";
 import { RecipeCardGridSkeleton } from "@/components/RecipeCard/RecipeCardSkeleton";
-import { ScrollReveal, FadeUp, Staggered } from "@/components/ScrollReveal";
+import { motion, AnimatePresence } from "framer-motion";
 import { apiClient } from "@/lib/apiClient";
 import { type SearchFilters } from "@shared/schema";
 import { 
@@ -274,18 +274,27 @@ export function SearchResults({
       ) : sortedRecipes.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sortedRecipes.map((recipe, index) => (
-            <ScrollReveal key={`${recipe.id}-${activeMode}`} preset="fadeUp">
+            <motion.div
+              key={`${recipe.id}-${activeMode}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.2, duration: 0.8, ease: "easeOut" }}
+            >
               <RecipeCard
                 recipe={recipe}
                 onSave={onRecipeSave}
                 onUseSuggestion={onUseSuggestion}
                 priority={index < 3} // Prioritize first 3 images
               />
-            </ScrollReveal>
+            </motion.div>
           ))}
         </div>
       ) : (
-        <FadeUp>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
+        >
           <EmptyState
             icon={<Search className="mx-auto h-12 w-12 mb-4 opacity-50" />}
             title="No recipes found"
@@ -295,7 +304,7 @@ export function SearchResults({
               onClick: activeMode === 'match' ? handleGenerateCreative : () => {}
             }}
           />
-        </FadeUp>
+        </motion.div>
       )}
 
       {/* Creative generation loading */}

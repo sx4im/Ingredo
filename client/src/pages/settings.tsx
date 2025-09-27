@@ -15,9 +15,6 @@ import {
   Mail, 
   Bell, 
   Shield, 
-  Palette, 
-  Moon, 
-  Sun,
   Camera,
   Save,
   Trash2,
@@ -33,12 +30,25 @@ import {
   Heart,
   BookOpen,
   Package,
-  ShoppingCart
+  ShoppingCart,
+  ChefHat,
+  Clock,
+  Scale,
+  Thermometer,
+  Volume2,
+  VolumeX,
+  Wifi,
+  WifiOff,
+  Database,
+  Cloud,
+  CloudOff,
+  AlertTriangle,
+  CheckCircle,
+  XCircle,
 } from "lucide-react";
 
 export default function Settings() {
   const { user } = useAuth();
-  const { theme, setTheme, toggleTheme } = useAppStore();
   const { toast } = useToast();
   
   const [profileData, setProfileData] = React.useState({
@@ -56,6 +66,8 @@ export default function Settings() {
     pantryReminders: true,
     shoppingReminders: false,
     weeklyDigest: true,
+    cookingTimer: true,
+    ingredientAlerts: true,
   });
 
   const [privacy, setPrivacy] = React.useState({
@@ -66,13 +78,33 @@ export default function Settings() {
     dataSharing: false,
   });
 
-  const [preferences, setPreferences] = React.useState({
+  const [cookingPreferences, setCookingPreferences] = React.useState({
     defaultServings: 4,
     preferredUnits: "metric",
-    language: "en",
-    timezone: "UTC",
-    autoSave: true,
+    temperatureUnit: "celsius",
+    defaultCookingTime: 30,
+    autoStartTimer: false,
     showNutritionInfo: true,
+    showCookingTips: true,
+    voiceInstructions: false,
+    soundEffects: true,
+    difficultyLevel: "intermediate",
+  });
+
+  const [accessibility, setAccessibility] = React.useState({
+    highContrast: false,
+    largeText: false,
+    screenReader: false,
+    reducedMotion: false,
+    keyboardNavigation: true,
+  });
+
+  const [dataSync, setDataSync] = React.useState({
+    autoSync: true,
+    syncFrequency: "realtime",
+    offlineMode: false,
+    cloudBackup: true,
+    lastSync: new Date().toISOString(),
   });
 
   const handleSaveProfile = () => {
@@ -97,10 +129,24 @@ export default function Settings() {
     });
   };
 
-  const handleSavePreferences = () => {
+  const handleSaveCookingPreferences = () => {
     toast({
-      title: "Preferences updated!",
-      description: "Your app preferences have been saved.",
+      title: "Cooking preferences updated!",
+      description: "Your cooking settings have been saved.",
+    });
+  };
+
+  const handleSaveAccessibility = () => {
+    toast({
+      title: "Accessibility settings updated!",
+      description: "Your accessibility preferences have been saved.",
+    });
+  };
+
+  const handleSaveDataSync = () => {
+    toast({
+      title: "Sync settings updated!",
+      description: "Your data sync preferences have been saved.",
     });
   };
 
@@ -109,8 +155,9 @@ export default function Settings() {
       profile: profileData,
       notifications,
       privacy,
-      preferences,
-      theme,
+      cookingPreferences,
+      accessibility,
+      dataSync,
     };
     
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -127,6 +174,36 @@ export default function Settings() {
     });
   };
 
+  const handleImportData = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const data = JSON.parse(e.target?.result as string);
+            // In a real app, you would validate and apply the imported data
+            toast({
+              title: "Data imported!",
+              description: "Your settings have been imported successfully.",
+            });
+          } catch (error) {
+            toast({
+              title: "Import failed",
+              description: "The file format is invalid.",
+              variant: "destructive",
+            });
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
+  };
+
   const handleDeleteAccount = () => {
     toast({
       title: "Feature coming soon",
@@ -134,14 +211,35 @@ export default function Settings() {
     });
   };
 
+  const handleSyncNow = () => {
+    setDataSync(prev => ({ ...prev, lastSync: new Date().toISOString() }));
+    toast({
+      title: "Sync completed!",
+      description: "Your data has been synchronized.",
+    });
+  };
+
   return (
     <div className="relative min-h-screen">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50" />
-      <div className="absolute inset-0 bg-[url('/settings.webp')] bg-cover bg-center opacity-5" />
+      {/* Background Image */}
+      <div 
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url(/settings.webp)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
       
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="max-w-4xl mx-auto">
+      {/* Blue Overlay */}
+      <div 
+        className="fixed inset-0 z-10"
+        style={{ backgroundColor: 'rgba(30, 64, 175, 0.4)' }}
+      />
+      
+      <div className="relative z-20 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-6xl mx-auto">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -151,10 +249,10 @@ export default function Settings() {
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  Settings ⚙️
+                <h1 className="text-3xl font-bold text-white mb-2 text-left">
+                  Settings 
                 </h1>
-                <p className="text-gray-600">
+                <p className="text-white text-left">
                   Manage your account preferences and app settings
                 </p>
               </div>
@@ -189,7 +287,7 @@ export default function Settings() {
                         Change Avatar
                       </Button>
                       <p className="text-sm text-gray-600 mt-1">
-                        JPG, PNG or GIF. Max size 2MB.
+                        JPG, PNG or JPEG. Max size 2MB.
                       </p>
                     </div>
                   </div>
@@ -255,7 +353,7 @@ export default function Settings() {
               </Card>
             </motion.div>
 
-            {/* Theme Settings */}
+            {/* Cooking Preferences */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -264,47 +362,157 @@ export default function Settings() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Palette className="h-5 w-5 text-purple-600" />
-                    Appearance
+                    <ChefHat className="h-5 w-5 text-orange-600" />
+                    Cooking Preferences
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="theme">Theme</Label>
-                      <p className="text-sm text-gray-600">
-                        Choose your preferred color scheme
-                      </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="default-servings">Default Servings</Label>
+                      <Input
+                        id="default-servings"
+                        type="number"
+                        min="1"
+                        max="20"
+                        value={cookingPreferences.defaultServings}
+                        onChange={(e) => setCookingPreferences(prev => ({ ...prev, defaultServings: Number(e.target.value) }))}
+                      />
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant={theme === "light" ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setTheme("light")}
-                      >
-                        <Sun className="h-4 w-4 mr-2" />
-                        Light
-                      </Button>
-                      <Button
-                        variant={theme === "dark" ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setTheme("dark")}
-                      >
-                        <Moon className="h-4 w-4 mr-2" />
-                        Dark
-                      </Button>
+                    <div>
+                      <Label htmlFor="default-cooking-time">Default Cooking Time (minutes)</Label>
+                      <Input
+                        id="default-cooking-time"
+                        type="number"
+                        min="5"
+                        max="300"
+                        value={cookingPreferences.defaultCookingTime}
+                        onChange={(e) => setCookingPreferences(prev => ({ ...prev, defaultCookingTime: Number(e.target.value) }))}
+                      />
                     </div>
                   </div>
                   
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="preferred-units">Preferred Units</Label>
+                      <div className="flex gap-2 mt-2">
+                      <Button
+                          variant={cookingPreferences.preferredUnits === "metric" ? "default" : "outline"}
+                        size="sm"
+                          onClick={() => setCookingPreferences(prev => ({ ...prev, preferredUnits: "metric" }))}
+                      >
+                          <Scale className="h-4 w-4 mr-1" />
+                          Metric
+                      </Button>
+                      <Button
+                          variant={cookingPreferences.preferredUnits === "imperial" ? "default" : "outline"}
+                        size="sm"
+                          onClick={() => setCookingPreferences(prev => ({ ...prev, preferredUnits: "imperial" }))}
+                      >
+                          <Scale className="h-4 w-4 mr-1" />
+                          Imperial
+                      </Button>
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="temperature-unit">Temperature Unit</Label>
+                      <div className="flex gap-2 mt-2">
+                        <Button
+                          variant={cookingPreferences.temperatureUnit === "celsius" ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setCookingPreferences(prev => ({ ...prev, temperatureUnit: "celsius" }))}
+                        >
+                          <Thermometer className="h-4 w-4 mr-1" />
+                          °C
+                        </Button>
+                        <Button
+                          variant={cookingPreferences.temperatureUnit === "fahrenheit" ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setCookingPreferences(prev => ({ ...prev, temperatureUnit: "fahrenheit" }))}
+                        >
+                          <Thermometer className="h-4 w-4 mr-1" />
+                          °F
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
-                      <Label htmlFor="auto-theme">Auto Theme</Label>
+                        <Label htmlFor="auto-start-timer" className="text-gray-900 font-semibold">Auto Start Timer</Label>
                       <p className="text-sm text-gray-600">
-                        Automatically switch theme based on system preference
+                          Automatically start cooking timer when viewing recipes
                       </p>
                     </div>
-                    <Switch id="auto-theme" />
+                      <Switch
+                        id="auto-start-timer"
+                        checked={cookingPreferences.autoStartTimer}
+                        onCheckedChange={(checked) => setCookingPreferences(prev => ({ ...prev, autoStartTimer: checked }))}
+                      />
                   </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="show-nutrition" className="text-gray-900 font-semibold">Show Nutrition Info</Label>
+                        <p className="text-sm text-gray-600">
+                          Display nutritional information for recipes
+                        </p>
+                      </div>
+                      <Switch
+                        id="show-nutrition"
+                        checked={cookingPreferences.showNutritionInfo}
+                        onCheckedChange={(checked) => setCookingPreferences(prev => ({ ...prev, showNutritionInfo: checked }))}
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="show-cooking-tips" className="text-gray-900 font-semibold">Show Cooking Tips</Label>
+                        <p className="text-sm text-gray-600">
+                          Display helpful cooking tips and techniques
+                        </p>
+                      </div>
+                      <Switch
+                        id="show-cooking-tips"
+                        checked={cookingPreferences.showCookingTips}
+                        onCheckedChange={(checked) => setCookingPreferences(prev => ({ ...prev, showCookingTips: checked }))}
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="voice-instructions" className="text-gray-900 font-semibold">Voice Instructions</Label>
+                        <p className="text-sm text-gray-600">
+                          Enable voice-guided cooking instructions
+                        </p>
+                      </div>
+                      <Switch
+                        id="voice-instructions"
+                        checked={cookingPreferences.voiceInstructions}
+                        onCheckedChange={(checked) => setCookingPreferences(prev => ({ ...prev, voiceInstructions: checked }))}
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="sound-effects" className="text-gray-900 font-semibold">Sound Effects</Label>
+                        <p className="text-sm text-gray-600">
+                          Play sound effects for timer alerts and notifications
+                        </p>
+                      </div>
+                      <Switch
+                        id="sound-effects"
+                        checked={cookingPreferences.soundEffects}
+                        onCheckedChange={(checked) => setCookingPreferences(prev => ({ ...prev, soundEffects: checked }))}
+                      />
+                    </div>
+                  </div>
+                  
+                  <Button onClick={handleSaveCookingPreferences} className="bg-orange-600 hover:bg-orange-700">
+                    <Save className="h-4 w-4 mr-2" />
+                    Save Cooking Preferences
+                  </Button>
                 </CardContent>
               </Card>
             </motion.div>
@@ -326,7 +534,7 @@ export default function Settings() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label htmlFor="email-notifications">Email Notifications</Label>
+                        <Label htmlFor="email-notifications" className="text-gray-900 font-semibold">Email Notifications</Label>
                         <p className="text-sm text-gray-600">
                           Receive notifications via email
                         </p>
@@ -340,7 +548,7 @@ export default function Settings() {
                     
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label htmlFor="push-notifications">Push Notifications</Label>
+                        <Label htmlFor="push-notifications" className="text-gray-900 font-semibold">Push Notifications</Label>
                         <p className="text-sm text-gray-600">
                           Receive push notifications in your browser
                         </p>
@@ -356,7 +564,7 @@ export default function Settings() {
                     
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label htmlFor="recipe-updates">Recipe Updates</Label>
+                        <Label htmlFor="recipe-updates" className="text-gray-900 font-semibold">Recipe Updates</Label>
                         <p className="text-sm text-gray-600">
                           Get notified when your saved recipes are updated
                         </p>
@@ -370,7 +578,7 @@ export default function Settings() {
                     
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label htmlFor="pantry-reminders">Pantry Reminders</Label>
+                        <Label htmlFor="pantry-reminders" className="text-gray-900 font-semibold">Pantry Reminders</Label>
                         <p className="text-sm text-gray-600">
                           Get reminded about expiring ingredients
                         </p>
@@ -384,7 +592,7 @@ export default function Settings() {
                     
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label htmlFor="shopping-reminders">Shopping Reminders</Label>
+                        <Label htmlFor="shopping-reminders" className="text-gray-900 font-semibold">Shopping Reminders</Label>
                         <p className="text-sm text-gray-600">
                           Get reminded about your shopping list
                         </p>
@@ -398,7 +606,7 @@ export default function Settings() {
                     
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label htmlFor="weekly-digest">Weekly Digest</Label>
+                        <Label htmlFor="weekly-digest" className="text-gray-900 font-semibold">Weekly Digest</Label>
                         <p className="text-sm text-gray-600">
                           Receive a weekly summary of your cooking activity
                         </p>
@@ -407,6 +615,34 @@ export default function Settings() {
                         id="weekly-digest"
                         checked={notifications.weeklyDigest}
                         onCheckedChange={(checked) => setNotifications(prev => ({ ...prev, weeklyDigest: checked }))}
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="cooking-timer" className="text-gray-900 font-semibold">Cooking Timer Alerts</Label>
+                        <p className="text-sm text-gray-600">
+                          Get notified when cooking timers finish
+                        </p>
+                      </div>
+                      <Switch
+                        id="cooking-timer"
+                        checked={notifications.cookingTimer}
+                        onCheckedChange={(checked) => setNotifications(prev => ({ ...prev, cookingTimer: checked }))}
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="ingredient-alerts" className="text-gray-900 font-semibold">Ingredient Alerts</Label>
+                        <p className="text-sm text-gray-600">
+                          Get notified about missing or expiring ingredients
+                        </p>
+                      </div>
+                      <Switch
+                        id="ingredient-alerts"
+                        checked={notifications.ingredientAlerts}
+                        onCheckedChange={(checked) => setNotifications(prev => ({ ...prev, ingredientAlerts: checked }))}
                       />
                     </div>
                   </div>
@@ -436,7 +672,7 @@ export default function Settings() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label htmlFor="profile-visibility">Profile Visibility</Label>
+                        <Label htmlFor="profile-visibility" className="text-gray-900 font-semibold">Profile Visibility</Label>
                         <p className="text-sm text-gray-600">
                           Control who can see your profile
                         </p>
@@ -463,7 +699,7 @@ export default function Settings() {
                     
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label htmlFor="show-email">Show Email</Label>
+                        <Label htmlFor="show-email" className="text-gray-900 font-semibold">Show Email</Label>
                         <p className="text-sm text-gray-600">
                           Display your email address on your profile
                         </p>
@@ -477,7 +713,7 @@ export default function Settings() {
                     
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label htmlFor="show-location">Show Location</Label>
+                        <Label htmlFor="show-location" className="text-gray-900 font-semibold">Show Location</Label>
                         <p className="text-sm text-gray-600">
                           Display your location on your profile
                         </p>
@@ -491,7 +727,7 @@ export default function Settings() {
                     
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label htmlFor="allow-messages">Allow Messages</Label>
+                        <Label htmlFor="allow-messages" className="text-gray-900 font-semibold">Allow Messages</Label>
                         <p className="text-sm text-gray-600">
                           Allow other users to send you messages
                         </p>
@@ -505,7 +741,7 @@ export default function Settings() {
                     
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label htmlFor="data-sharing">Data Sharing</Label>
+                        <Label htmlFor="data-sharing" className="text-gray-900 font-semibold">Data Sharing</Label>
                         <p className="text-sm text-gray-600">
                           Allow anonymous usage data to improve the app
                         </p>
@@ -521,8 +757,7 @@ export default function Settings() {
                   <div className="space-y-4">
                     <Separator />
                     <div className="space-y-2">
-                      <Label>Change Password</Label>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" className="border-2 border-gray-300">
                         <Key className="h-4 w-4 mr-2" />
                         Update Password
                       </Button>
@@ -537,7 +772,7 @@ export default function Settings() {
               </Card>
             </motion.div>
 
-            {/* App Preferences */}
+            {/* Accessibility Settings */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -546,75 +781,165 @@ export default function Settings() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Monitor className="h-5 w-5 text-indigo-600" />
-                    App Preferences
+                    <Eye className="h-5 w-5 text-blue-600" />
+                    Accessibility
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="default-servings">Default Servings</Label>
-                      <Input
-                        id="default-servings"
-                        type="number"
-                        min="1"
-                        max="20"
-                        value={preferences.defaultServings}
-                        onChange={(e) => setPreferences(prev => ({ ...prev, defaultServings: Number(e.target.value) }))}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="high-contrast" className="text-gray-900 font-semibold">High Contrast Mode</Label>
+                        <p className="text-sm text-gray-600">
+                          Increase contrast for better visibility
+                        </p>
+                      </div>
+                      <Switch
+                        id="high-contrast"
+                        checked={accessibility.highContrast}
+                        onCheckedChange={(checked) => setAccessibility(prev => ({ ...prev, highContrast: checked }))}
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="preferred-units">Preferred Units</Label>
-                      <div className="flex gap-2 mt-2">
-                        <Button
-                          variant={preferences.preferredUnits === "metric" ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setPreferences(prev => ({ ...prev, preferredUnits: "metric" }))}
-                        >
-                          Metric
-                        </Button>
-                        <Button
-                          variant={preferences.preferredUnits === "imperial" ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setPreferences(prev => ({ ...prev, preferredUnits: "imperial" }))}
-                        >
-                          Imperial
-                        </Button>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="large-text" className="text-gray-900 font-semibold">Large Text</Label>
+                        <p className="text-sm text-gray-600">
+                          Increase text size for better readability
+                        </p>
                       </div>
+                      <Switch
+                        id="large-text"
+                        checked={accessibility.largeText}
+                        onCheckedChange={(checked) => setAccessibility(prev => ({ ...prev, largeText: checked }))}
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="screen-reader" className="text-gray-900 font-semibold">Screen Reader Support</Label>
+                        <p className="text-sm text-gray-600">
+                          Optimize interface for screen readers
+                        </p>
+                      </div>
+                      <Switch
+                        id="screen-reader"
+                        checked={accessibility.screenReader}
+                        onCheckedChange={(checked) => setAccessibility(prev => ({ ...prev, screenReader: checked }))}
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="reduced-motion" className="text-gray-900 font-semibold">Reduce Motion</Label>
+                        <p className="text-sm text-gray-600">
+                          Minimize animations and transitions
+                        </p>
+                      </div>
+                      <Switch
+                        id="reduced-motion"
+                        checked={accessibility.reducedMotion}
+                        onCheckedChange={(checked) => setAccessibility(prev => ({ ...prev, reducedMotion: checked }))}
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="keyboard-navigation" className="text-gray-900 font-semibold">Keyboard Navigation</Label>
+                        <p className="text-sm text-gray-600">
+                          Enable full keyboard navigation support
+                        </p>
+                      </div>
+                      <Switch
+                        id="keyboard-navigation"
+                        checked={accessibility.keyboardNavigation}
+                        onCheckedChange={(checked) => setAccessibility(prev => ({ ...prev, keyboardNavigation: checked }))}
+                      />
                     </div>
                   </div>
                   
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="auto-save">Auto Save</Label>
-                      <p className="text-sm text-gray-600">
-                        Automatically save your progress while cooking
-                      </p>
-                    </div>
-                    <Switch
-                      id="auto-save"
-                      checked={preferences.autoSave}
-                      onCheckedChange={(checked) => setPreferences(prev => ({ ...prev, autoSave: checked }))}
-                    />
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="show-nutrition">Show Nutrition Info</Label>
-                      <p className="text-sm text-gray-600">
-                        Display nutritional information for recipes
-                      </p>
-                    </div>
-                    <Switch
-                      id="show-nutrition"
-                      checked={preferences.showNutritionInfo}
-                      onCheckedChange={(checked) => setPreferences(prev => ({ ...prev, showNutritionInfo: checked }))}
-                    />
-                  </div>
-                  
-                  <Button onClick={handleSavePreferences} className="bg-indigo-600 hover:bg-indigo-700">
+                  <Button onClick={handleSaveAccessibility} className="bg-blue-600 hover:bg-blue-700">
                     <Save className="h-4 w-4 mr-2" />
-                    Save Preferences
+                    Save Accessibility Settings
+                        </Button>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Data Sync & Backup */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+            >
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Cloud className="h-5 w-5 text-green-600" />
+                    Data Sync & Backup
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="auto-sync" className="text-gray-900 font-semibold">Auto Sync</Label>
+                        <p className="text-sm text-gray-600">
+                          Automatically sync your data across devices
+                        </p>
+                      </div>
+                      <Switch
+                        id="auto-sync"
+                        checked={dataSync.autoSync}
+                        onCheckedChange={(checked) => setDataSync(prev => ({ ...prev, autoSync: checked }))}
+                      />
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                        <Label htmlFor="cloud-backup" className="text-gray-900 font-semibold">Cloud Backup</Label>
+                      <p className="text-sm text-gray-600">
+                          Backup your data to the cloud
+                      </p>
+                    </div>
+                    <Switch
+                        id="cloud-backup"
+                        checked={dataSync.cloudBackup}
+                        onCheckedChange={(checked) => setDataSync(prev => ({ ...prev, cloudBackup: checked }))}
+                    />
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                        <Label htmlFor="offline-mode" className="text-gray-900 font-semibold">Offline Mode</Label>
+                      <p className="text-sm text-gray-600">
+                          Enable offline access to your recipes
+                      </p>
+                    </div>
+                    <Switch
+                        id="offline-mode"
+                        checked={dataSync.offlineMode}
+                        onCheckedChange={(checked) => setDataSync(prev => ({ ...prev, offlineMode: checked }))}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div>
+                      <Label className="text-gray-900 font-semibold">Last Sync</Label>
+                      <p className="text-sm text-gray-600">
+                        {new Date(dataSync.lastSync).toLocaleString()}
+                      </p>
+                    </div>
+                    <Button variant="outline" onClick={handleSyncNow}>
+                      <Cloud className="h-4 w-4 mr-2" />
+                      Sync Now
+                    </Button>
+                  </div>
+                  
+                  <Button onClick={handleSaveDataSync} className="bg-green-600 hover:bg-green-700">
+                    <Save className="h-4 w-4 mr-2" />
+                    Save Sync Settings
                   </Button>
                 </CardContent>
               </Card>
@@ -637,7 +962,7 @@ export default function Settings() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label>Export Data</Label>
+                        <Label className="text-gray-900 font-semibold">Export Data</Label>
                         <p className="text-sm text-gray-600">
                           Download all your data including recipes, collections, and settings
                         </p>
@@ -650,12 +975,12 @@ export default function Settings() {
                     
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label>Import Data</Label>
+                        <Label className="text-gray-900 font-semibold">Import Data</Label>
                         <p className="text-sm text-gray-600">
                           Import data from a previously exported file
                         </p>
                       </div>
-                      <Button variant="outline">
+                      <Button variant="outline" onClick={handleImportData}>
                         <Upload className="h-4 w-4 mr-2" />
                         Import
                       </Button>
@@ -667,7 +992,7 @@ export default function Settings() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label className="text-red-600">Delete Account</Label>
+                        <Label className="text-red-600 font-semibold">Delete Account</Label>
                         <p className="text-sm text-gray-600">
                           Permanently delete your account and all associated data
                         </p>

@@ -8,5 +8,11 @@ export {
   Rotate,
   SlowFadeUp,
   SlowFadeDown,
-  Staggered
+  Staggered,
+  ModernFadeUp,
+  ModernFadeDown,
+  ModernFadeLeft,
+  ModernFadeRight,
+  QuickFadeUp,
+  QuickFadeDown
 } from './ScrollReveal';

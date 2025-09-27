@@ -27,24 +27,24 @@ import Signup from "@/pages/auth/signup";
 function AppRouter() {
   return (
     <Switch>
-      {/* Public Routes */}
-      <Route path="/" component={Home} />
-      <Route path="/search" component={Search} />
-      <Route path="/recipe/:slug" component={Recipe} />
-      
-      {/* Auth Routes */}
-      <Route path="/auth/login" component={Login} />
-      <Route path="/auth/signup" component={Signup} />
-      
-      {/* Protected Routes */}
-      <Route path="/dashboard" component={Dashboard} />
-      <Route path="/pantry" component={Pantry} />
-      <Route path="/shopping" component={Shopping} />
-      <Route path="/favorites" component={Favorites} />
-      <Route path="/settings" component={Settings} />
-      <Route path="/profile" component={Profile} />
-      <Route path="/admin" component={Admin} />
-      
+        {/* Public Routes */}
+        <Route path="/" component={Home} />
+        <Route path="/search" component={Search} />
+        <Route path="/recipe/:slug" component={Recipe} />
+        
+        {/* Auth Routes */}
+        <Route path="/auth/login" component={Login} />
+        <Route path="/auth/signup" component={Signup} />
+        
+        {/* Protected Routes */}
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/pantry" component={Pantry} />
+        <Route path="/shopping" component={Shopping} />
+        <Route path="/favorites" component={Favorites} />
+        <Route path="/settings" component={Settings} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/admin" component={Admin} />
+        
       {/* 404 */}
       <Route component={NotFound} />
     </Switch>

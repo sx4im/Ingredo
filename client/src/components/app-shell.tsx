@@ -70,7 +70,7 @@ export function AppShell({ children }: AppShellProps) {
               {/* Profile Menu */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" data-testid="profile-menu" className="h-12 w-12 rounded-full p-0 hover:bg-transparent">
+                  <Button variant="ghost" size="icon" data-testid="profile-menu" className="h-12 w-12 rounded-full p-0 hover:bg-transparent profile-icon-button">
                     <Avatar className="h-10 w-10">
                       <AvatarFallback className="bg-orange-500 text-white text-sm rounded-full">
                         <User className="h-5 w-5" />
@@ -78,7 +78,7 @@ export function AppShell({ children }: AppShellProps) {
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="center" className="mt-4">
                   <DropdownMenuItem asChild>
                     <Link href="/profile" data-testid="menu-profile">
                       <User className="mr-2 h-4 w-4" />

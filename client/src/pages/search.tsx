@@ -1,11 +1,11 @@
 import * as React from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/apiClient";
 import { Card, CardContent } from "@/components/ui/card";
 import { IngredientInput } from "@/components/IngredientInput";
 import { PreferencesPanel } from "@/components/PreferencesPanel";
 import { SearchResults } from "@/components/SearchResults";
-import { ScrollReveal, FadeUp, SlowFadeUp } from "@/components/ScrollReveal";
 import { type IngredientChip, type SearchFilters } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { Search as SearchIcon } from "lucide-react";
@@ -61,6 +61,7 @@ export default function Search() {
           backgroundRepeat: 'no-repeat'
         }}
       />
+      
       {/* Blue Overlay */}
       <div
         className="fixed inset-0 z-0"
@@ -70,17 +71,25 @@ export default function Search() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <SlowFadeUp>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
+        >
           <div className="text-center mb-8">
             <h1 className="h1 text-white mb-4">Find Recipes</h1>
             <p className="text-white/90 text-center text-base font-medium">
               Add ingredients you have and discover delicious recipes you can make
             </p>
           </div>
-        </SlowFadeUp>
+        </motion.div>
 
         {/* Ingredient Search */}
-        <ScrollReveal preset="fadeUp" >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
+        >
           <Card className="mb-8">
             <CardContent className="p-6" >
               <IngredientInput
@@ -91,24 +100,32 @@ export default function Search() {
               />
             </CardContent>
           </Card>
-        </ScrollReveal>
+        </motion.div>
 
         {/* Filters */}
-        <ScrollReveal preset="fadeUp" >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
+        >
           <div className="mb-8">
             <PreferencesPanel onFiltersChange={handleFiltersChange} />
           </div>
-        </ScrollReveal>
+        </motion.div>
 
         {/* Search Results */}
-        <ScrollReveal preset="fadeUp" >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
+        >
           <SearchResults
             ingredients={selectedIngredients.map(ing => ing.name)}
             filters={searchFilters}
             onRecipeSave={handleRecipeSave}
             onUseSuggestion={handleUseSuggestion}
           />
-        </ScrollReveal>
+        </motion.div>
               </div>
       </div>
     </div>
