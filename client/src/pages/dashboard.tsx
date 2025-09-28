@@ -115,14 +115,22 @@ export default function Dashboard() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
+        staggerChildren: 0.08,
+        duration: 0.4
       }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+    hidden: { opacity: 0, y: 15 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: "easeOut"
+      }
+    }
   };
 
   return (
@@ -148,9 +156,9 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             className="mb-8"
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -249,7 +257,7 @@ export default function Dashboard() {
           </motion.div>
 
           {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             {/* Left Column */}
             <div className="lg:col-span-2 space-y-8">
               {/* Quick Actions */}
@@ -257,8 +265,9 @@ export default function Dashboard() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
+                id="quick-actions-card"
               >
-                <Card>
+                <Card className="bg-white/95 backdrop-blur-sm h-full">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Zap className="h-5 w-5 text-yellow-500" />
@@ -268,7 +277,7 @@ export default function Dashboard() {
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <Link href="/search">
-                        <Button className="w-full h-16 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white justify-start">
+                        <Button className="w-full h-16 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white justify-start shadow-md hover:shadow-lg transition-all duration-300">
                           <ChefHat className="h-5 w-5 mr-3" />
                           <div className="text-left">
                             <div className="font-semibold">Find Recipes</div>
@@ -278,21 +287,21 @@ export default function Dashboard() {
                       </Link>
                       
                       <Link href="/pantry">
-                        <Button variant="outline" className="w-full h-16 justify-start">
+                        <Button className="w-full h-16 bg-white hover:bg-gradient-to-r hover:from-orange-500 hover:to-red-500 border-2 border-gray-200 hover:border-transparent text-gray-900 hover:text-white justify-start shadow-md hover:shadow-lg transition-all duration-300">
                           <Package className="h-5 w-5 mr-3" />
                           <div className="text-left">
                             <div className="font-semibold">Manage Pantry</div>
-                            <div className="text-sm text-gray-600">Track ingredients</div>
+                            <div className="text-sm opacity-90">Track ingredients</div>
                           </div>
                         </Button>
                       </Link>
                       
                       <Link href="/shopping">
-                        <Button variant="outline" className="w-full h-16 justify-start">
+                        <Button className="w-full h-16 bg-white hover:bg-gradient-to-r hover:from-green-500 hover:to-emerald-500 border-2 border-gray-200 hover:border-transparent text-gray-900 hover:text-white justify-start shadow-md hover:shadow-lg transition-all duration-300 md:col-span-2">
                           <ShoppingCart className="h-5 w-5 mr-3" />
                           <div className="text-left">
                             <div className="font-semibold">Shopping List</div>
-                            <div className="text-sm text-gray-600">Plan your shopping</div>
+                            <div className="text-sm opacity-90">Plan your shopping</div>
                           </div>
                         </Button>
                       </Link>
@@ -307,8 +316,9 @@ export default function Dashboard() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
+                id="recent-activity-card"
               >
-                <Card>
+                <Card className="bg-white/95 backdrop-blur-sm h-full">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Clock className="h-5 w-5 text-blue-500" />
@@ -343,58 +353,54 @@ export default function Dashboard() {
 
             {/* Right Column */}
             <div className="space-y-8">
-              {/* Expiring Items */}
+              {/* Expiring Items - Match Quick Actions height */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
               >
-                <Card>
+                <Card className="bg-white/95 backdrop-blur-sm h-full flex flex-col">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Target className="h-5 w-5 text-orange-500" />
                       Expiring Soon
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="flex-1 flex flex-col">
                     {expiringItems.length > 0 ? (
-                      <div className="space-y-3">
-                        {expiringItems.slice(0, 5).map((item) => (
-                          <div key={item.id} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
-                            <div>
-                              <p className="font-medium text-gray-900">{item.name}</p>
-                              <p className="text-sm text-gray-600">Expires in {item.daysLeft ?? 0} days</p>
+                      <div className="flex flex-col h-full">
+                        <div className="space-y-3 overflow-y-auto flex-1 min-h-[200px]">
+                          {expiringItems.slice(0, 5).map((item) => (
+                            <div key={item.id} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-gray-900 truncate text-sm">{item.name}</p>
+                                <p className="text-xs text-gray-600">Expires in {item.daysLeft ?? 0} days</p>
+                              </div>
+                              <Badge variant={(item.daysLeft ?? 0) <= 1 ? "destructive" : "secondary"} className="ml-2 flex-shrink-0 text-xs">
+                                {item.daysLeft ?? 0}d
+                              </Badge>
                             </div>
-                            <Badge variant={(item.daysLeft ?? 0) <= 1 ? "destructive" : "secondary"}>
-                              {item.daysLeft ?? 0}d
-                            </Badge>
-                          </div>
-                        ))}
-                        <Link href="/pantry">
-                          <Button variant="outline" size="sm" className="w-full">
-                            View All Pantry Items
-                            <ArrowRight className="h-4 w-4 ml-2" />
-                          </Button>
-                        </Link>
+                          ))}
+                        </div>
                       </div>
                     ) : (
-                      <div className="text-center py-6">
-                        <Package className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                        <p className="text-gray-600">No items expiring soon</p>
-                        <p className="text-sm text-gray-500">Great job managing your pantry!</p>
+                      <div className="flex-1 flex flex-col justify-center items-center text-center min-h-[145px]">
+                        <Package className="h-8 w-8 text-gray-300 mx-auto" />
+                        <p className="text-gray-600 text-sm">No items expiring soon</p>
+                        <p className="text-xs text-gray-500 mt-1">Great job managing your pantry!</p>
                       </div>
                     )}
                   </CardContent>
                 </Card>
               </motion.div>
 
-              {/* Quick Tips */}
+              {/* Cooking Tips - Match Recent Activity height */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.5 }}
               >
-                <Card>
+                <Card className="bg-white/95 backdrop-blur-sm h-full">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <TrendingUp className="h-5 w-5 text-green-500" />
@@ -404,15 +410,21 @@ export default function Dashboard() {
                   <CardContent>
                     <div className="space-y-4">
                       <div className="p-4 bg-green-50 rounded-lg">
-                        <h4 className="font-semibold text-green-900 mb-2">💡 Pro Tip</h4>
-                        <p className="text-sm text-green-800">
+                        <h4 className="font-medium text-green-700 mb-1 text-2xl">Pro Tip</h4>
+                        <p className="text-xs text-green-800">
                           Store fresh herbs in a glass of water in the fridge to keep them fresh longer.
                         </p>
                       </div>
                       <div className="p-4 bg-blue-50 rounded-lg">
-                        <h4 className="font-semibold text-blue-900 mb-2">🔥 Trending</h4>
-                        <p className="text-sm text-blue-800">
+                        <h4 className="font-medium text-blue-700 mb-1 text-2xl">Trending</h4>
+                        <p className="text-xs text-blue-800">
                           One-pot meals are perfect for busy weeknights and easy cleanup.
+                        </p>
+                      </div>
+                      <div className="p-4 bg-amber-50 rounded-lg">
+                        <h4 className="font-medium text-amber-700 mb-1 text-2xl">Quick Tip</h4>
+                        <p className="text-xs text-amber-800">
+                          Always taste and season your food at each cooking stage for best flavor.
                         </p>
                       </div>
                     </div>

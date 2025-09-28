@@ -990,3 +990,15 @@ html {
   height: 48px;
   opacity: 1;
 }
+
+/* Background Optimization Styles */
+.bg-optimized {
+  will-change: background-image;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Ensure smooth background transitions */
+[style*="backgroundImage"] {
+  transition: opacity 0.3s ease-in-out;
+}

@@ -209,12 +209,12 @@ export default function Favorites() {
       <div className="relative z-20 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-8"
-          >
+        <motion.div
+          initial={{ opacity: 0, y: -15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="mb-8"
+        >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h1 className="text-3xl font-bold text-white mb-2 text-left">
@@ -399,23 +399,25 @@ export default function Favorites() {
             transition={{ delay: 0.4 }}
           >
             {filteredRecipes.length === 0 ? (
-              <Card>
+              <Card className="bg-white/95 backdrop-blur-sm">
                 <CardContent className="p-12 text-center">
-                  <Heart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No favorites found</h3>
-                  <p className="text-gray-600 mb-6">
+                  <Heart className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2 text-center">No favorites found</h3>
+                  <p className="text-gray-600 mb-6 text-center max-w-md mx-auto">
                     {favoriteRecipesData.length === 0 
                       ? "Start building your favorites by saving recipes you love!"
                       : "Try adjusting your search or filter criteria."
                     }
                   </p>
                   {favoriteRecipesData.length === 0 && (
-                    <Link href="/search">
-                      <Button className="bg-red-600 hover:bg-red-700">
-                        <Plus className="h-4 w-4 mr-2" />
-                        Find Recipes to Save
-                      </Button>
-                    </Link>
+                    <div className="flex justify-center">
+                      <Link href="/search">
+                        <Button className="bg-red-600 hover:bg-red-700">
+                          <Plus className="h-4 w-4 mr-2" />
+                          Find Recipes to Save
+                        </Button>
+                      </Link>
+                    </div>
                   )}
                 </CardContent>
               </Card>

@@ -274,9 +274,9 @@ export default function Shopping() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             className="mb-8"
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -552,11 +552,11 @@ export default function Shopping() {
             transition={{ delay: 0.4 }}
           >
             {filteredItems.length === 0 ? (
-              <Card>
+              <Card className="bg-white/95 backdrop-blur-sm">
                 <CardContent className="p-12 text-center">
-                  <ShoppingCart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No items found</h3>
-                  <p className="text-gray-600 mb-6">
+                  <ShoppingCart className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2 text-center">No items found</h3>
+                  <p className="text-gray-600 mb-6 text-center max-w-md mx-auto">
                     {shoppingList.length === 0 
                       ? "Start building your shopping list by adding some items!"
                       : "Try adjusting your search or filter criteria."

@@ -15,10 +15,10 @@ export interface UseScrollRevealOptions {
 export function useScrollReveal(options: UseScrollRevealOptions = {}) {
   const {
     threshold = 0.1,
-    rootMargin = '0px 0px -50px 0px',
+    rootMargin = '0px 0px -30px 0px',
     triggerOnce = true,
     delay = 0,
-    duration = 1000,
+    duration = 1200,
     distance = '30px',
     direction = 'up',
     easing = 'ease-out',
@@ -126,29 +126,29 @@ export function useScrollReveal(options: UseScrollRevealOptions = {}) {
 export const scrollRevealPresets = {
   fadeUp: {
     direction: 'up' as const,
-    distance: '20px',
-    duration: 600,
+    distance: '30px',
+    duration: 1200,
     easing: 'ease-out' as const,
     delay: 0
   },
   fadeDown: {
     direction: 'down' as const,
-    distance: '20px',
-    duration: 600,
+    distance: '30px',
+    duration: 1200,
     easing: 'ease-out' as const,
     delay: 0
   },
   fadeLeft: {
     direction: 'left' as const,
-    distance: '20px',
-    duration: 600,
+    distance: '30px',
+    duration: 1200,
     easing: 'ease-out' as const,
     delay: 0
   },
   fadeRight: {
     direction: 'right' as const,
-    distance: '20px',
-    duration: 600,
+    distance: '30px',
+    duration: 1200,
     easing: 'ease-out' as const,
     delay: 0
   },
@@ -168,15 +168,15 @@ export const scrollRevealPresets = {
   },
   slowFadeUp: {
     direction: 'up' as const,
-    distance: '30px',
-    duration: 800,
+    distance: '35px',
+    duration: 1400,
     easing: 'ease-out' as const,
-    delay: 100
+    delay: 150
   },
   slowFadeDown: {
     direction: 'down' as const,
-    distance: '30px',
-    duration: 800,
+    distance: '25px',
+    duration: 1000,
     easing: 'ease-out' as const,
     delay: 100
   },
@@ -190,15 +190,15 @@ export const scrollRevealPresets = {
   // New modern presets
   modernFadeUp: {
     direction: 'up' as const,
-    distance: '15px',
-    duration: 500,
+    distance: '30px',
+    duration: 1200,
     easing: 'ease-out' as const,
     delay: 0
   },
   modernFadeDown: {
     direction: 'down' as const,
-    distance: '15px',
-    duration: 500,
+    distance: '30px',
+    duration: 1200,
     easing: 'ease-out' as const,
     delay: 0
   },

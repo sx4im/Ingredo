@@ -204,9 +204,9 @@ export default function Pantry() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             className="mb-8"
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -477,21 +477,23 @@ export default function Pantry() {
             transition={{ delay: 0.4 }}
           >
             {filteredItems.length === 0 ? (
-              <Card>
+              <Card className="bg-white/95 backdrop-blur-sm">
                 <CardContent className="p-12 text-center">
-                  <Package className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No items found</h3>
-                  <p className="text-gray-600 mb-6">
+                  <Package className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2 text-center">No items found</h3>
+                  <p className="text-gray-600 mb-6 text-center max-w-md mx-auto">
                     {pantryItems.length === 0 
                       ? "Start building your pantry by adding some ingredients!"
                       : "Try adjusting your search or filter criteria."
                     }
                   </p>
                   {pantryItems.length === 0 && (
-                    <Button onClick={() => setShowAddDialog(true)} className="bg-green-600 hover:bg-green-700">
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Your First Item
-                    </Button>
+                    <div className="flex justify-center">
+                      <Button onClick={() => setShowAddDialog(true)} className="bg-green-600 hover:bg-green-700">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Your First Item
+                      </Button>
+                    </div>
                   )}
                 </CardContent>
               </Card>

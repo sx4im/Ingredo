@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import CountUp from "@/components/CountUp";
+import SplitText from "@/components/SplitText";
 import { type IngredientChip } from "@shared/schema";
 import { Search, ChefHat, Recycle, Heart, Plus, Star, Bookmark, ArrowRight, Clock, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -89,23 +90,26 @@ export default function Home() {
         
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="w-full mx-auto text-center px-2 sm:px-8 lg:px-16 py-4 sm:py-8 lg:py-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
-            >
-              <h1 
-                className="text-white font-semibold mb-4 sm:mb-6 max-w-4xl mx-auto px-2"
-                style={{ 
-                  fontSize: 'clamp(1.8rem, 4.5vw, 3.5rem)', 
-                  fontWeight: '600', 
-                  textShadow: 'none',
-                  lineHeight: '1.1'
-                }}
-              >
-                Cook with what you have
-              </h1>
-            </motion.div>
+            <SplitText
+              text="Cook with what you have"
+              tag="h1"
+              className="text-white font-semibold mb-4 sm:mb-6 max-w-4xl mx-auto px-2"
+              style={{ 
+                fontSize: 'clamp(1.8rem, 4.5vw, 3.5rem)', 
+                fontWeight: '600', 
+                textShadow: 'none',
+                lineHeight: '1.1'
+              }}
+              delay={100}
+              duration={0.8}
+              ease="power3.out"
+              splitType="chars"
+              from={{ opacity: 0, y: 60, rotationX: -90 }}
+              to={{ opacity: 1, y: 0, rotationX: 0 }}
+              threshold={0.1}
+              rootMargin="-50px"
+              textAlign="center"
+            />
             
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -234,7 +238,7 @@ export default function Home() {
             </FadeUp>
             <div className="grid md:grid-cols-3 gap-8">
               <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']} delay={200}>
-                <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-white transition-all duration-300">
+                <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-white hover:bg-white transition-all duration-300">
                   <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
                     <ChefHat className="h-6 w-6" style={{ color: '#FF6B35' }} />
                   </div>
@@ -244,7 +248,7 @@ export default function Home() {
               </FadeUp>
 
               <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']} delay={400}>
-                <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-white transition-all duration-300">
+                <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-white hover:bg-white transition-all duration-300">
                   <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
                     <Recycle className="h-6 w-6" style={{ color: '#4CAF50' }} />
                   </div>
@@ -254,7 +258,7 @@ export default function Home() {
               </FadeUp>
 
               <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']} delay={600}>
-                <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-white transition-all duration-300">
+                <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-white hover:bg-white transition-all duration-300">
                   <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
                     <Heart className="h-6 w-6" style={{ color: '#E91E63' }} />
                   </div>
@@ -374,7 +378,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Step 1 */}
             <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']} delay={400}>
-              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-white transition-all duration-300">
+              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-white hover:bg-white transition-all duration-300">
                 <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
                   1
                 </div>
@@ -389,7 +393,7 @@ export default function Home() {
 
             {/* Step 2 */}
             <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']} delay={600}>
-              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-white transition-all duration-300">
+              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-white hover:bg-white transition-all duration-300">
                 <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
                   2
                 </div>
@@ -404,7 +408,7 @@ export default function Home() {
 
             {/* Step 3 */}
             <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']} delay={800}>
-              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-amber-300 hover:bg-white transition-all duration-300">
+              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-white hover:bg-white transition-all duration-300">
                 <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
                   3
                 </div>
