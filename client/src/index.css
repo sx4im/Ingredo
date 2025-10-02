@@ -880,10 +880,11 @@ html {
 
 /* Responsive Typography */
 .hero-heading {
-  font-size: 1.5rem; 
+  font-size: 1.6rem; 
   font-weight: 600;
   text-shadow: none;
   line-height: 1.3;
+  width: 100%;
 }
 
 @media (min-width: 640px) {
