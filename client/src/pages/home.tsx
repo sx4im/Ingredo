@@ -210,7 +210,7 @@ export default function Home() {
                 >
                 <Link 
                   href="/search" 
-                  className="animated-button-secondary explore-button font-extrabold text-lg sm:text-xl px-8 py-4 inline-block"
+                  className="animated-button-secondary explore-button responsive-button font-extrabold inline-block"
                   style={{ maxWidth: '300px' }}
                 >
                       Explore All Recipes 
