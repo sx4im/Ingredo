@@ -880,7 +880,7 @@ html {
 
 /* Responsive Typography */
 .hero-heading {
-  font-size: 1.75rem; /* 28px - mobile - increased size */
+  font-size: 1.5rem; 
   font-weight: 600;
   text-shadow: none;
   line-height: 1.3;
@@ -1129,13 +1129,13 @@ html {
   }
   
   .hero-button {
-    font-size: 1.25rem; /* 20px - desktop */
+    font-size: 1.125rem; /* 18px - desktop - reduced font size */
     padding: 1rem 2rem; /* 16px 32px */
     min-height: 3.5rem; /* 56px */
   }
   
   .explore-button-responsive {
-    font-size: 1.375rem; /* 22px - desktop - increased for Browse Recipes */
+    font-size: 1.4rem; /* 22px - desktop - increased for Browse Recipes */
     padding: 1rem 2rem; /* 16px 32px */
     min-height: 3.5rem; /* 56px */
   }
