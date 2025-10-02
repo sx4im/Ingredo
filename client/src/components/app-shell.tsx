@@ -151,7 +151,7 @@ export function AppShell({ children }: AppShellProps) {
           <SheetContent side="right" className="w-80 [&>button]:hidden">
             <div className="flex flex-col h-full">
               {/* Mobile Header */}
-              <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
                   <img 
                     src="/logo.png" 

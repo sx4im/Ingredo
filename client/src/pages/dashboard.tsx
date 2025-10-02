@@ -199,9 +199,7 @@ export default function Dashboard() {
                       <p className="text-sm font-medium text-gray-600">Saved Recipes</p>
                       <p className="text-3xl font-bold text-gray-900">{quickStats.savedRecipes}</p>
                     </div>
-                    <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-pink-500 rounded-lg flex items-center justify-center">
-                      <Heart className="h-6 w-6 text-white" />
-                    </div>
+                    <Heart className="h-8 w-8 text-red-600" />
                   </div>
                 </CardContent>
               </Card>
@@ -215,9 +213,7 @@ export default function Dashboard() {
                       <p className="text-sm font-medium text-gray-600">Recipes Cooked</p>
                       <p className="text-3xl font-bold text-gray-900">{quickStats.cookedRecipes}</p>
                     </div>
-                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-lg flex items-center justify-center">
-                      <ChefHat className="h-6 w-6 text-white" />
-                    </div>
+                    <ChefHat className="h-8 w-8 text-orange-600" />
                   </div>
                 </CardContent>
               </Card>
@@ -231,9 +227,8 @@ export default function Dashboard() {
                       <p className="text-sm font-medium text-gray-600">Pantry Items</p>
                       <p className="text-3xl font-bold text-gray-900">{quickStats.pantryItems}</p>
                     </div>
-                    <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
-                      <Package className="h-6 w-6 text-white" />
-                    </div>
+                  <Package className="h-8 w-8 text-green-600" />
+                    
                   </div>
                 </CardContent>
               </Card>
@@ -247,9 +242,7 @@ export default function Dashboard() {
                       <p className="text-sm font-medium text-gray-600">Shopping Items</p>
                       <p className="text-3xl font-bold text-gray-900">{quickStats.shoppingItems}</p>
                     </div>
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center">
-                      <ShoppingCart className="h-6 w-6 text-white" />
-                    </div>
+                    <ShoppingCart className="h-8 w-8 text-blue-600" />
                   </div>
                 </CardContent>
               </Card>
@@ -270,8 +263,8 @@ export default function Dashboard() {
                 <Card className="bg-white/95 backdrop-blur-sm h-full">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <Zap className="h-5 w-5 text-yellow-500" />
                       Quick Actions
+                      <Zap className="h-6 w-6 text-yellow-500" />
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -321,28 +314,28 @@ export default function Dashboard() {
                 <Card className="bg-white/95 backdrop-blur-sm h-full">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <Clock className="h-5 w-5 text-blue-500" />
                       Recent Activity
+                      <Clock className="h-6 w-6 text-blue-500 stroke-2" fill="none" />
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
+                  <CardContent className="recent-activity-mobile">
+                    <div className="space-y-2 sm:space-y-3">
                       {recentActivity.map((activity, index) => (
                         <motion.div
                           key={activity.id}
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.4 + index * 0.1 }}
-                          className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                          className="recent-activity-item-mobile flex items-center rounded-lg hover:bg-gray-50 transition-colors"
                         >
-                          <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                          <div className="recent-activity-icon-mobile bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
                             {activity.icon}
                           </div>
-                          <div className="flex-1">
-                            <p className="font-medium text-gray-900">{activity.title}</p>
-                            <p className="text-sm text-gray-600">{activity.description}</p>
+                          <div className="flex-1 min-w-0">
+                            <p className="recent-activity-text-mobile font-medium text-gray-900 truncate">{activity.title}</p>
+                            <p className="recent-activity-desc-mobile text-gray-600 truncate">{activity.description}</p>
                           </div>
-                          <span className="text-sm text-gray-500">{activity.timestamp}</span>
+                          <span className="recent-activity-time-mobile text-gray-500 flex-shrink-0 ml-2">{activity.timestamp}</span>
                         </motion.div>
                       ))}
                     </div>
@@ -362,8 +355,8 @@ export default function Dashboard() {
                 <Card className="bg-white/95 backdrop-blur-sm h-full flex flex-col">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <Target className="h-5 w-5 text-orange-500" />
                       Expiring Soon
+                      <Target className="h-6 w-6 text-orange-500" />
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="flex-1 flex flex-col">
@@ -400,28 +393,28 @@ export default function Dashboard() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.5 }}
               >
-                <Card className="bg-white/95 backdrop-blur-sm h-full">
+                <Card className="bg-white/95 backdrop-blur-sm h-full cooking-tips-card">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <TrendingUp className="h-5 w-5 text-green-500" />
                       Cooking Tips
+                      <TrendingUp className="h-6 w-6 text-green-500 stroke-2" fill="none" />
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="cooking-tips-content">
                     <div className="space-y-4">
-                      <div className="p-4 bg-green-50 rounded-lg">
+                      <div className="p-4 bg-green-50 rounded-lg cooking-tips-item">
                         <h4 className="font-medium text-green-700 mb-1 text-2xl">Pro Tip</h4>
                         <p className="text-xs text-green-800">
                           Store fresh herbs in a glass of water in the fridge to keep them fresh longer.
                         </p>
                       </div>
-                      <div className="p-4 bg-blue-50 rounded-lg">
+                      <div className="p-4 bg-blue-50 rounded-lg cooking-tips-item">
                         <h4 className="font-medium text-blue-700 mb-1 text-2xl">Trending</h4>
                         <p className="text-xs text-blue-800">
                           One-pot meals are perfect for busy weeknights and easy cleanup.
                         </p>
                       </div>
-                      <div className="p-4 bg-amber-50 rounded-lg">
+                      <div className="p-4 bg-amber-50 rounded-lg cooking-tips-item">
                         <h4 className="font-medium text-amber-700 mb-1 text-2xl">Quick Tip</h4>
                         <p className="text-xs text-amber-800">
                           Always taste and season your food at each cooking stage for best flavor.

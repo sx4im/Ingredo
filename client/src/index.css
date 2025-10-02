@@ -1141,6 +1141,60 @@ html {
   }
 }
 
+.recent-activity-item-mobile {
+  padding: 0.8rem; /* 8px - mobile - reduced item padding */
+  gap: 0.75rem; /* 12px - mobile - reduced gap */
+}
+
+.recent-activity-icon-mobile {
+  width: 2rem; /* 32px - mobile - smaller icon container */
+  height: 2rem; /* 32px - mobile - smaller icon container */
+}
+
+.recent-activity-text-mobile {
+  font-size: 0.875rem; /* 14px - mobile - smaller title */
+  line-height: 1.25;
+}
+
+.recent-activity-desc-mobile {
+  font-size: 0.75rem; /* 12px - mobile - smaller description */
+  line-height: 1.2;
+}
+
+.recent-activity-time-mobile {
+  font-size: 0.6875rem; /* 11px - mobile - smaller timestamp */
+  line-height: 1.2;
+}
+
+@media (min-width: 640px) {
+
+  
+  .recent-activity-item-mobile {
+    padding: 0.75rem; /* 12px - tablet+ - normal item padding */
+    gap: 1rem; /* 16px - tablet+ - normal gap */
+  }
+  
+  .recent-activity-icon-mobile {
+    width: 2.5rem; /* 40px - tablet+ - normal icon container */
+    height: 2.5rem; /* 40px - tablet+ - normal icon container */
+  }
+  
+  .recent-activity-text-mobile {
+    font-size: 1rem; /* 16px - tablet+ - normal title */
+    line-height: 1.5;
+  }
+  
+  .recent-activity-desc-mobile {
+    font-size: 0.875rem; /* 14px - tablet+ - normal description */
+    line-height: 1.4;
+  }
+  
+  .recent-activity-time-mobile {
+    font-size: 0.875rem; /* 14px - tablet+ - normal timestamp */
+    line-height: 1.4;
+  }
+}
+
 /* How It Works Container Responsive */
 .how-it-works-container {
   padding: 2rem 1rem; /* 32px 16px - mobile */
@@ -1281,4 +1335,17 @@ html {
 /* Ensure smooth background transitions */
 [style*="backgroundImage"] {
   transition: opacity 0.3s ease-in-out;
+}
+
+/* Cooking Tips Card Height Control for Desktop */
+@media (min-width: 1024px) {
+  .cooking-tips-item {
+    padding: 0.85rem; /* Reduced item padding */
+    margin-bottom: 0.75rem;
+     /* Reduced spacing between tips */
+  }
+  
+  .cooking-tips-item:last-child {
+    margin-bottom: 0; /* Remove bottom margin from last item */
+  }
 }

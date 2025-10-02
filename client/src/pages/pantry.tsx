@@ -401,7 +401,8 @@ export default function Pantry() {
           >
             <Card>
               <CardContent className="p-6">
-                <div className="flex flex-col md:flex-row gap-4">
+                <div className="space-y-4">
+                  {/* Search Bar - Full Width */}
                   <div className="flex-1">
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -414,56 +415,63 @@ export default function Pantry() {
                     </div>
                   </div>
                   
-                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger className="w-full md:w-48">
-                      <Filter className="h-4 w-4 mr-2" />
-                      <SelectValue placeholder="Category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Categories</SelectItem>
-                      {categories.map(category => (
-                        <SelectItem key={category} value={category}>
-                          {category.charAt(0).toUpperCase() + category.slice(1)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-full md:w-48">
-                      <SelectValue placeholder="Sort by" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="expiry">Expiry Date</SelectItem>
-                      <SelectItem value="name">Name</SelectItem>
-                      <SelectItem value="category">Category</SelectItem>
-                      <SelectItem value="quantity">Quantity</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  
-                  <Button
-                    variant="outline"
-                    onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-                    className="w-full md:w-auto"
-                  >
-                    {sortOrder === "asc" ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />}
-                  </Button>
-                  
-                  <div className="flex gap-2">
-                    <Button
-                      variant={viewMode === "grid" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setViewMode("grid")}
-                    >
-                      <Grid className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant={viewMode === "list" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setViewMode("list")}
-                    >
-                      <List className="h-4 w-4" />
-                    </Button>
+                  {/* Controls Row - Category, Sort, Sort Order, View Toggle */}
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+                    <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                      <SelectTrigger className="w-full sm:w-40">
+                        <Filter className="h-4 w-4 mr-2" />
+                        <SelectValue placeholder="Category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Categories</SelectItem>
+                        {categories.map(category => (
+                          <SelectItem key={category} value={category}>
+                            {category.charAt(0).toUpperCase() + category.slice(1)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    
+                    <div className="flex gap-2 flex-1">
+                      <Select value={sortBy} onValueChange={setSortBy}>
+                        <SelectTrigger className="flex-1 sm:w-32">
+                          <SelectValue placeholder="Sort by" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="expiry">Expiry Date</SelectItem>
+                          <SelectItem value="name">Name</SelectItem>
+                          <SelectItem value="category">Category</SelectItem>
+                          <SelectItem value="quantity">Quantity</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      
+                      <Button
+                        variant="outline"
+                        onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                        className="px-3"
+                      >
+                        {sortOrder === "asc" ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />}
+                      </Button>
+                      
+                      <div className="flex gap-1">
+                        <Button
+                          variant={viewMode === "grid" ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setViewMode("grid")}
+                          className="px-3"
+                        >
+                          <Grid className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant={viewMode === "list" ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setViewMode("list")}
+                          className="px-3"
+                        >
+                          <List className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </CardContent>
