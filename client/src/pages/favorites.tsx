@@ -52,7 +52,6 @@ export default function Favorites() {
   
   const [searchQuery, setSearchQuery] = React.useState("");
   const [selectedDifficulty, setSelectedDifficulty] = React.useState("all");
-  const [selectedTag, setSelectedTag] = React.useState("all");
   const [sortBy, setSortBy] = React.useState("added");
   const [sortOrder, setSortOrder] = React.useState<"asc" | "desc">("desc");
   const [viewMode, setViewMode] = React.useState<"grid" | "list">("grid");
@@ -122,7 +121,6 @@ export default function Favorites() {
   ]);
 
   const difficulties = ["Easy", "Medium", "Hard"];
-  const allTags = ["Quick", "Fresh", "Vegetarian", "Healthy", "Comfort", "Italian", "Pasta", "Dessert", "Chocolate", "Special"];
 
   // Filter and sort recipes
   const filteredRecipes = React.useMemo(() => {
@@ -130,8 +128,7 @@ export default function Favorites() {
       const matchesSearch = recipe.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            recipe.description.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesDifficulty = selectedDifficulty === "all" || recipe.difficulty === selectedDifficulty;
-      const matchesTag = selectedTag === "all" || recipe.tags.includes(selectedTag);
-      return matchesSearch && matchesDifficulty && matchesTag;
+      return matchesSearch && matchesDifficulty;
     });
 
     // Sort recipes
@@ -161,7 +158,7 @@ export default function Favorites() {
     });
 
     return filtered;
-  }, [favoriteRecipesData, searchQuery, selectedDifficulty, selectedTag, sortBy, sortOrder]);
+  }, [favoriteRecipesData, searchQuery, selectedDifficulty, sortBy, sortOrder]);
 
   const handleRemoveFavorite = (recipeId: string, recipeTitle: string) => {
     removeFromFavorites(recipeId);
@@ -312,80 +309,73 @@ export default function Favorites() {
           >
             <Card>
               <CardContent className="p-6">
-                <div className="flex flex-col md:flex-row gap-4">
-                  <div className="flex-1">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                      <Input
-                        placeholder="Search your favorite recipes..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
+                <div className="flex flex-col gap-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <Input
+                      placeholder="Search your favorite recipes..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10"
+                    />
                   </div>
                   
-                  <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
-                    <SelectTrigger className="w-full md:w-48">
-                      <Filter className="h-4 w-4 mr-2" />
-                      <SelectValue placeholder="Difficulty" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Difficulties</SelectItem>
-                      {difficulties.map(difficulty => (
-                        <SelectItem key={difficulty} value={difficulty}>{difficulty}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  
-                  <Select value={selectedTag} onValueChange={setSelectedTag}>
-                    <SelectTrigger className="w-full md:w-48">
-                      <SelectValue placeholder="Tag" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Tags</SelectItem>
-                      {allTags.map(tag => (
-                        <SelectItem key={tag} value={tag}>{tag}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-full md:w-48">
-                      <SelectValue placeholder="Sort by" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="added">Date Added</SelectItem>
-                      <SelectItem value="title">Title</SelectItem>
-                      <SelectItem value="rating">Rating</SelectItem>
-                      <SelectItem value="cookTime">Cook Time</SelectItem>
-                      <SelectItem value="difficulty">Difficulty</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  
-                  <Button
-                    variant="outline"
-                    onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-                    className="w-full md:w-auto"
-                  >
-                    {sortOrder === "asc" ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />}
-                  </Button>
-                  
-                  <div className="flex gap-2">
-                    <Button
-                      variant={viewMode === "grid" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setViewMode("grid")}
-                    >
-                      <Grid className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant={viewMode === "list" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setViewMode("list")}
-                    >
-                      <List className="h-4 w-4" />
-                    </Button>
+                  {/* Controls Row - Difficulty, Sort, Sort Order, View Toggle */}
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+                    <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
+                      <SelectTrigger className="w-full sm:w-40">
+                        <Filter className="h-4 w-4 mr-2" />
+                        <SelectValue placeholder="Difficulty" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Difficulties</SelectItem>
+                        {difficulties.map(difficulty => (
+                          <SelectItem key={difficulty} value={difficulty}>{difficulty}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    
+                    <div className="flex gap-2 flex-1">
+                      <Select value={sortBy} onValueChange={setSortBy}>
+                        <SelectTrigger className="flex-1 sm:w-32">
+                          <SelectValue placeholder="Sort by" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="added">Date Added</SelectItem>
+                          <SelectItem value="title">Title</SelectItem>
+                          <SelectItem value="rating">Rating</SelectItem>
+                          <SelectItem value="cookTime">Cook Time</SelectItem>
+                          <SelectItem value="difficulty">Difficulty</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      
+                      <Button
+                        variant="outline"
+                        onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                        className="px-3"
+                      >
+                        {sortOrder === "asc" ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />}
+                      </Button>
+                      
+                      <div className="flex gap-1">
+                        <Button
+                          variant={viewMode === "grid" ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setViewMode("grid")}
+                          className="px-3"
+                        >
+                          <Grid className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant={viewMode === "list" ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setViewMode("list")}
+                          className="px-3"
+                        >
+                          <List className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </CardContent>

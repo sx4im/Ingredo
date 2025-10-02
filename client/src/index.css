@@ -1052,7 +1052,7 @@ html {
 
 /* Hero buttons - improved mobile styling */
 .hero-button {
-  font-size: 0.875rem; /* 14px - mobile */
+  font-size: 0.8rem; /* 13px - mobile - reduced font size */
   padding: 0.75rem 0.75rem; /* 12px 12px - mobile */
   width: 70%; /* Reduced width on mobile */
   min-height: 3rem; /* 48px - ensure consistent height */

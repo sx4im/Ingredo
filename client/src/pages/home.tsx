@@ -120,7 +120,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
             >
-              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8 justify-center mb-8 sm:mb-12 lg:mb-16 px-4">
+              <div className="flex flex-row gap-3 sm:gap-6 lg:gap-8 justify-center mb-8 sm:mb-12 lg:mb-16 px-4">
                 <Link 
                   href="/search" 
                   className="animated-button hero-button"
@@ -182,7 +182,7 @@ export default function Home() {
                         className="count-up-text"
                         />
                       </div>
-                      <div className="text-white/90 text-xs sm:text-sm lg:text-base xl:text-lg">Ingredients Supported</div>
+                      <div className="text-white/90 text-xs sm:text-sm lg:text-base xl:text-lg">Ingredients</div>
                     </motion.div>
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
