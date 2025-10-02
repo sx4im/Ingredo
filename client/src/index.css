@@ -1053,7 +1053,7 @@ html {
 
 /* Hero buttons - improved mobile styling */
 .hero-button {
-  font-size: 0.8rem; /* 13px - mobile - reduced font size */
+  font-size: 0.75rem; /* 12px - mobile - further reduced font size */
   padding: 0.75rem 0.75rem; /* 12px 12px - mobile */
   width: 70%; /* Reduced width on mobile */
   min-height: 3rem; /* 48px - ensure consistent height */
@@ -1063,6 +1063,12 @@ html {
   white-space: normal;
   text-align: center;
   line-height: 1.2;
+}
+
+/* Reduce icon size in hero buttons on mobile */
+.hero-button svg {
+  width: 14px;
+  height: 14px;
 }
 
 /* Explore button - larger width on mobile */
