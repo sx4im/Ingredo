@@ -1009,11 +1009,53 @@ html {
   line-height: 1.2;
 }
 
+/* Hero buttons - smaller width on mobile */
+.hero-button {
+  font-size: 0.875rem; /* 14px - mobile */
+  padding: 0.75rem 0.75rem; /* 12px 12px - mobile */
+  width: 70%; /* Reduced width on mobile */
+  min-height: 3rem; /* 48px - ensure consistent height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Explore button - larger width on mobile */
+.explore-button-responsive {
+  font-size: 0.875rem; /* 14px - mobile */
+  padding: 0.75rem 0.75rem; /* 12px 12px - mobile */
+  width: 90%; /* Increased width on mobile */
+  min-height: 3rem; /* 48px - ensure consistent height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.2;
+}
+
 @media (min-width: 640px) {
   .responsive-button {
     font-size: 1rem; /* 16px - small tablet */
     padding: 0.875rem 1.75rem; /* 14px 28px */
     width: auto;
+    min-height: 3.5rem; /* 56px */
+  }
+  
+  .hero-button {
+    font-size: 1rem; /* 16px - small tablet */
+    padding: 0.875rem 1.75rem; /* 14px 28px */
+    width: auto; /* Auto width on larger screens */
+    min-height: 3.5rem; /* 56px */
+  }
+  
+  .explore-button-responsive {
+    font-size: 1rem; /* 16px - small tablet */
+    padding: 0.875rem 1.75rem; /* 14px 28px */
+    width: auto; /* Auto width on larger screens */
     min-height: 3.5rem; /* 56px */
   }
 }
@@ -1024,10 +1066,34 @@ html {
     padding: 1rem 2rem; /* 16px 32px */
     min-height: 3.5rem; /* 56px */
   }
+  
+  .hero-button {
+    font-size: 1.125rem; /* 18px - tablet */
+    padding: 1rem 2rem; /* 16px 32px */
+    min-height: 3.5rem; /* 56px */
+  }
+  
+  .explore-button-responsive {
+    font-size: 1.125rem; /* 18px - tablet */
+    padding: 1rem 2rem; /* 16px 32px */
+    min-height: 3.5rem; /* 56px */
+  }
 }
 
 @media (min-width: 1024px) {
   .responsive-button {
+    font-size: 1.25rem; /* 20px - desktop */
+    padding: 1rem 2rem; /* 16px 32px */
+    min-height: 3.5rem; /* 56px */
+  }
+  
+  .hero-button {
+    font-size: 1.25rem; /* 20px - desktop */
+    padding: 1rem 2rem; /* 16px 32px */
+    min-height: 3.5rem; /* 56px */
+  }
+  
+  .explore-button-responsive {
     font-size: 1.25rem; /* 20px - desktop */
     padding: 1rem 2rem; /* 16px 32px */
     min-height: 3.5rem; /* 56px */

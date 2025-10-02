@@ -123,7 +123,7 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8 justify-center mb-8 sm:mb-12 lg:mb-16 px-4">
                 <Link 
                   href="/search" 
-                  className="animated-button responsive-button"
+                  className="animated-button hero-button"
                   data-testid="start-cooking-button"
                 >
                     Start Cooking
@@ -136,7 +136,7 @@ export default function Home() {
                         element.scrollIntoView({ behavior: 'smooth' });
                       }
                     }}
-                    className="animated-button responsive-button"
+                    className="animated-button hero-button"
                   data-testid="learn-more-button"
                 >
                     <ArrowRight className="button-icon mr-2" style={{ color: 'var(--vintage-dark-green)' }} />
@@ -210,7 +210,7 @@ export default function Home() {
                 >
                 <Link 
                   href="/search" 
-                  className="animated-button-secondary explore-button responsive-button font-extrabold inline-block"
+                  className="animated-button-secondary explore-button explore-button-responsive font-extrabold inline-block"
                   style={{ maxWidth: '300px' }}
                 >
                       Explore All Recipes 

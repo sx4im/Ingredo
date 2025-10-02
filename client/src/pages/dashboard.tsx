@@ -164,7 +164,7 @@ export default function Dashboard() {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h1 className="text-3xl font-bold text-white mb-2 text-left">
-                  {getGreeting()}, {user?.name?.split(' ')[0] || 'Chef'}! 
+                  {getGreeting()}{user?.name?.split(' ')[0] ? `, ${user.name.split(' ')[0]}` : ''}! 
                 </h1>
                 <p className="text-white text-left">
                   Ready to cook something amazing today?
