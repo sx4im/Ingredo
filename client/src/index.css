@@ -685,6 +685,21 @@ html {
   font-variant-numeric: tabular-nums;
 }
 
+/* Make counter numbers bigger on smaller devices */
+@media (max-width: 640px) {
+  /* Home page CountUp numbers */
+  .count-up-text {
+    font-size: 1.5rem !important; /* 40px - bigger on mobile */
+    font-weight: 800 !important;
+  }
+  
+  /* Stats cards counter numbers */
+  .text-3xl.font-bold.text-gray-900 {
+    font-size: 1.5rem !important; /* 44px - bigger on mobile */
+    font-weight: 800 !important;
+  }
+}
+
 /* Scroll Reveal Animation Styles */
 .scroll-reveal-hidden {
   opacity: 0;
@@ -1054,21 +1069,21 @@ html {
 /* Hero buttons - improved mobile styling */
 .hero-button {
   font-size: 0.75rem; /* 12px - mobile - further reduced font size */
-  padding: 0.75rem 0.75rem; /* 12px 12px - mobile */
+  padding: 0.5rem 0.5rem; /* 8px 12px - mobile - reduced vertical padding */
   width: 70%; /* Reduced width on mobile */
-  min-height: 3rem; /* 48px - ensure consistent height */
+  min-height: 2rem; /* 40px - reduced height for thinner appearance */
   display: flex;
   align-items: center;
   justify-content: center;
   white-space: normal;
   text-align: center;
-  line-height: 1.2;
+  line-height: 1;
 }
 
 /* Reduce icon size in hero buttons on mobile */
 .hero-button svg {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
 }
 
 /* Explore button - larger width on mobile */
@@ -1238,6 +1253,34 @@ html {
   color: #374151 !important;
 }
 
+/* Hamburger Menu Icon Styles */
+.hamburger-menu-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.hamburger-line {
+  width: 100%;
+  height: 3px;
+  background-color: #374151;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Make middle line shorter and thinner */
+.hamburger-line:nth-child(2) {
+  width: 75%; /* Shorter width */
+  height: 2px; /* Thinner height */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Hamburger stays as hamburger - no cross animation */
+
 /* Hide the default Sheet close button */
 [data-side="right"] button[aria-label="Close"] {
   display: none !important;
@@ -1250,7 +1293,7 @@ html {
   max-width: 900px;
   width: auto;
   margin: 0 auto;
-  border-radius: 16px;
+  border-radius: 50px;
 }
 
 .nav-button {

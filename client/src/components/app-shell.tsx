@@ -145,13 +145,17 @@ export function AppShell({ children }: AppShellProps) {
               className="mobile-menu-button transition-all duration-200"
               data-testid="mobile-menu-toggle"
             >
-              <Menu className="mobile-menu-icon stroke-2" />
+              <div className="hamburger-menu-icon">
+                <span className="hamburger-line"></span>
+                <span className="hamburger-line"></span>
+                <span className="hamburger-line"></span>
+              </div>
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="w-80 [&>button]:hidden">
             <div className="flex flex-col h-full">
               {/* Mobile Header */}
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-0 -mt-8">
                 <div className="flex items-center">
                   <img 
                     src="/logo.png" 
@@ -161,7 +165,7 @@ export function AppShell({ children }: AppShellProps) {
                 </div>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-3 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 >
                   <X className="h-8 w-8 text-gray-600" />
                 </button>
@@ -176,8 +180,8 @@ export function AppShell({ children }: AppShellProps) {
                       key={item.name}
                       href={item.href}
                       className={cn(
-                        "flex items-center px-4 py-3 text-lg font-medium transition-colors rounded-full",
-                        item.current ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-gray-100"
+                        "flex items-center px-4 py-3 text-lg font-medium transition-colors rounded-full bg-gray-100",
+                        item.current ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-gray-200"
                       )}
                       data-testid={`mobile-nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
                       onClick={() => setIsMobileMenuOpen(false)}
