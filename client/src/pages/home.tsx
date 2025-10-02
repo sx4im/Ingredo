@@ -93,13 +93,7 @@ export default function Home() {
             <SplitText
               text="Cook with what you have"
               tag="h1"
-              className="text-white font-semibold mb-4 sm:mb-2 max-w-4xl mx-auto px-2 py-2"
-              style={{ 
-                fontSize: 'clamp(1.8rem, 4.5vw, 3.5rem)', 
-                fontWeight: '600', 
-                textShadow: 'none',
-                lineHeight: '1.3'
-              }}
+              className="hero-heading text-white mb-4 sm:mb-2 max-w-4xl mx-auto px-2 py-2"
               delay={100}
               duration={0.8}
               ease="power3.out"
@@ -129,7 +123,7 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8 justify-center mb-8 sm:mb-12 lg:mb-16 px-4">
                 <Link 
                   href="/search" 
-                  className="animated-button text-lg sm:text-xl px-8 py-4 w-full sm:w-auto"
+                  className="animated-button responsive-button"
                   data-testid="start-cooking-button"
                 >
                     Start Cooking
@@ -142,7 +136,7 @@ export default function Home() {
                         element.scrollIntoView({ behavior: 'smooth' });
                       }
                     }}
-                    className="animated-button text-lg sm:text-xl px-8 py-4 w-full sm:w-auto"
+                    className="animated-button responsive-button"
                   data-testid="learn-more-button"
                 >
                     <ArrowRight className="button-icon mr-2" style={{ color: 'var(--vintage-dark-green)' }} />
@@ -363,13 +357,13 @@ export default function Home() {
       {/* How It Works Section */}
       <section id="how-it-works" className="section-padding relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="w-full mx-auto text-center p-16">
+          <div className="how-it-works-container w-full mx-auto text-center">
             <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']}>
-              <div className="text-center mb-16">
-                <h2 className="text-4xl font-bold text-white mb-4">
+              <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+                <h2 className="how-it-works-heading">
                   How It Works
                 </h2>
-                <p className="text-white/90 text-lg max-w-2xl mx-auto">
+                <p className="how-it-works-description">
                   Get started with Ingredo in just three simple steps
                 </p>
               </div>
@@ -382,10 +376,10 @@ export default function Home() {
                 <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
                   1
                 </div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-3 text-center">
+                <h3 className="step-card-title">
                   Add Your Ingredients
                 </h3>
-                <p className="text-gray-800/80 leading-relaxed text-left">
+                <p className="step-card-description">
                   Simply type or select the ingredients you have in your kitchen. Our smart system will recognize them instantly.
                 </p>
               </div>
@@ -397,10 +391,10 @@ export default function Home() {
                 <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
                   2
                 </div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-3 text-center">
+                <h3 className="step-card-title">
                   Discover Recipes
                 </h3>
-                <p className="text-gray-800/80 leading-relaxed text-left">
+                <p className="step-card-description">
                   Browse through perfectly matched recipes or explore creative suggestions based on your available ingredients.
                 </p>
               </div>
@@ -412,10 +406,10 @@ export default function Home() {
                 <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
                   3
                 </div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-3 text-center">
+                <h3 className="step-card-title">
                   Start Cooking
                 </h3>
-                <p className="text-gray-800/80 leading-relaxed text-left">
+                <p className="step-card-description">
                   Follow step-by-step instructions and create delicious meals while reducing food waste in your kitchen.
                 </p>
               </div>
@@ -424,10 +418,10 @@ export default function Home() {
 
             {/* CTA Button */}
             <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']} delay={1000}>
-              <div className="text-center mt-12">
+              <div className="text-center mt-8 sm:mt-10 lg:mt-12">
                 <Link 
                   href="/search" 
-                  className="animated-button explore-button font-extrabold text-lg sm:text-xl px-8 py-4"
+                  className="animated-button explore-button responsive-button font-extrabold"
                   style={{ maxWidth: '300px' }}
                 >
                   Get Started Now
