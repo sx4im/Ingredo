@@ -42,7 +42,7 @@ export function AppShell({ children }: AppShellProps) {
             {/* Logo */}
             <Link href="/" className="flex items-center" data-testid="logo-link">
               <img 
-                src="/logo.webp" 
+                src="/logo.png" 
                 alt="Ingredo Logo" 
                 className="app-logo rounded-xl"
               />
@@ -127,7 +127,7 @@ export function AppShell({ children }: AppShellProps) {
         <div className="lg:hidden fixed top-4 left-4 z-50 h-16 flex items-center">
           <Link href="/" className="flex items-center">
             <img 
-              src="/logo.webp" 
+              src="/logo.png" 
               alt="Ingredo Logo" 
               className="app-logo-mobile-large rounded-xl"
             />
@@ -154,7 +154,7 @@ export function AppShell({ children }: AppShellProps) {
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center">
                   <img 
-                    src="/logo.webp" 
+                    src="/logo.png" 
                     alt="Ingredo Logo" 
                     className="app-logo-mobile rounded-xl"
                   />

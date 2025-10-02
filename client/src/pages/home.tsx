@@ -93,12 +93,12 @@ export default function Home() {
             <SplitText
               text="Cook with what you have"
               tag="h1"
-              className="text-white font-semibold mb-4 sm:mb-6 max-w-4xl mx-auto px-2"
+              className="text-white font-semibold mb-4 sm:mb-2 max-w-4xl mx-auto px-2 py-2"
               style={{ 
                 fontSize: 'clamp(1.8rem, 4.5vw, 3.5rem)', 
                 fontWeight: '600', 
                 textShadow: 'none',
-                lineHeight: '1.1'
+                lineHeight: '1.3'
               }}
               delay={100}
               duration={0.8}
