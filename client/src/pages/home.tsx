@@ -110,7 +110,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
             >
-              <p className="hero-description mb-6 sm:mb-8 lg:mb-10">
+              <p className="hero-description">
                 Turn the ingredients you already have into amazing meals. Discover personalized recipes that help you save time, reduce food waste, and enjoy delicious possibilities every day.
               </p>
             </motion.div>

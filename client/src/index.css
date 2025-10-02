@@ -1016,10 +1016,10 @@ html {
   text-align-last: center; /* Center the last line */
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   max-width: 56rem; /* 896px */
-  margin: 0 auto;
-  padding: 0 1rem; /* Increased padding for better alignment */
-  font-size: 0.875rem; /* 14px - mobile */
-  line-height: 1.6;
+  margin: 0 auto 1.5rem auto; /* Added bottom margin for mobile */
+  padding: 0 1.25rem; /* Slightly increased padding for better mobile appearance */
+  font-size: 0.9375rem; /* 15px - mobile - slightly increased */
+  line-height: 1.65; /* Improved line height for readability */
   font-weight: 400;
 }
 
@@ -1028,6 +1028,9 @@ html {
     font-size: 1rem; /* 16px - small tablet */
     line-height: 1.7;
     padding: 0 1rem;
+    margin: 0 auto 2rem auto; /* Increased bottom margin for larger screens */
+    text-align: center; /* Back to center alignment for larger screens */
+    text-align-last: auto; /* Reset last line alignment */
   }
 }
 
