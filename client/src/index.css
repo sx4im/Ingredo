@@ -1009,7 +1009,44 @@ html {
   line-height: 1.2;
 }
 
-/* Hero buttons - smaller width on mobile */
+/* Hero Description Paragraph */
+.hero-description {
+  color: white;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  max-width: 56rem; /* 896px */
+  margin: 0 auto;
+  padding: 0 0.5rem;
+  font-size: 0.875rem; /* 14px - mobile */
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+@media (min-width: 640px) {
+  .hero-description {
+    font-size: 1rem; /* 16px - small tablet */
+    line-height: 1.7;
+    padding: 0 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-description {
+    font-size: 1.125rem; /* 18px - tablet */
+    line-height: 1.8;
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-description {
+    font-size: 1.25rem; /* 20px - desktop */
+    line-height: 1.8;
+    padding: 0 2rem;
+  }
+}
+
+/* Hero buttons - improved mobile styling */
 .hero-button {
   font-size: 0.875rem; /* 14px - mobile */
   padding: 0.75rem 0.75rem; /* 12px 12px - mobile */

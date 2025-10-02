@@ -110,7 +110,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
             >
-              <p className="lead text-white mb-6 sm:mb-8 lg:mb-10 max-w-4xl mx-auto text-center drop-shadow-lg text-base sm:text-lg lg:text-xl font-medium leading-relaxed px-2">
+              <p className="hero-description mb-6 sm:mb-8 lg:mb-10">
                 Turn the ingredients you already have into amazing meals. Discover personalized recipes that help you save time, reduce food waste, and enjoy delicious possibilities every day.
               </p>
             </motion.div>
@@ -213,7 +213,7 @@ export default function Home() {
                   className="animated-button-secondary explore-button explore-button-responsive font-extrabold inline-block"
                   style={{ maxWidth: '300px' }}
                 >
-                      Explore All Recipes 
+                      Browse Recipes 
                       <ArrowRight className="button-icon ml-2" style={{ color: 'var(--vintage-warm-brown)' }} />
                       </Link>
                 </motion.div>
@@ -421,7 +421,7 @@ export default function Home() {
               <div className="text-center mt-8 sm:mt-10 lg:mt-12">
                 <Link 
                   href="/search" 
-                  className="animated-button explore-button responsive-button font-extrabold"
+                  className="animated-button explore-button explore-button-responsive font-extrabold"
                   style={{ maxWidth: '300px' }}
                 >
                   Get Started Now
