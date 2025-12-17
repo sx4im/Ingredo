@@ -176,7 +176,7 @@ export function aggregateIngredients(
       // No conversion possible or only one amount
       const totalAmount = amounts.reduce((sum, item) => sum + item.amount, 0);
       aggregated.push({
-        id: `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: `item_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
         name: ingredient.name,
         normalizedName,
         totalAmount: totalAmount.toString(),

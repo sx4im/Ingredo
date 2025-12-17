@@ -24,7 +24,7 @@ async function handleResponse(response: Response) {
       });
       // In a real app, you might redirect to login page
       window.location.href = "/login";
-      return;
+      throw new APIError("Authentication required", 401);
     }
     
     throw new APIError(text || response.statusText, response.status);

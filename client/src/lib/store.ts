@@ -112,7 +112,7 @@ interface AppStore {
 }
 
 // Generate unique ID
-const generateId = () => Math.random().toString(36).substr(2, 9);
+const generateId = () => Math.random().toString(36).substring(2, 11);
 
 export const useAppStore = create<AppStore>()(
   persist(
@@ -231,11 +231,9 @@ export const useAppStore = create<AppStore>()(
       partialize: (state) => ({
         user: state.user,
         isAuthenticated: state.isAuthenticated,
-        theme: state.theme,
         favoriteRecipes: state.favoriteRecipes,
         pantryItems: state.pantryItems,
         shoppingList: state.shoppingList,
-        collections: state.collections,
         searchFilters: state.searchFilters,
       }),
     }

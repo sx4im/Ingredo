@@ -410,8 +410,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       if (maxCookTime) {
-        const maxTime = parseInt(maxCookTime as string);
-        matchingRecipes = matchingRecipes.filter(recipe => recipe.cookTime <= maxTime);
+        const maxTime = parseInt(maxCookTime as string, 10);
+        if (!isNaN(maxTime) && maxTime > 0) {
+          matchingRecipes = matchingRecipes.filter(recipe => recipe.cookTime <= maxTime);
+        }
       }
 
       if (cuisine) {
@@ -668,7 +670,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "File too large. Maximum size is 5MB." });
       }
       
-      const imageId = `img_${Math.random().toString(36).substr(2, 9)}`;
+      const imageId = `img_${Math.random().toString(36).substring(2, 11)}`;
       const mockUploadUrl = `https://mock-storage.example.com/upload/${imageId}`;
       
       res.json({
