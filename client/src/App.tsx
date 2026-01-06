@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { AppShell } from "@/components/app-shell";
 import { AuthProvider } from "@/lib/auth-context";
+import { Analytics } from "@vercel/analytics/react";
 
 // Pages
 import Home from "@/pages/home";
@@ -62,6 +63,7 @@ function App() {
                 <AppRouter />
               </AppShell>
               <Toaster />
+              <Analytics />
             </Router>
           </TooltipProvider>
         </AuthProvider>

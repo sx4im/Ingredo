@@ -382,8 +382,10 @@ async function registerRoutes(app2) {
         );
       }
       if (maxCookTime) {
-        const maxTime = parseInt(maxCookTime);
-        matchingRecipes = matchingRecipes.filter((recipe) => recipe.cookTime <= maxTime);
+        const maxTime = parseInt(maxCookTime, 10);
+        if (!isNaN(maxTime) && maxTime > 0) {
+          matchingRecipes = matchingRecipes.filter((recipe) => recipe.cookTime <= maxTime);
+        }
       }
       if (cuisine) {
         matchingRecipes = matchingRecipes.filter(
@@ -580,7 +582,7 @@ async function registerRoutes(app2) {
       if (size > 5 * 1024 * 1024) {
         return res.status(400).json({ message: "File too large. Maximum size is 5MB." });
       }
-      const imageId = `img_${Math.random().toString(36).substr(2, 9)}`;
+      const imageId = `img_${Math.random().toString(36).substring(2, 11)}`;
       const mockUploadUrl = `https://mock-storage.example.com/upload/${imageId}`;
       res.json({
         image_id: imageId,
@@ -722,7 +724,7 @@ async function setupVite(app2, server) {
   });
 }
 function serveStatic(app2) {
-  const distPath = path2.resolve(import.meta.dirname, "public");
+  const distPath = path2.resolve(import.meta.dirname, "..", "dist", "public");
   if (!fs.existsSync(distPath)) {
     throw new Error(
       `Could not find the build directory: ${distPath}, make sure to build the client first`
@@ -768,7 +770,7 @@ app.use((req, res, next) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
     res.status(status).json({ message });
-    throw err;
+    console.error("Error:", err);
   });
   if (app.get("env") === "development") {
     await setupVite(app, server);
