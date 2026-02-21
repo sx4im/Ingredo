@@ -92,10 +92,11 @@ export default function Admin() {
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="relative min-h-screen bg-grain bg-background font-sans text-foreground py-12">
+      <div className="container mx-auto px-6 lg:px-12">
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+          <h1 className="font-serif text-4xl lg:text-5xl font-medium tracking-tight text-foreground">Admin Dashboard</h1>
           <Button data-testid="admin-settings">
             <Settings className="mr-2 h-4 w-4" />
             Settings
@@ -370,6 +371,7 @@ export default function Admin() {
             </Card>
           </TabsContent>
         </Tabs>
+      </div>
       </div>
     </div>
   );

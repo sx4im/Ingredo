@@ -112,25 +112,8 @@ export default function Profile() {
   }
 
   return (
-    <div className="relative min-h-screen">
-      {/* Background Image */}
-      <div 
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(/profile.webp)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
-      
-      {/* Blue Overlay */}
-      <div
-        className="fixed inset-0 z-0"
-        style={{ backgroundColor: 'rgba(30, 64, 175, 0.4)' }}
-      />
-      
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+    <div className="relative min-h-screen bg-grain bg-background font-sans text-foreground py-12">
+      <div className="container mx-auto px-6 lg:px-12 relative z-10">
         <div className="max-w-6xl mx-auto">
         {/* Profile Header */}
         <SlowFadeUp>
@@ -143,11 +126,12 @@ export default function Profile() {
             </Avatar>
             
             <div className="flex-1 text-left">
-              <h1 className="text-3xl font-bold mb-2 text-white text-left">{profile.name}</h1>
-              <p className="text-white mb-4">{profile.email}</p>
+              <h1 className="font-serif text-4xl lg:text-5xl font-medium tracking-tight text-foreground mb-4 text-left">{profile.name}</h1>
+              <div className="w-12 h-0.5 mb-6" style={{ background: 'var(--accent-gold)' }} />
+              <p className="text-muted-foreground mb-4">{profile.email}</p>
             </div>
 
-            <Button data-testid="edit-profile" onClick={() => alert('Edit Profile functionality coming soon!')} className="bg-orange-500 hover:bg-orange-600 text-white">
+            <Button data-testid="edit-profile" onClick={() => alert('Edit Profile functionality coming soon!')}>
               <Settings className="mr-2 h-4 w-4" />
               Edit Profile
             </Button>
@@ -158,37 +142,43 @@ export default function Profile() {
         <FadeUp>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <ScrollReveal preset="fadeLeft" >
-              <Card className="bg-gradient-to-br from-pink-50 to-red-50 border-pink-200 hover:shadow-lg transition-all duration-300">
-                <CardContent className="p-6 text-center">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-red-500 mb-3">
-                    <Heart className="h-6 w-6 text-white" />
+              <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+                <CardContent className="p-8">
+                  <div className="flex flex-col items-start gap-4">
+                    <Heart className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
+                    <div>
+                      <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>{profile.stats.savedRecipes}</p>
+                      <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Saved Recipes</p>
+                    </div>
                   </div>
-                  <div className="text-3xl font-bold text-gray-800 mb-1">{profile.stats.savedRecipes}</div>
-                  <div className="text-sm font-medium text-gray-600">Saved Recipes</div>
                 </CardContent>
               </Card>
             </ScrollReveal>
             
             <ScrollReveal preset="fadeUp" >
-              <Card className="bg-gradient-to-br from-orange-50 to-yellow-50 border-orange-200 hover:shadow-lg transition-all duration-300">
-                <CardContent className="p-6 text-center">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-yellow-500 mb-3">
-                    <ChefHat className="h-6 w-6 text-white" />
+              <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+                <CardContent className="p-8">
+                  <div className="flex flex-col items-start gap-4">
+                    <ChefHat className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
+                    <div>
+                      <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>{profile.stats.cookedRecipes}</p>
+                      <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Recipes Cooked</p>
+                    </div>
                   </div>
-                  <div className="text-3xl font-bold text-gray-800 mb-1">{profile.stats.cookedRecipes}</div>
-                  <div className="text-sm font-medium text-gray-600">Recipes Cooked</div>
                 </CardContent>
               </Card>
             </ScrollReveal>
             
             <ScrollReveal preset="fadeRight" >
-              <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 hover:shadow-lg transition-all duration-300">
-                <CardContent className="p-6 text-center">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 mb-3">
-                    <BookOpen className="h-6 w-6 text-white" />
+              <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+                <CardContent className="p-8">
+                  <div className="flex flex-col items-start gap-4">
+                    <BookOpen className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
+                    <div>
+                      <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>{profile.stats.collections}</p>
+                      <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Collections</p>
+                    </div>
                   </div>
-                  <div className="text-3xl font-bold text-gray-800 mb-1">{profile.stats.collections}</div>
-                  <div className="text-sm font-medium text-gray-600">Collections</div>
                 </CardContent>
               </Card>
             </ScrollReveal>
@@ -209,7 +199,7 @@ export default function Profile() {
           <TabsContent value="saved" className="space-y-4">
             <FadeUp >
               <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-white">Saved Recipes</h2>
+                <h2 className="text-2xl font-serif font-medium text-foreground">Saved Recipes</h2>
                 <div className="flex items-center gap-2">
                   <Button 
                     variant="outline" 
@@ -301,7 +291,7 @@ export default function Profile() {
           <TabsContent value="recent" className="space-y-4">
             <FadeUp >
               <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-white">Recently Cooked</h2>
+                <h2 className="text-2xl font-serif font-medium text-foreground">Recently Cooked</h2>
                 <span className="text-muted-foreground">
                   {recentRecipes?.length || 0} recipes
                 </span>

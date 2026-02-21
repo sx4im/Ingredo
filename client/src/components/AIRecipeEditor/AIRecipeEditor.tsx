@@ -206,7 +206,7 @@ export default function AIRecipeEditor({ isOpen, onClose, recipe, onSave }: AIRe
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <DialogTitle className="text-2xl font-bold">AI-Generated Recipe</DialogTitle>
-              <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+              <Badge variant="secondary" className="bg-primary/10 text-primary uppercase tracking-widest font-bold text-[10px]">
                 <ChefHat className="w-3 h-3 mr-1" />
                 AI Generated
               </Badge>

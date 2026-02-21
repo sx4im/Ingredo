@@ -50,25 +50,8 @@ export default function Search() {
   };
 
   return (
-    <div className="relative min-h-screen">
-      {/* Background Image */}
-      <div
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(/search.webp)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
-      
-      {/* Blue Overlay */}
-      <div
-        className="fixed inset-0 z-0"
-        style={{ backgroundColor: 'rgba(30, 64, 175, 0.4)' }}
-      />
-      
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+    <div className="relative min-h-screen bg-grain bg-background font-sans text-foreground py-12">
+      <div className="container mx-auto px-6 lg:px-12">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
@@ -76,9 +59,10 @@ export default function Search() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
         >
-          <div className="text-center mb-8">
-            <h1 className="h1 text-white mb-4">Find Recipes</h1>
-            <p className="text-white/90 text-center text-base font-medium">
+          <div className="text-left mb-12">
+            <h1 className="font-serif text-4xl lg:text-5xl font-medium tracking-tight text-foreground mb-4">Find Recipes</h1>
+            <div className="w-12 h-0.5 mb-6" style={{ background: 'var(--accent-gold)' }} />
+            <p className="text-muted-foreground text-left text-lg italic font-serif">
               Add ingredients you have and discover delicious recipes you can make
             </p>
           </div>

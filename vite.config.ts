@@ -27,6 +27,20 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    sourcemap: false,
+    minify: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'wouter'],
+          ui: ['lucide-react', 'framer-motion', 'clsx', 'tailwind-merge'],
+          query: ['@tanstack/react-query'],
+        }
+      }
+    }
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'wouter', 'lucide-react', 'framer-motion', 'zustand']
   },
   server: {
     fs: {

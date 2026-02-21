@@ -357,8 +357,8 @@ export default function Recipe() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         <Card className="max-w-md mx-auto">
           <CardContent className="p-8 text-center">
-              <h2 className="text-xl font-semibold mb-2 text-gray-800">Recipe not found</h2>
-              <p className="text-gray-800/80">
+              <h2 className="text-xl font-semibold mb-2 text-foreground">Recipe not found</h2>
+              <p className="text-muted-foreground">
               The recipe you're looking for doesn't exist or has been removed.
             </p>
           </CardContent>
@@ -369,24 +369,8 @@ export default function Recipe() {
   }
 
   return (
-    <div className="relative min-h-screen">
-      {/* Background Image */}
-      <div
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(/bg3.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
-      {/* Blue Overlay */}
-      <div
-        className="fixed inset-0 z-0"
-        style={{ backgroundColor: 'rgba(30, 64, 175, 0.8)' }}
-      />
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+    <div className="relative min-h-screen bg-grain bg-background font-sans text-foreground py-12">
+      <div className="container mx-auto px-6 lg:px-12 relative z-10">
         <div className="max-w-6xl mx-auto">
           {/* Hero Section */}
         <div className="mb-8">
@@ -432,28 +416,28 @@ export default function Recipe() {
           <div className="space-y-4">
             <div className="flex flex-wrap gap-2 mb-4">
               {recipe.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="bg-vintage-warm-brown/20 text-gray-800">
+                  <Badge key={tag} variant="secondary" className="bg-vintage-warm-brown/20 text-foreground">
                   {tag}
                 </Badge>
               ))}
             </div>
             
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-800">{recipe.title}</h1>
-              <p className="text-lg text-gray-800/90">{recipe.description}</p>
+              <h1 className="font-serif text-3xl md:text-4xl font-medium text-foreground">{recipe.title}</h1>
+              <p className="text-lg text-muted-foreground">{recipe.description}</p>
               
               {/* Author */}
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-vintage-warm-brown/20 flex items-center justify-center">
-                  <ChefHat className="h-5 w-5 text-gray-800" />
+                  <ChefHat className="h-5 w-5 text-foreground" />
                 </div>
                 <div>
-                  <p className="text-gray-800 font-medium">{recipe.author.name}</p>
-                  <p className="text-gray-800/70 text-sm">Recipe Author</p>
+                  <p className="text-foreground font-medium">{recipe.author.name}</p>
+                  <p className="text-muted-foreground text-sm">Recipe Author</p>
                 </div>
               </div>
             
             {/* Recipe Meta */}
-              <div className="flex flex-wrap gap-6 text-sm text-gray-800/80">
+              <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
                 <span>{recipe.prepTime + recipe.cookTime} mins total</span>
@@ -479,16 +463,16 @@ export default function Recipe() {
             <CardContent className="p-6">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-800">{recipe.prepTime}</div>
-                  <div className="text-sm text-gray-800/80">Prep Time</div>
+                  <div className="text-2xl font-bold text-foreground">{recipe.prepTime}</div>
+                  <div className="text-sm text-muted-foreground">Prep Time</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-800">{recipe.cookTime}</div>
-                  <div className="text-sm text-gray-800/80">Cook Time</div>
+                  <div className="text-2xl font-bold text-foreground">{recipe.cookTime}</div>
+                  <div className="text-sm text-muted-foreground">Cook Time</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-800">{recipe.prepTime + recipe.cookTime}</div>
-                  <div className="text-sm text-gray-800/80">Total Time</div>
+                  <div className="text-2xl font-bold text-foreground">{recipe.prepTime + recipe.cookTime}</div>
+                  <div className="text-sm text-muted-foreground">Total Time</div>
                 </div>
                 <div className="text-center">
                   <div className="flex items-center justify-center gap-2">
@@ -501,7 +485,7 @@ export default function Recipe() {
                     >
                       <Minus className="h-4 w-4" />
                     </Button>
-                    <span className="text-2xl font-bold text-gray-800 min-w-[3rem]">{servings}</span>
+                    <span className="text-2xl font-bold text-foreground min-w-[3rem]">{servings}</span>
                     <Button
                       size="sm"
                       variant="outline"
@@ -511,7 +495,7 @@ export default function Recipe() {
                       <Plus className="h-4 w-4" />
                     </Button>
                   </div>
-                  <div className="text-sm text-gray-800/80">Servings</div>
+                  <div className="text-sm text-muted-foreground">Servings</div>
                 </div>
               </div>
             </CardContent>
@@ -523,12 +507,12 @@ export default function Recipe() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <Timer className="h-6 w-6 text-gray-800" />
+                    <Timer className="h-6 w-6 text-foreground" />
                     <div>
-                      <div className="text-lg font-bold text-gray-800">
+                      <div className="text-lg font-bold text-foreground">
                         Step {activeTimer.stepNumber} Timer
                       </div>
-                      <div className="text-2xl font-mono text-gray-800">
+                      <div className="text-2xl font-mono text-foreground">
                         {formatTime(activeTimer.timeLeft)}
                       </div>
                     </div>
@@ -552,7 +536,7 @@ export default function Recipe() {
             </div>
                 </div>
                 <div className="mt-3">
-                  <div className="w-full bg-blue-200 rounded-full h-2">
+                  <div className="w-full bg-muted rounded-full h-2">
                     <div 
                       className="bg-vintage-warm-brown h-2 rounded-full transition-all duration-1000"
                       style={{ width: `${((activeTimer.totalTime - activeTimer.timeLeft) / activeTimer.totalTime) * 100}%` }}
@@ -569,7 +553,7 @@ export default function Recipe() {
             {/* Ingredients */}
               <Card className="bg-vintage-light-beige/10 backdrop-blur-sm border-vintage-warm-brown/20">
               <CardHeader>
-                  <CardTitle className="text-gray-800">Ingredients</CardTitle>
+                  <CardTitle className="text-foreground">Ingredients</CardTitle>
               </CardHeader>
               <CardContent>
                   <div className="space-y-3">
@@ -590,10 +574,10 @@ export default function Recipe() {
                             />
                           )}
                           <div className="flex-1">
-                            <span className={`font-medium ${completedIngredients.has(ingredient.id) ? 'line-through text-gray-800/60' : 'text-gray-800'}`}>
+                            <span className={`font-medium ${completedIngredients.has(ingredient.id) ? 'line-through text-muted-foreground/60' : 'text-foreground'}`}>
                               {substitutions[ingredient.id] || ingredient.name}
                             </span>
-                            <span className="text-gray-800/80 ml-2">
+                            <span className="text-muted-foreground ml-2">
                               {getAdjustedAmount(ingredient.amount)} {ingredient.unit}
                       </span>
                           </div>
@@ -622,7 +606,7 @@ export default function Recipe() {
             {/* Instructions */}
               <Card className="bg-vintage-light-beige/10 backdrop-blur-sm border-vintage-warm-brown/20">
               <CardHeader>
-                  <CardTitle className="text-gray-800">Instructions</CardTitle>
+                  <CardTitle className="text-foreground">Instructions</CardTitle>
               </CardHeader>
               <CardContent>
                   <div className="space-y-6">
@@ -633,8 +617,8 @@ export default function Recipe() {
                         onClick={() => toggleStep(instruction.step)}
                             className={`flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center transition-colors ${
                           completedSteps.has(instruction.step)
-                                ? 'bg-vintage-warm-brown border-vintage-warm-brown text-gray-800'
-                                : 'border-vintage-light-beige/30 hover:border-vintage-warm-brown text-gray-800'
+                                ? 'bg-vintage-warm-brown border-vintage-warm-brown text-foreground'
+                                : 'border-vintage-light-beige/30 hover:border-vintage-warm-brown text-foreground'
                         }`}
                         data-testid={`step-${instruction.step}`}
                       >
@@ -658,9 +642,9 @@ export default function Recipe() {
                           )}
                         </div>
                       <div className="flex-1">
-                          <p className={`text-gray-800 leading-relaxed ${
+                          <p className={`text-foreground leading-relaxed ${
                           completedSteps.has(instruction.step) 
-                              ? 'line-through text-gray-800/60' 
+                              ? 'line-through text-muted-foreground/60' 
                             : ''
                         }`}>
                           {instruction.description}
@@ -679,37 +663,37 @@ export default function Recipe() {
               {recipe.nutrition && (
                 <Card className="bg-vintage-light-beige/10 backdrop-blur-sm border-vintage-warm-brown/20">
               <CardHeader>
-                    <CardTitle className="text-gray-800 text-lg">Nutrition (per serving)</CardTitle>
+                    <CardTitle className="text-foreground text-lg">Nutrition (per serving)</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
-                      <span className="text-gray-800/80">Calories</span>
-                      <span className="text-gray-800 font-medium">{recipe.nutrition.calories}</span>
+                      <span className="text-muted-foreground">Calories</span>
+                      <span className="text-foreground font-medium">{recipe.nutrition.calories}</span>
                     </div>
                     <Separator className="bg-vintage-warm-brown/20" />
                     <div className="flex justify-between">
-                      <span className="text-gray-800/80">Protein</span>
-                      <span className="text-gray-800 font-medium">{recipe.nutrition.protein}</span>
+                      <span className="text-muted-foreground">Protein</span>
+                      <span className="text-foreground font-medium">{recipe.nutrition.protein}</span>
                 </div>
                     <Separator className="bg-vintage-warm-brown/20" />
                 <div className="flex justify-between">
-                      <span className="text-gray-800/80">Carbs</span>
-                      <span className="text-gray-800 font-medium">{recipe.nutrition.carbs}</span>
+                      <span className="text-muted-foreground">Carbs</span>
+                      <span className="text-foreground font-medium">{recipe.nutrition.carbs}</span>
                 </div>
                     <Separator className="bg-vintage-warm-brown/20" />
                 <div className="flex justify-between">
-                      <span className="text-gray-800/80">Fat</span>
-                      <span className="text-gray-800 font-medium">{recipe.nutrition.fat}</span>
+                      <span className="text-muted-foreground">Fat</span>
+                      <span className="text-foreground font-medium">{recipe.nutrition.fat}</span>
                 </div>
                     <Separator className="bg-vintage-warm-brown/20" />
                 <div className="flex justify-between">
-                      <span className="text-gray-800/80">Fiber</span>
-                      <span className="text-gray-800 font-medium">{recipe.nutrition.fiber}</span>
+                      <span className="text-muted-foreground">Fiber</span>
+                      <span className="text-foreground font-medium">{recipe.nutrition.fiber}</span>
                 </div>
                     <Separator className="bg-vintage-warm-brown/20" />
                 <div className="flex justify-between">
-                      <span className="text-gray-800/80">Sugar</span>
-                      <span className="text-gray-800 font-medium">{recipe.nutrition.sugar}</span>
+                      <span className="text-muted-foreground">Sugar</span>
+                      <span className="text-foreground font-medium">{recipe.nutrition.sugar}</span>
                 </div>
               </CardContent>
             </Card>
@@ -718,7 +702,7 @@ export default function Recipe() {
               {/* Quick Actions */}
               <Card className="bg-vintage-light-beige/10 backdrop-blur-sm border-vintage-warm-brown/20">
                 <CardHeader>
-                  <CardTitle className="text-gray-800 text-lg">Quick Actions</CardTitle>
+                  <CardTitle className="text-foreground text-lg">Quick Actions</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <Button 
@@ -757,7 +741,7 @@ export default function Recipe() {
           {similarRecipes && similarRecipes.length > 0 && (
             <Card className="mt-12 bg-vintage-light-beige/10 backdrop-blur-sm border-vintage-warm-brown/20">
               <CardHeader>
-                <CardTitle className="text-gray-800">Similar Recipes</CardTitle>
+                <CardTitle className="text-foreground">Similar Recipes</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -771,8 +755,8 @@ export default function Recipe() {
                             className="w-full h-32 object-cover rounded mb-3"
                           />
                         )}
-                        <h3 className="font-medium text-gray-800 mb-2">{similar.title}</h3>
-                        <div className="flex items-center justify-between text-sm text-gray-800/80">
+                        <h3 className="font-medium text-foreground mb-2">{similar.title}</h3>
+                        <div className="flex items-center justify-between text-sm text-muted-foreground">
                           <span className="flex items-center gap-1">
                             <Clock className="h-3 w-3" />
                             {similar.cookTime}m
@@ -796,7 +780,7 @@ export default function Recipe() {
       <Dialog open={showShareModal} onOpenChange={setShowShareModal}>
         <DialogContent className="bg-vintage-light-beige border-vintage-warm-brown/20">
           <DialogHeader>
-            <DialogTitle className="text-blue-600">Share Recipe</DialogTitle>
+            <DialogTitle className="text-primary">Share Recipe</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="flex gap-2">

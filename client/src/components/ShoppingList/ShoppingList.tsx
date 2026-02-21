@@ -52,7 +52,7 @@ interface ShoppingListProps {
   className?: string;
 }
 
-export function ShoppingList({ listId, onClose, className }: ShoppingListProps) {
+export const ShoppingList = React.memo(function ShoppingList({ listId, onClose, className }: ShoppingListProps) {
   const isMobile = useIsMobile();
   const queryClient = useQueryClient();
   const [editingItem, setEditingItem] = React.useState<string | null>(null);
@@ -352,4 +352,4 @@ export function ShoppingList({ listId, onClose, className }: ShoppingListProps) 
       </CardContent>
     </Card>
   );
-}
+});

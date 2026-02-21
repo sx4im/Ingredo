@@ -54,7 +54,7 @@ interface RecipeCardProps {
   isFavorited?: boolean;
 }
 
-export function RecipeCard({ 
+export const RecipeCard = React.memo(function RecipeCard({ 
   recipe, 
   onSave, 
   onUseSuggestion, 
@@ -125,7 +125,7 @@ export function RecipeCard({
   const getMatchColor = (percentage: number) => {
     if (percentage >= 90) return "match-badge";
     if (percentage >= 70) return "bg-yellow-100 text-yellow-800 border-yellow-200";
-    if (percentage >= 50) return "bg-orange-100 text-orange-800 border-orange-200";
+    if (percentage >= 50) return "bg-accent/20 text-foreground border-accent/30";
     return "bg-red-100 text-red-800 border-red-200";
   };
 
@@ -150,6 +150,8 @@ export function RecipeCard({
                 <img
                   src={recipe.imageSet.mobile}
                   alt={recipe.title}
+                  width={600}
+                  height={400}
                   className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
                   loading={priority ? "eager" : "lazy"}
                 />
@@ -158,6 +160,8 @@ export function RecipeCard({
               <img
                 src={recipe.image}
                 alt={recipe.title}
+                width={600}
+                height={400}
                 className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
                 loading={priority ? "eager" : "lazy"}
               />
@@ -349,4 +353,4 @@ export function RecipeCard({
       </Link>
     </Card>
   );
-}
+});

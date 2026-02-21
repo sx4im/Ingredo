@@ -132,55 +132,27 @@ export default function Signup() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-4">
-      {/* Background with gradient and particles */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50" />
-      <div className="absolute inset-0 bg-[url('/signup.webp')] bg-cover bg-center opacity-20" />
-      
-      {/* Floating particles animation */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-purple-200 rounded-full opacity-60"
-            animate={{
-              x: [0, -100, 0],
-              y: [0, 100, 0],
-              scale: [1, 1.5, 1],
-            }}
-            transition={{
-              duration: 12 + i * 2,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
-      </div>
-
+    <div className="relative min-h-screen flex items-center justify-center p-4" style={{ background: 'var(--bg-deep-olive)' }}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="relative z-10 w-full max-w-md"
       >
-        <Card className="backdrop-blur-xl bg-white/80 border-white/20 shadow-2xl">
+        <Card className="bg-[var(--bg-cream)] border-0 shadow-2xl">
           <CardHeader className="space-y-2 text-center pb-8">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-              className="mx-auto w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-4"
+              className="mx-auto w-16 h-16 bg-secondary rounded-2xl flex items-center justify-center mb-4"
             >
               <img src="/logo.webp" alt="Ingredo" className="w-8 h-8 sm:w-10 sm:h-10" />
             </motion.div>
-            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <CardTitle className="font-serif text-2xl font-medium text-foreground">
               Join Ingredo
             </CardTitle>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground italic font-serif">
               Create your account and start cooking amazing meals
             </p>
           </CardHeader>
@@ -189,19 +161,19 @@ export default function Signup() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Name Field */}
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="name" className="text-sm font-medium text-foreground">
                   Full name
                 </Label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                   <Input
                     id="name"
                     name="name"
                     type="text"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className={`pl-10 h-12 bg-white/50 border-gray-200 focus:border-purple-500 focus:ring-purple-500/20 ${
-                      errors.name ? "border-red-500 focus:border-red-500" : ""
+                    className={`pl-10 h-12 bg-background border-border focus:border-primary focus:ring-primary/20 ${
+                      errors.name ? "border-destructive focus:border-destructive" : ""
                     }`}
                     placeholder="Enter your full name"
                     disabled={isLoading}
@@ -223,19 +195,19 @@ export default function Signup() {
 
               {/* Email Field */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="email" className="text-sm font-medium text-foreground">
                   Email address
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                   <Input
                     id="email"
                     name="email"
                     type="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className={`pl-10 h-12 bg-white/50 border-gray-200 focus:border-purple-500 focus:ring-purple-500/20 ${
-                      errors.email ? "border-red-500 focus:border-red-500" : ""
+                    className={`pl-10 h-12 bg-background border-border focus:border-primary focus:ring-primary/20 ${
+                      errors.email ? "border-destructive focus:border-destructive" : ""
                     }`}
                     placeholder="Enter your email"
                     disabled={isLoading}
@@ -257,19 +229,19 @@ export default function Signup() {
 
               {/* Password Field */}
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="password" className="text-sm font-medium text-foreground">
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                   <Input
                     id="password"
                     name="password"
                     type={showPassword ? "text" : "password"}
                     value={formData.password}
                     onChange={handleInputChange}
-                    className={`pl-10 pr-10 h-12 bg-white/50 border-gray-200 focus:border-purple-500 focus:ring-purple-500/20 ${
-                      errors.password ? "border-red-500 focus:border-red-500" : ""
+                    className={`pl-10 pr-10 h-12 bg-background border-border focus:border-primary focus:ring-primary/20 ${
+                      errors.password ? "border-destructive focus:border-destructive" : ""
                     }`}
                     placeholder="Create a password"
                     disabled={isLoading}
@@ -277,7 +249,7 @@ export default function Signup() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
                     disabled={isLoading}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -299,19 +271,19 @@ export default function Signup() {
 
               {/* Confirm Password Field */}
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="confirmPassword" className="text-sm font-medium text-foreground">
                   Confirm password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                   <Input
                     id="confirmPassword"
                     name="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
-                    className={`pl-10 pr-10 h-12 bg-white/50 border-gray-200 focus:border-purple-500 focus:ring-purple-500/20 ${
-                      errors.confirmPassword ? "border-red-500 focus:border-red-500" : ""
+                    className={`pl-10 pr-10 h-12 bg-background border-border focus:border-primary focus:ring-primary/20 ${
+                      errors.confirmPassword ? "border-destructive focus:border-destructive" : ""
                     }`}
                     placeholder="Confirm your password"
                     disabled={isLoading}
@@ -319,7 +291,7 @@ export default function Signup() {
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
                     disabled={isLoading}
                   >
                     {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -340,11 +312,11 @@ export default function Signup() {
               </div>
 
               {/* Terms and Privacy */}
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-muted-foreground">
                 By creating an account, you agree to our{" "}
                 <button
                   type="button"
-                  className="text-purple-600 hover:text-purple-500 underline"
+                  className="text-primary hover:text-primary/80 underline"
                   onClick={() => toast({ title: "Coming soon", description: "Terms and Privacy policy will be available soon." })}
                 >
                   Terms of Service
@@ -352,7 +324,7 @@ export default function Signup() {
                 and{" "}
                 <button
                   type="button"
-                  className="text-purple-600 hover:text-purple-500 underline"
+                  className="text-primary hover:text-primary/80 underline"
                   onClick={() => toast({ title: "Coming soon", description: "Terms and Privacy policy will be available soon." })}
                 >
                   Privacy Policy
@@ -362,7 +334,7 @@ export default function Signup() {
               {/* Submit Button */}
               <Button
                 type="submit"
-                className="w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium transition-all duration-200 transform hover:scale-[1.02]"
+                className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-200"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -376,9 +348,9 @@ export default function Signup() {
 
             {/* Divider */}
             <div className="relative">
-              <Separator className="bg-gray-200" />
+              <Separator className="bg-border" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="bg-white px-4 text-sm text-gray-500">or continue with</span>
+                <span className="bg-card px-4 text-sm text-muted-foreground">or continue with</span>
               </div>
             </div>
 
@@ -389,7 +361,7 @@ export default function Signup() {
                 variant="outline"
                 onClick={handleGoogleLogin}
                 disabled={isLoading}
-                className="h-12 bg-white/50 border-gray-200 hover:bg-white/80 transition-all duration-200"
+                className="h-12 bg-background border-border hover:bg-muted transition-all duration-200"
               >
                 <Chrome className="h-4 w-4 mr-2" />
                 Google
@@ -399,7 +371,7 @@ export default function Signup() {
                 variant="outline"
                 onClick={handleGitHubLogin}
                 disabled={isLoading}
-                className="h-12 bg-white/50 border-gray-200 hover:bg-white/80 transition-all duration-200"
+                className="h-12 bg-background border-border hover:bg-muted transition-all duration-200"
               >
                 <Github className="h-4 w-4 mr-2" />
                 GitHub
@@ -408,11 +380,11 @@ export default function Signup() {
 
             {/* Sign In Link */}
             <div className="text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 Already have an account?{" "}
                 <Link
                   href="/auth/login"
-                  className="text-purple-600 hover:text-purple-500 font-medium transition-colors"
+                  className="text-primary hover:text-primary/80 font-medium transition-colors"
                 >
                   Sign in
                 </Link>

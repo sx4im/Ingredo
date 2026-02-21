@@ -54,7 +54,7 @@ const SORT_OPTIONS = [
   { value: "popularity", label: "Most Popular", icon: TrendingUp },
 ] as const;
 
-export function SearchResults({ 
+export const SearchResults = React.memo(function SearchResults({ 
   ingredients, 
   filters, 
   onRecipeSave, 
@@ -184,7 +184,7 @@ export function SearchResults({
   if (ingredients.length === 0) {
     return (
       <EmptyState
-        icon={<Search className="mx-auto h-12 w-12 mb-4 text-orange-500" />}
+        icon={<Search className="mx-auto h-12 w-12 mb-4 text-primary" />}
         title="Start by adding ingredients"
         description="Search for ingredients you have and we'll find recipes you can make!"
         action={{
@@ -201,7 +201,7 @@ export function SearchResults({
       <Card className={className}>
         <CardContent className="p-8 text-center">
           <div className="flex flex-col items-center justify-center">
-            <Search className="h-12 w-12 mb-4 text-orange-500" />
+            <Search className="h-12 w-12 mb-4 text-primary" />
             <h3 className="text-lg font-medium mb-2 text-gray-800">Search failed</h3>
             <p className="text-black mb-4">
               We couldn't find any recipes. Please try again.
@@ -337,4 +337,4 @@ export function SearchResults({
       )}
     </div>
   );
-}
+});

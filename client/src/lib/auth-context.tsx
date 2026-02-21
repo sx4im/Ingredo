@@ -1,8 +1,8 @@
 import * as React from "react";
-import { useAppStore } from "./store";
+import { useAppStore, User } from "./store";
 
 interface AuthContextValue {
-  user: any;
+  user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
@@ -19,7 +19,10 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const { user, isAuthenticated, setUser, logout: storeLogout } = useAppStore();
+  const user = useAppStore((state) => state.user);
+  const isAuthenticated = useAppStore((state) => state.isAuthenticated);
+  const setUser = useAppStore((state) => state.setUser);
+  const storeLogout = useAppStore((state) => state.logout);
   const [isLoading, setIsLoading] = React.useState(false);
 
   // Mock authentication functions - replace with real API calls
@@ -155,7 +158,7 @@ export function ProtectedRoute({ children, fallback }: ProtectedRouteProps) {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
       </div>
     );
   }

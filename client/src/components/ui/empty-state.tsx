@@ -30,9 +30,12 @@ export function EmptyState({
         <h3 className="text-lg font-medium mb-2 text-center">{title}</h3>
         <p className="text-black mb-4">{description}</p>
         {action && (
-          <Button onClick={action.onClick} data-testid="empty-state-action">
+          <div 
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-primary text-primary-foreground h-10 px-4 py-2 mt-2 select-none cursor-default"
+            data-testid="empty-state-action"
+          >
             {action.label}
-          </Button>
+          </div>
         )}
       </CardContent>
     </Card>

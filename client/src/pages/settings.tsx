@@ -220,25 +220,8 @@ export default function Settings() {
   };
 
   return (
-    <div className="relative min-h-screen">
-      {/* Background Image */}
-      <div 
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(/settings.webp)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
-      
-      {/* Blue Overlay */}
-      <div 
-        className="fixed inset-0 z-10"
-        style={{ backgroundColor: 'rgba(30, 64, 175, 0.4)' }}
-      />
-      
-      <div className="relative z-20 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="relative min-h-screen bg-grain bg-background font-sans text-foreground py-12">
+      <div className="relative z-20 container mx-auto px-6 lg:px-12">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <motion.div
@@ -249,10 +232,10 @@ export default function Settings() {
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-white mb-2 text-left">
-                  Settings 
+                <h1 className="font-serif text-4xl lg:text-5xl font-medium tracking-tight text-foreground mb-3">
+                  Settings
                 </h1>
-                <p className="text-white text-left">
+                <p className="text-muted-foreground text-lg italic font-serif">
                   Manage your account preferences and app settings
                 </p>
               </div>
@@ -269,7 +252,7 @@ export default function Settings() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <User className="h-5 w-5 text-blue-600" />
+                    <User className="h-5 w-5 text-primary" />
                     Profile Settings
                   </CardTitle>
                 </CardHeader>
@@ -345,7 +328,7 @@ export default function Settings() {
                     </div>
                   </div>
                   
-                  <Button onClick={handleSaveProfile} className="bg-blue-600 hover:bg-blue-700">
+                  <Button onClick={handleSaveProfile} className="bg-primary hover:bg-primary/90">
                     <Save className="h-4 w-4 mr-2" />
                     Save Profile
                   </Button>
@@ -362,7 +345,7 @@ export default function Settings() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <ChefHat className="h-5 w-5 text-orange-600" />
+                    <ChefHat className="h-5 w-5 text-primary" />
                     Cooking Preferences
                   </CardTitle>
                 </CardHeader>
@@ -509,7 +492,7 @@ export default function Settings() {
                     </div>
                   </div>
                   
-                  <Button onClick={handleSaveCookingPreferences} className="bg-orange-600 hover:bg-orange-700">
+                  <Button onClick={handleSaveCookingPreferences} className="bg-primary hover:bg-primary/90">
                     <Save className="h-4 w-4 mr-2" />
                     Save Cooking Preferences
                   </Button>
@@ -526,7 +509,7 @@ export default function Settings() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Bell className="h-5 w-5 text-orange-600" />
+                    <Bell className="h-5 w-5 text-secondary" />
                     Notifications
                   </CardTitle>
                 </CardHeader>
@@ -647,7 +630,7 @@ export default function Settings() {
                     </div>
                   </div>
                   
-                  <Button onClick={handleSaveNotifications} className="bg-orange-600 hover:bg-orange-700">
+                  <Button onClick={handleSaveNotifications} className="bg-primary hover:bg-primary/90">
                     <Save className="h-4 w-4 mr-2" />
                     Save Notifications
                   </Button>
@@ -781,7 +764,7 @@ export default function Settings() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Eye className="h-5 w-5 text-blue-600" />
+                    <Eye className="h-5 w-5 text-primary" />
                     Accessibility
                   </CardTitle>
                 </CardHeader>
@@ -858,7 +841,7 @@ export default function Settings() {
                     </div>
                   </div>
                   
-                  <Button onClick={handleSaveAccessibility} className="bg-blue-600 hover:bg-blue-700">
+                  <Button onClick={handleSaveAccessibility} className="bg-primary hover:bg-primary/90">
                     <Save className="h-4 w-4 mr-2" />
                     Save Accessibility Settings
                         </Button>

@@ -76,7 +76,7 @@ function SortableChip({ chip, onRemove }: SortableChipProps) {
       style={style}
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-semibold transition-colors min-w-fit max-w-48",
-        "bg-orange-500 text-white hover:bg-orange-600",
+        "bg-primary text-white hover:bg-primary/90",
         isDragging && "opacity-50"
       )}
       data-testid={`ingredient-chip-${chip.name.toLowerCase()}`}

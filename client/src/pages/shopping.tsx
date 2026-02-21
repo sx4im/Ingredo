@@ -40,7 +40,12 @@ interface ShoppingListItem {
 }
 
 export default function Shopping() {
-  const { shoppingList, addToShoppingList, updateShoppingListItem, removeFromShoppingList, togglePurchased, clearPurchased } = useAppStore();
+  const shoppingList = useAppStore(state => state.shoppingList);
+  const addToShoppingList = useAppStore(state => state.addToShoppingList);
+  const updateShoppingListItem = useAppStore(state => state.updateShoppingListItem);
+  const removeFromShoppingList = useAppStore(state => state.removeFromShoppingList);
+  const togglePurchased = useAppStore(state => state.togglePurchased);
+  const clearPurchased = useAppStore(state => state.clearPurchased);
   const { toast } = useToast();
   
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -252,25 +257,8 @@ export default function Shopping() {
   };
 
   return (
-    <div className="relative min-h-screen">
-      {/* Background Image */}
-      <div 
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(/shopping.webp)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
-      
-      {/* Blue Overlay */}
-      <div 
-        className="fixed inset-0 z-10"
-        style={{ backgroundColor: 'rgba(30, 64, 175, 0.4)' }}
-      />
-      
-      <div className="relative z-20 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="relative min-h-screen bg-grain bg-background font-sans text-foreground py-12">
+      <div className="relative z-20 container mx-auto px-6 lg:px-12">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <motion.div
@@ -280,11 +268,12 @@ export default function Shopping() {
             className="mb-8"
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <h1 className="text-3xl font-bold text-white mb-2 text-left">
-                  Shopping List 
+              <div className="relative pb-1">
+                <h1 className="font-serif text-4xl lg:text-5xl font-medium tracking-tight text-foreground mb-4">
+                  Shopping List
                 </h1>
-                <p className="text-white text-left">
+                <div className="w-12 h-0.5 mb-6" style={{ background: 'var(--accent-gold)' }} />
+                <p className="text-muted-foreground text-lg italic font-serif">
                   Plan your shopping and never forget an ingredient
                 </p>
               </div>
@@ -298,7 +287,7 @@ export default function Shopping() {
                 
                 <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
                   <DialogTrigger asChild>
-                    <Button className="bg-blue-600 hover:bg-blue-700">
+                    <Button>
                       <Plus className="h-4 w-4 mr-2" />
                       Add Item
                     </Button>
@@ -365,7 +354,7 @@ export default function Shopping() {
                       <div className="flex gap-2 pt-4">
                         <Button
                           onClick={editingItem ? handleUpdateItem : handleAddItem}
-                          className="flex-1 bg-blue-600 hover:bg-blue-700"
+                          className="flex-1 bg-primary hover:bg-primary/90"
                         >
                           {editingItem ? "Update Item" : "Add Item"}
                         </Button>
@@ -400,50 +389,50 @@ export default function Shopping() {
             transition={{ delay: 0.2 }}
             className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
           >
-            <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+            <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+              <CardContent className="p-8">
+                <div className="flex flex-col items-start gap-4">
+                  <ShoppingCart className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Total Items</p>
-                    <p className="text-3xl font-bold text-gray-900">{totalCount}</p>
+                    <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>{totalCount}</p>
+                    <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Total Items</p>
                   </div>
-                  <ShoppingCart className="h-8 w-8 text-blue-600" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+            <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+              <CardContent className="p-8">
+                <div className="flex flex-col items-start gap-4">
+                  <CheckCircle2 className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Purchased</p>
-                    <p className="text-3xl font-bold text-gray-900">{purchasedCount}</p>
+                    <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>{purchasedCount}</p>
+                    <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Purchased</p>
                   </div>
-                  <CheckCircle2 className="h-8 w-8 text-green-600" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-orange-50 to-yellow-50 border-orange-200">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+            <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+              <CardContent className="p-8">
+                <div className="flex flex-col items-start gap-4">
+                  <List className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Remaining</p>
-                    <p className="text-3xl font-bold text-gray-900">{remainingCount}</p>
+                    <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>{remainingCount}</p>
+                    <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Remaining</p>
                   </div>
-                  <List className="h-8 w-8 text-orange-600" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+            <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+              <CardContent className="p-8">
+                <div className="flex flex-col items-start gap-4">
+                  <Filter className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Categories</p>
-                    <p className="text-3xl font-bold text-gray-900">{new Set(shoppingList.map(item => item.category)).size}</p>
+                    <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>{new Set(shoppingList.map(item => item.category)).size}</p>
+                    <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Categories</p>
                   </div>
-                  <Filter className="h-8 w-8 text-purple-600" />
                 </div>
               </CardContent>
             </Card>
@@ -569,7 +558,7 @@ export default function Shopping() {
                   </p>
                   {shoppingList.length === 0 && (
                     <div className="flex justify-center">
-                      <Button onClick={() => setShowAddDialog(true)} className="bg-blue-600 hover:bg-blue-700">
+                      <Button onClick={() => setShowAddDialog(true)}>
                         <Plus className="h-4 w-4 mr-2" />
                         Add Your First Item
                       </Button>

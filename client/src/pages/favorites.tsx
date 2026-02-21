@@ -47,7 +47,8 @@ interface Recipe {
 }
 
 export default function Favorites() {
-  const { favoriteRecipes, removeFromFavorites } = useAppStore();
+  const favoriteRecipes = useAppStore(state => state.favoriteRecipes);
+  const removeFromFavorites = useAppStore(state => state.removeFromFavorites);
   const { toast } = useToast();
   
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -185,25 +186,8 @@ export default function Favorites() {
   };
 
   return (
-    <div className="relative min-h-screen">
-      {/* Background Image */}
-      <div 
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(/favorites.webp)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
-      
-      {/* Blue Overlay */}
-      <div 
-        className="fixed inset-0 z-10"
-        style={{ backgroundColor: 'rgba(30, 64, 175, 0.4)' }}
-      />
-      
-      <div className="relative z-20 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="relative min-h-screen bg-grain bg-background font-sans text-foreground py-12">
+      <div className="relative z-20 container mx-auto px-6 lg:px-12">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
         <motion.div
@@ -213,11 +197,12 @@ export default function Favorites() {
           className="mb-8"
         >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <h1 className="text-3xl font-bold text-white mb-2 text-left">
-                  My Favorites 
+              <div className="relative pb-1">
+                <h1 className="font-serif text-4xl lg:text-5xl font-medium tracking-tight text-foreground mb-4">
+                  My Favorites
                 </h1>
-                <p className="text-white text-left">
+                <div className="w-12 h-0.5 mb-6" style={{ background: 'var(--accent-gold)' }} />
+                <p className="text-muted-foreground text-lg italic font-serif">
                   Your saved recipes and culinary inspirations
                 </p>
               </div>
@@ -229,7 +214,7 @@ export default function Favorites() {
                 </Badge>
                 
                 <Link href="/search">
-                  <Button className="bg-red-600 hover:bg-red-700">
+                  <Button>
                     <Plus className="h-4 w-4 mr-2" />
                     Find More Recipes
                   </Button>
@@ -245,56 +230,56 @@ export default function Favorites() {
             transition={{ delay: 0.2 }}
             className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
           >
-            <Card className="bg-gradient-to-br from-red-50 to-pink-50 border-red-200">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+            <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+              <CardContent className="p-8">
+                <div className="flex flex-col items-start gap-4">
+                  <Heart className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Total Favorites</p>
-                    <p className="text-3xl font-bold text-gray-900">{favoriteRecipesData.length}</p>
+                    <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>{favoriteRecipesData.length}</p>
+                    <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Total Favorites</p>
                   </div>
-                  <Heart className="h-8 w-8 text-red-600" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-orange-50 to-yellow-50 border-orange-200">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+            <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+              <CardContent className="p-8">
+                <div className="flex flex-col items-start gap-4">
+                  <ChefHat className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Easy Recipes</p>
-                    <p className="text-3xl font-bold text-gray-900">
+                    <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>
                       {favoriteRecipesData.filter(r => r.difficulty === "Easy").length}
                     </p>
+                    <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Easy Recipes</p>
                   </div>
-                  <ChefHat className="h-8 w-8 text-orange-600" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+            <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+              <CardContent className="p-8">
+                <div className="flex flex-col items-start gap-4">
+                  <Clock className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Quick Recipes</p>
-                    <p className="text-3xl font-bold text-gray-900">
+                    <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>
                       {favoriteRecipesData.filter(r => r.tags.includes("Quick")).length}
                     </p>
+                    <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Quick Recipes</p>
                   </div>
-                  <Clock className="h-8 w-8 text-green-600" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+            <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+              <CardContent className="p-8">
+                <div className="flex flex-col items-start gap-4">
+                  <Star className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Avg Rating</p>
-                    <p className="text-3xl font-bold text-gray-900">
+                    <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>
                       {(favoriteRecipesData.reduce((sum, r) => sum + r.rating, 0) / favoriteRecipesData.length).toFixed(1)}
                     </p>
+                    <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Avg Rating</p>
                   </div>
-                  <Star className="h-8 w-8 text-purple-600" />
                 </div>
               </CardContent>
             </Card>
@@ -402,7 +387,7 @@ export default function Favorites() {
                   {favoriteRecipesData.length === 0 && (
                     <div className="flex justify-center">
                       <Link href="/search">
-                        <Button className="bg-red-600 hover:bg-red-700">
+                        <Button className="bg-secondary hover:bg-secondary/90">
                           <Plus className="h-4 w-4 mr-2" />
                           Find Recipes to Save
                         </Button>
@@ -431,6 +416,9 @@ export default function Favorites() {
                             <img 
                               src={recipe.image}
                               alt={recipe.title}
+                              width={600}
+                              height={400}
+                              loading="lazy"
                               className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                             />
                             <div className="absolute top-4 right-4 flex gap-2">

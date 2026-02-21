@@ -8,9 +8,12 @@ import { Badge } from "@/components/ui/badge";
 import CountUp from "@/components/CountUp";
 import SplitText from "@/components/SplitText";
 import { type IngredientChip } from "@shared/schema";
-import { Search, ChefHat, Recycle, Heart, Plus, Star, Bookmark, ArrowRight, Clock, Users } from "lucide-react";
+import { Heart, Plus, Star, Bookmark, ArrowRight, Clock, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { FadeUp, FadeDown, ModernFadeUp, ModernFadeDown } from "@/components/ScrollReveal";
+import { FloatingParticles } from "@/components/effects/FloatingParticles";
+import { MagneticButton } from "@/components/effects/MagneticButton";
+import { TiltCard } from "@/components/effects/TiltCard";
 
 export default function Home() {
   const [ingredients, setIngredients] = React.useState<IngredientChip[]>([
@@ -39,7 +42,7 @@ export default function Home() {
       id: 1,
       title: "Fresh Caprese Salad",
       description: "A classic Italian salad with fresh tomatoes, mozzarella, and basil.",
-      image: "https://images.unsplash.com/photo-1592417817098-8fd3d9eb14a5?ixlib=rb-4.0.3&w=600&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1592417817098-8fd3d9eb14a5?q=80&w=2070&auto=format&fit=crop",
       time: "15 min",
       rating: 4.8,
       reviews: 124,
@@ -49,7 +52,7 @@ export default function Home() {
       id: 2,
       title: "Garden Vegetable Stir Fry",
       description: "Quick and nutritious stir fry with seasonal vegetables and aromatic spices.",
-      image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-4.0.3&w=600&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=2070&auto=format&fit=crop",
       time: "25 min",
       rating: 4.6,
       reviews: 89,
@@ -59,7 +62,7 @@ export default function Home() {
       id: 3,
       title: "Classic Pasta Marinara",
       description: "Authentic Italian pasta with homemade marinara sauce and fresh herbs.",
-      image: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&w=600&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1473093226795-af9932fe5856?q=80&w=2070&auto=format&fit=crop",
       time: "45 min",
       rating: 4.9,
       reviews: 203,
@@ -68,196 +71,148 @@ export default function Home() {
   ];
 
   return (
-    <div className="relative min-h-screen">
-      {/* Background Image for entire page */}
-      <div 
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(/discover.webp)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
-      {/* Blue Overlay for entire page */}
-      <div 
-        className="fixed inset-0 z-0" 
-        style={{ backgroundColor: 'rgba(30, 64, 175, 0.4)' }}
-      />
-
-      {/* Hero Section */}
-      <section className="relative w-full min-h-screen flex items-center justify-center z-10 py-4 sm:py-8 lg:py-16">
-        
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="w-full mx-auto text-center px-2 sm:px-8 lg:px-16 py-4 sm:py-8 lg:py-16">
-            <SplitText
-              text="Cook with what you have"
-              tag="h1"
-              className="hero-heading text-white mb-4 sm:mb-2 max-w-4xl mx-auto px-2 py-2"
-              delay={100}
-              duration={0.8}
-              ease="power3.out"
-              splitType="chars"
-              from={{ opacity: 0, y: 60, rotationX: -90 }}
-              to={{ opacity: 1, y: 0, rotationX: 0 }}
-              threshold={0.1}
-              rootMargin="-50px"
-              textAlign="center"
-            />
+    <div className="relative min-h-screen font-sans">
+      {/* ─── Hero Section — Deep Olive Atmosphere ─── */}
+      <section className="relative w-full min-h-[85vh] flex items-center z-10 pt-20 pb-16" style={{ background: 'var(--bg-deep-olive)' }}>
+        {/* Ambient radial glow */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full opacity-20" style={{ background: 'radial-gradient(circle, var(--accent-gold) 0%, transparent 70%)', filter: 'blur(80px)' }} />
+          <FloatingParticles />
+        </div>
+        <div className="container mx-auto px-6 lg:px-12 relative z-10">
+          <div className="grid lg:grid-cols-12 gap-12 items-center">
             
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
-            >
-              <p className="hero-description">
-                Turn the ingredients you already have into amazing meals. Discover personalized recipes that help you save time, reduce food waste, and enjoy delicious possibilities every day.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
-            >
-              <div className="flex flex-row gap-3 sm:gap-6 lg:gap-8 justify-center mb-8 sm:mb-12 lg:mb-16 px-4">
-                <Link 
-                  href="/search" 
-                  className="animated-button hero-button"
-                  data-testid="start-cooking-button"
-                >
-                    Start Cooking
-                  <ArrowRight className="button-icon ml-2" style={{ color: 'var(--vintage-dark-green)' }} />
-                  </Link>
-                <button 
-                    onClick={() => {
-                      const element = document.getElementById('how-it-works');
-                      if (element) {
-                        element.scrollIntoView({ behavior: 'smooth' });
-                      }
-                    }}
-                    className="animated-button hero-button"
-                  data-testid="learn-more-button"
-                >
-                    <ArrowRight className="button-icon mr-2" style={{ color: 'var(--vintage-dark-green)' }} />
-                  Learn More
-                  </button>
-              </div>
-            </motion.div>
-
-            {/* Simple Stats Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
-            >
-              <div className="max-w-4xl mx-auto px-4">
-                <div className="grid grid-cols-3 gap-2 sm:gap-6 lg:gap-8 mb-8 sm:mb-12">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.0, duration: 0.8, ease: "easeOut" }}
-                    className="text-center"
-                  >
-                    <div className="text-xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-1 sm:mb-2">
-                      <CountUp 
-                        to={2847} 
-                        duration={4.0} 
-                        separator="," 
-                        className="count-up-text"
-                      />
-                    </div>
-                    <div className="text-white/90 text-xs sm:text-sm lg:text-base xl:text-lg">Recipes Available</div>
-                  </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.2, duration: 0.8, ease: "easeOut" }}
-                    className="text-center"
-                  >
-                    <div className="text-xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-1 sm:mb-2">
-                      <CountUp 
-                        to={156} 
-                        duration={4.0} 
-                        className="count-up-text"
-                        />
-                      </div>
-                      <div className="text-white/90 text-xs sm:text-sm lg:text-base xl:text-lg">Ingredients</div>
-                    </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.4, duration: 0.8, ease: "easeOut" }}
-                    className="text-center"
-                  >
-                    <div className="text-xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-1 sm:mb-2">
-                      <CountUp 
-                        to={98} 
-                        duration={4.0} 
-                        className="count-up-text"
-                      />%
-                    </div>
-                    <div className="text-white/90 text-xs sm:text-sm lg:text-base xl:text-lg">User Satisfaction</div>
-                  </motion.div>
+            {/* Left Content — Typography Focus */}
+            <div className="lg:col-span-7 order-2 lg:order-1">
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <div className="inline-block px-3 py-1 mb-6 border border-[var(--accent-gold)]/40 rounded-full text-sm font-medium tracking-widest uppercase" style={{ color: 'var(--accent-gold)' }}>
+                  Culinary Discovery
                 </div>
+              </motion.div>
+              <SplitText
+                text="Cook With Purpose"
+                tag="h1"
+                className="font-serif text-6xl md:text-8xl font-medium tracking-tighter leading-[0.9] mb-8"
+                delay={50}
+                duration={1.2}
+                ease="power4.out"
+                splitType="words"
+                from={{ opacity: 0, y: 40 }}
+                to={{ opacity: 1, y: 0 }}
+                threshold={0.1}
+                rootMargin="-50px"
+                style={{ color: 'var(--text-on-dark)' }}
+              />
+            
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8, duration: 1 }}
+              >
+                <p className="text-xl md:text-2xl font-serif leading-relaxed mb-10 max-w-md" style={{ color: 'var(--text-on-dark-muted)' }}>
+                  Transform the ingredients you already have into extraordinary, elegant meals without leaving your home.
+                </p>
+              </motion.div>
 
-                {/* Simple Call to Action */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.6, duration: 0.8, ease: "easeOut" }}
-                  className="text-center px-4"
-                >
-                <Link 
-                  href="/search" 
-                  className="animated-button-secondary explore-button explore-button-responsive font-extrabold inline-block"
-                  style={{ maxWidth: '300px' }}
-                >
-                      Browse Recipes 
-                      <ArrowRight className="button-icon ml-2" style={{ color: 'var(--vintage-warm-brown)' }} />
-                      </Link>
-                </motion.div>
-              </div>
-            </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1, duration: 0.8 }}
+                className="flex flex-col sm:flex-row gap-6"
+              >
+                <MagneticButton strength={20}>
+                  <Link 
+                    href="/search" 
+                    className="inline-flex items-center justify-center px-10 py-4 text-sm font-bold tracking-widest uppercase btn-fill-up btn-fill-gold" style={{ background: 'var(--accent-gold)', color: 'var(--bg-deep-olive)' }}
+                  >
+                    Begin Journey
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Link>
+                </MagneticButton>
+                <MagneticButton strength={15}>
+                  <button 
+                    onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="group inline-flex items-center justify-center px-8 py-4 text-sm font-bold tracking-widest uppercase border transition-colors" style={{ color: 'var(--text-on-dark)', borderColor: 'var(--text-on-dark-muted)' }}
+                  >
+                    Discover More
+                  </button>
+                </MagneticButton>
+              </motion.div>
+            </div>
+
+            {/* Right Content — Constrained Hero Image */}
+            <div className="lg:col-span-5 order-1 lg:order-2 relative lg:h-[420px] h-[300px]">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+                className="w-full h-full relative"
+              >
+                <div className="absolute inset-0 z-0 transform translate-x-4 translate-y-4" style={{ background: 'var(--bg-olive-surface)' }} />
+                <img 
+                  src="/discover.webp" 
+                  alt="Culinary spread" 
+                  className="w-full h-full object-cover relative z-10 grayscale-[20%] sepia-[10%] contrast-[1.1]"
+                />
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="why-ingredo" className="section-padding relative z-10">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-6xl mx-auto">
-            <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']}>
-              <h2 className="h2 text-white mb-12">Why Ingredo?</h2>
-            </FadeUp>
-            <div className="grid md:grid-cols-3 gap-8">
+      {/* ─── Features Section — Warm Brown Atmosphere ─── */}
+      <section id="why-ingredo" className="py-52 relative z-10" style={{ background: 'var(--bg-warm-brown)' }}>
+        <div className="container mx-auto px-6 lg:px-12 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
+            <div>
+              <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']}>
+                <h2 className="font-serif text-5xl lg:text-7xl font-medium tracking-tight mb-8" style={{ color: 'var(--text-on-dark)' }}>
+                  The Art of Resourcefulness.
+                </h2>
+                <p className="font-serif text-2xl mb-12" style={{ color: 'var(--text-on-dark-muted)' }}>
+                  A curated experience designed for the modern home chef who values flavor, zero waste, and elegance.
+                </p>
+              </FadeUp>
+            </div>
+            
+            <div className="flex flex-col gap-12">
               <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']} delay={200}>
-                <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-white hover:bg-white transition-all duration-300">
-                  <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
-                    <ChefHat className="h-6 w-6" style={{ color: '#FF6B35' }} />
+                <div className="flex items-start gap-6 relative before:absolute before:left-0 before:-bottom-6 before:w-full before:h-px" style={{ '--tw-before-bg': 'rgba(245,240,232,0.15)' } as React.CSSProperties}>
+                  <div className="mt-1">
+                    <span className="font-serif text-3xl italic" style={{ color: 'var(--accent-gold)' }}>01</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--foreground)' }}>Smart Recipe Matching</h3>
-                  <p className="text-gray-800/90">Our AI finds recipes that maximize your available ingredients and minimize shopping needs.</p>
+                  <div>
+                    <h3 className="text-xl tracking-tight uppercase font-bold mb-3" style={{ color: 'var(--text-on-dark)' }}>Intelligent Pairing</h3>
+                    <p className="leading-relaxed" style={{ color: 'var(--text-on-dark-muted)' }}>Our culinary algorithm discovers sophisticated flavor profiles using exactly what rests in your pantry.</p>
+                  </div>
                 </div>
               </FadeUp>
 
               <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']} delay={400}>
-                <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-white hover:bg-white transition-all duration-300">
-                  <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
-                    <Recycle className="h-6 w-6" style={{ color: '#4CAF50' }} />
+                <div className="flex items-start gap-6 relative before:absolute before:left-0 before:-bottom-6 before:w-full before:h-px">
+                  <div className="mt-1">
+                    <span className="font-serif text-3xl italic" style={{ color: 'var(--accent-gold)' }}>02</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--foreground)' }}>Reduce Food Waste</h3>
-                  <p className="text-gray-800/90">Use what you have before it spoils. Track expiration dates and get timely recipe suggestions.</p>
+                  <div>
+                    <h3 className="text-xl tracking-tight uppercase font-bold mb-3" style={{ color: 'var(--text-on-dark)' }}>Mindful Consumption</h3>
+                    <p className="leading-relaxed" style={{ color: 'var(--text-on-dark-muted)' }}>Embrace sustainable cooking habits by reviving forgotten ingredients before they perish.</p>
+                  </div>
                 </div>
               </FadeUp>
 
               <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']} delay={600}>
-                <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-white hover:bg-white transition-all duration-300">
-                  <div className="w-12 h-12 bg-vintage-warm-brown/20 rounded-lg flex items-center justify-center mb-4">
-                    <Heart className="h-6 w-6" style={{ color: '#E91E63' }} />
+                <div className="flex items-start gap-6">
+                  <div className="mt-1">
+                    <span className="font-serif text-3xl italic" style={{ color: 'var(--accent-gold)' }}>03</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--foreground)' }}>Save Favorites</h3>
-                  <p className="text-gray-800/90">Build your personal digital cookbook with recipes you love and neatly organize them into collections.</p>
+                  <div>
+                    <h3 className="text-xl tracking-tight uppercase font-bold mb-3" style={{ color: 'var(--text-on-dark)' }}>Curated Collection</h3>
+                    <p className="leading-relaxed" style={{ color: 'var(--text-on-dark-muted)' }}>Archive your masterpieces into a personal folio of enduring recipes.</p>
+                  </div>
                 </div>
               </FadeUp>
             </div>
@@ -265,105 +220,72 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Sample Recipes */}
-      <section id="popular-recipes" className="section-padding relative z-10">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-6xl mx-auto">
-            <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']}>
-              <h2 className="h2 text-white mb-12">Popular Recipes</h2>
-            </FadeUp>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sampleRecipes.map((recipe, index) => (
-                <FadeUp 
-                  key={recipe.id}
-                  allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']} 
-                  delay={400 + (index * 200)}
-                >
-                  <Card 
-                    className="overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer group"
-                    onMouseEnter={() => handleRecipeHover(recipe.id)}
-                    onMouseLeave={handleRecipeLeave}
-                  >
-                    <div className="relative overflow-hidden">
-                    <img 
-                      src={recipe.image}
-                      alt={recipe.title}
-                      className={`w-full h-48 object-cover transition-transform duration-300 ${
-                        hoveredRecipe === recipe.id ? 'scale-105' : ''
-                      }`}
-                      loading="lazy"
-                    />
-                      <div className={`absolute inset-0 bg-black/20 transition-opacity duration-300 ${
-                        hoveredRecipe === recipe.id ? 'opacity-100' : 'opacity-0'
-                      }`} />
-                      <div className={`absolute top-4 right-4 transition-opacity duration-300 ${
-                        hoveredRecipe === recipe.id ? 'opacity-100' : 'opacity-0'
-                      }`}>
-                        <Button 
-                          size="sm" 
-                          variant="secondary" 
-                          className="h-8 w-8 p-0 rounded-full"
-                          data-testid={`quick-bookmark-${recipe.id}`}
-                        >
-                          <Bookmark className="h-4 w-4" />
-                        </Button>
-                      </div>
+      {/* ─── Recipes Showcase — Cream Contrast ─── */}
+      <section id="popular-recipes" className="py-24 relative z-10 bg-background">
+        <div className="container mx-auto px-6 lg:px-12 relative z-10">
+          <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']}>
+            <div className="flex justify-between items-end mb-16 border-b border-border/60 pb-8">
+              <div className="flex-1 text-left">
+                <h2 className="font-serif text-5xl font-medium tracking-tight text-foreground mb-4">
+                  Featured Fare
+                </h2>
+                <div className="w-12 h-0.5 mb-6" style={{ background: 'var(--accent-gold)' }} />
+                <p className="text-xl font-serif italic max-w-2xl" style={{ color: 'var(--muted-foreground)' }}>
+                  Discover our most celebrated and thoughtfully composed culinary creations.
+                </p>
+              </div>
+              <Link href="/search" className="hidden md:flex items-center gap-2 text-sm uppercase tracking-widest font-bold hover:text-primary transition-colors">
+                View All <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </FadeUp>
+
+          <div className="grid md:grid-cols-3 gap-10">
+            {sampleRecipes.map((recipe, index) => (
+              <FadeUp 
+                key={recipe.id}
+                allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']} 
+                delay={200 + (index * 200)}
+              >
+                <TiltCard intensity={15} className="h-full">
+                  <div className="group cursor-pointer">
+                    <div className="relative overflow-hidden aspect-[16/10] mb-6 rounded-lg">
+                      <img 
+                        src={recipe.image}
+                        alt={recipe.title}
+                        className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
+                        loading="lazy"
+                      />
                     </div>
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex gap-1">
-                          {recipe.tags.map((tag) => (
-                            <Badge key={tag} variant="secondary" className="text-xs">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                        <div className="flex items-center text-muted-foreground text-sm">
-                          <Clock className="mr-1 h-3 w-3" />
-                          {recipe.time}
-                        </div>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                        <span>{recipe.time}</span>
+                        <span className="w-1 h-1 rounded-full bg-border"></span>
+                        <span>{recipe.tags[0]}</span>
                       </div>
-                      <h4 className="recipe-title mb-2 group-hover:text-vintage-warm-brown transition-colors">
+                      <h4 className="font-serif text-2xl font-medium text-foreground group-hover:text-primary transition-colors">
                         {recipe.title}
                       </h4>
-                      <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
-                        {recipe.description}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <Star className="h-4 w-4 text-accent fill-current" />
-                          <span className="text-sm font-medium">{recipe.rating}</span>
-                          <span className="text-muted-foreground text-sm">({recipe.reviews})</span>
-                        </div>
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                          data-testid={`view-recipe-${recipe.id}`}
-                        >
-                          View Recipe
-                          <ArrowRight className="ml-1 h-3 w-3" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </FadeUp>
-              ))}
-            </div>
+                    </div>
+                  </div>
+                </TiltCard>
+              </FadeUp>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* How It Works Section */}
-      <section id="how-it-works" className="section-padding relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="how-it-works-container w-full mx-auto text-center">
+      {/* ─── How It Works — Deep Olive Surface ─── */}
+      <section id="how-it-works" className="py-24 relative z-10 bg-[var(--bg-deep-olive)]">
+        <div className="container mx-auto px-6 lg:px-12 relative z-10">
+          <div className="w-full mx-auto text-left">
             <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']}>
-              <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-                <h2 className="how-it-works-heading">
+              <div className="text-left mb-8 sm:mb-12 lg:mb-16">
+                <h2 className="font-serif text-5xl font-medium tracking-tight mb-4 text-[var(--text-on-dark)]">
                   How It Works
                 </h2>
-                <p className="how-it-works-description">
+                <div className="w-12 h-0.5 mb-6 bg-[var(--accent-gold)]" />
+                <p className="text-xl font-serif italic max-w-2xl text-[var(--text-on-dark-muted)]">
                   Get started with Ingredo in just three simple steps
                 </p>
               </div>
@@ -372,14 +294,14 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Step 1 */}
             <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']} delay={400}>
-              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-white hover:bg-white transition-all duration-300">
-                <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
+              <div className="group p-10 border transition-all duration-300 hover:shadow-xl hover:shadow-gold/5 flex flex-col items-center text-center" style={{ background: 'var(--bg-olive-surface)', borderColor: 'rgba(245,240,232,0.1)' }}>
+                <div className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-serif font-bold mb-8 transition-transform group-hover:scale-110" style={{ background: 'var(--accent-gold)', color: 'var(--bg-deep-olive)' }}>
                   1
                 </div>
-                <h3 className="step-card-title">
+                <h3 className="font-serif text-2xl font-medium mb-4" style={{ color: 'var(--text-on-dark)' }}>
                   Add Your Ingredients
                 </h3>
-                <p className="step-card-description">
+                <p className="text-base leading-relaxed max-w-[280px]" style={{ color: 'var(--text-on-dark-muted)' }}>
                   Simply type or select the ingredients you have in your kitchen. Our smart system will recognize them instantly.
                 </p>
               </div>
@@ -387,29 +309,29 @@ export default function Home() {
 
             {/* Step 2 */}
             <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']} delay={600}>
-              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-white hover:bg-white transition-all duration-300">
-                <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
+              <div className="group p-10 border transition-all duration-300 hover:shadow-xl hover:shadow-gold/5 flex flex-col items-center text-center" style={{ background: 'var(--bg-olive-surface)', borderColor: 'rgba(245,240,232,0.1)' }}>
+                <div className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-serif font-bold mb-8 transition-transform group-hover:scale-110" style={{ background: 'var(--accent-gold)', color: 'var(--bg-deep-olive)' }}>
                   2
                 </div>
-                <h3 className="step-card-title">
+                <h3 className="font-serif text-2xl font-medium mb-4" style={{ color: 'var(--text-on-dark)' }}>
                   Discover Recipes
                 </h3>
-                <p className="step-card-description">
-                  Browse through perfectly matched recipes or explore creative suggestions based on your available ingredients.
+                <p className="text-base leading-relaxed max-w-[280px]" style={{ color: 'var(--text-on-dark-muted)' }}>
+                  Browse through perfectly matched recipes or explore suggestions based on your available ingredients.
                 </p>
               </div>
             </FadeUp>
 
             {/* Step 3 */}
             <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']} delay={800}>
-              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-white hover:bg-white transition-all duration-300">
-                <div className="step-number w-20 h-20 bg-vintage-warm-brown rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4" style={{ color: 'var(--vintage-dark-green)' }}>
+              <div className="group p-10 border transition-all duration-300 hover:shadow-xl hover:shadow-gold/5 flex flex-col items-center text-center" style={{ background: 'var(--bg-olive-surface)', borderColor: 'rgba(245,240,232,0.1)' }}>
+                <div className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-serif font-bold mb-8 transition-transform group-hover:scale-110" style={{ background: 'var(--accent-gold)', color: 'var(--bg-deep-olive)' }}>
                   3
                 </div>
-                <h3 className="step-card-title">
+                <h3 className="font-serif text-2xl font-medium mb-4" style={{ color: 'var(--text-on-dark)' }}>
                   Start Cooking
                 </h3>
-                <p className="step-card-description">
+                <p className="text-base leading-relaxed max-w-[280px]" style={{ color: 'var(--text-on-dark-muted)' }}>
                   Follow step-by-step instructions and create delicious meals while reducing food waste in your kitchen.
                 </p>
               </div>
@@ -418,15 +340,16 @@ export default function Home() {
 
             {/* CTA Button */}
             <FadeUp allowedSections={['why-ingredo', 'popular-recipes', 'how-it-works']} delay={1000}>
-              <div className="text-center mt-8 sm:mt-10 lg:mt-12">
-                <Link 
-                  href="/search" 
-                  className="animated-button explore-button explore-button-responsive font-extrabold"
-                  style={{ maxWidth: '300px' }}
-                >
-                  Get Started Now
-                  <ArrowRight className="button-icon ml-2" style={{ color: 'var(--vintage-warm-brown)' }} />
+              <div className="text-center mt-10 lg:mt-14">
+                <MagneticButton strength={15}>
+                  <Link 
+                    href="/search" 
+                    className="inline-flex items-center justify-center px-10 py-4 text-sm font-bold tracking-widest uppercase btn-fill-up btn-fill-gold" style={{ background: 'var(--accent-gold)', color: 'var(--bg-deep-olive)' }}
+                  >
+                    Get Started Now
+                    <ArrowRight className="ml-2 w-4 h-4" />
                   </Link>
+                </MagneticButton>
               </div>
             </FadeUp>
           </div>

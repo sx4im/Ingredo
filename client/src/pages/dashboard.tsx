@@ -51,12 +51,10 @@ interface ExpiringItem {
 
 export default function Dashboard() {
   const { user } = useAuth();
-  const { 
-    favoriteRecipes, 
-    pantryItems, 
-    shoppingList, 
-    getExpiringItems 
-  } = useAppStore();
+  const favoriteRecipes = useAppStore(state => state.favoriteRecipes);
+  const pantryItems = useAppStore(state => state.pantryItems);
+  const shoppingList = useAppStore(state => state.shoppingList);
+  const getExpiringItems = useAppStore(state => state.getExpiringItems);
   
 
   const [quickStats] = React.useState<QuickStats>({
@@ -89,7 +87,7 @@ export default function Dashboard() {
       title: "Cooked Pasta Marinara",
       description: "Marked as completed",
       timestamp: "1 day ago",
-      icon: <ChefHat className="h-4 w-4 text-orange-500" />
+      icon: <ChefHat className="h-4 w-4 text-primary" />
     },
     {
       id: "4",
@@ -97,7 +95,7 @@ export default function Dashboard() {
       title: "Added Basil",
       description: "Added to shopping list",
       timestamp: "2 days ago",
-      icon: <ShoppingCart className="h-4 w-4 text-blue-500" />
+      icon: <ShoppingCart className="h-4 w-4 text-primary" />
     }
   ]);
 
@@ -134,25 +132,9 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="relative min-h-screen">
-      {/* Background Image */}
-      <div 
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(/dashboard.webp)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
+    <div className="relative min-h-screen bg-grain bg-background font-sans text-foreground py-12">
       
-      {/* Blue Overlay */}
-      <div 
-        className="fixed inset-0 z-10"
-        style={{ backgroundColor: 'rgba(30, 64, 175, 0.4)' }}
-      />
-      
-      <div className="relative z-20 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="relative z-20 container mx-auto px-6 lg:px-12 py-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <motion.div
@@ -162,21 +144,22 @@ export default function Dashboard() {
             className="mb-8"
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <h1 className="text-3xl font-bold text-white mb-2 text-left">
-                  {getGreeting()}{user?.name?.split(' ')[0] ? `, ${user.name.split(' ')[0]}` : ''}! 
+              <div className="relative pb-1">
+                <h1 className="font-serif text-4xl lg:text-5xl font-medium tracking-tight text-foreground mb-4 leading-tight">
+                  {getGreeting()}{user?.name?.split(' ')[0] ? `, ${user.name.split(' ')[0]}` : ''}.
                 </h1>
-                <p className="text-white text-left">
-                  Ready to cook something amazing today?
+                <div className="w-12 h-0.5 mb-6" style={{ background: 'var(--accent-gold)' }} />
+                <p className="text-muted-foreground text-lg italic font-serif">
+                  Your culinary digest for today.
                 </p>
               </div>
               
               <div className="flex items-center gap-3">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="btn-fill-up">
                   <Bell className="h-4 w-4 mr-2" />
                   Notifications
                 </Button>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="btn-fill-up">
                   <Settings className="h-4 w-4 mr-2" />
                   Settings
                 </Button>
@@ -184,65 +167,64 @@ export default function Dashboard() {
             </div>
           </motion.div>
 
-          {/* Quick Stats */}
+          {/* Quick Stats - Editorial Redesign */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
           >
             <motion.div variants={itemVariants}>
-              <Card className="bg-gradient-to-br from-red-50 to-pink-50 border-red-200 hover:shadow-lg transition-all duration-300">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
+              <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+                <CardContent className="p-8">
+                  <div className="flex flex-col items-start gap-4">
+                    <Heart className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Saved Recipes</p>
-                      <p className="text-3xl font-bold text-gray-900">{quickStats.savedRecipes}</p>
+                      <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>{quickStats.savedRecipes}</p>
+                      <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Saved Recipes</p>
                     </div>
-                    <Heart className="h-8 w-8 text-red-600" />
                   </div>
                 </CardContent>
               </Card>
             </motion.div>
 
             <motion.div variants={itemVariants}>
-              <Card className="bg-gradient-to-br from-orange-50 to-yellow-50 border-orange-200 hover:shadow-lg transition-all duration-300">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
+              <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+                <CardContent className="p-8">
+                  <div className="flex flex-col items-start gap-4">
+                    <ChefHat className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Recipes Cooked</p>
-                      <p className="text-3xl font-bold text-gray-900">{quickStats.cookedRecipes}</p>
+                      <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>{quickStats.cookedRecipes}</p>
+                      <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Recipes Cooked</p>
                     </div>
-                    <ChefHat className="h-8 w-8 text-orange-600" />
                   </div>
                 </CardContent>
               </Card>
             </motion.div>
 
             <motion.div variants={itemVariants}>
-              <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 hover:shadow-lg transition-all duration-300">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
+              <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+                <CardContent className="p-8">
+                  <div className="flex flex-col items-start gap-4">
+                    <Package className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Pantry Items</p>
-                      <p className="text-3xl font-bold text-gray-900">{quickStats.pantryItems}</p>
+                      <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>{quickStats.pantryItems}</p>
+                      <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Pantry Items</p>
                     </div>
-                  <Package className="h-8 w-8 text-green-600" />
-                    
                   </div>
                 </CardContent>
               </Card>
             </motion.div>
 
             <motion.div variants={itemVariants}>
-              <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 hover:shadow-lg transition-all duration-300">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
+              <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+                <CardContent className="p-8">
+                  <div className="flex flex-col items-start gap-4">
+                    <ShoppingCart className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Shopping Items</p>
-                      <p className="text-3xl font-bold text-gray-900">{quickStats.shoppingItems}</p>
+                      <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>{quickStats.shoppingItems}</p>
+                      <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Shopping Items</p>
                     </div>
-                    <ShoppingCart className="h-8 w-8 text-blue-600" />
                   </div>
                 </CardContent>
               </Card>
@@ -262,39 +244,38 @@ export default function Dashboard() {
               >
                 <Card className="bg-white/95 backdrop-blur-sm h-full">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="font-serif text-2xl font-medium tracking-tight">
                       Quick Actions
-                      <Zap className="h-6 w-6 text-yellow-500" />
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <Link href="/search">
-                        <Button className="w-full h-16 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white justify-start shadow-md hover:shadow-lg transition-all duration-300">
-                          <ChefHat className="h-5 w-5 mr-3" />
-                          <div className="text-left">
-                            <div className="font-semibold">Find Recipes</div>
-                            <div className="text-sm opacity-90">Discover new meals</div>
+                        <Button variant="outline" className="w-full h-auto py-4 flex flex-col items-center justify-center gap-2">
+                          <ChefHat className="h-5 w-5 text-primary" />
+                          <div className="text-center">
+                            <div className="font-bold text-[10px] tracking-widest uppercase">Find Recipes</div>
+                            <div className="text-[10px] text-muted-foreground mt-0.5">Discover new meals</div>
                           </div>
                         </Button>
                       </Link>
                       
                       <Link href="/pantry">
-                        <Button className="w-full h-16 bg-white hover:bg-gradient-to-r hover:from-orange-500 hover:to-red-500 border-2 border-gray-200 hover:border-transparent text-gray-900 hover:text-white justify-start shadow-md hover:shadow-lg transition-all duration-300">
-                          <Package className="h-5 w-5 mr-3" />
-                          <div className="text-left">
-                            <div className="font-semibold">Manage Pantry</div>
-                            <div className="text-sm opacity-90">Track ingredients</div>
+                        <Button variant="outline" className="w-full h-auto py-4 flex flex-col items-center justify-center gap-2">
+                          <Package className="h-5 w-5 text-secondary" />
+                          <div className="text-center">
+                            <div className="font-bold text-[10px] tracking-widest uppercase">Manage Pantry</div>
+                            <div className="text-[10px] text-muted-foreground mt-0.5">Track ingredients</div>
                           </div>
                         </Button>
                       </Link>
                       
                       <Link href="/shopping">
-                        <Button className="w-full h-16 bg-white hover:bg-gradient-to-r hover:from-green-500 hover:to-emerald-500 border-2 border-gray-200 hover:border-transparent text-gray-900 hover:text-white justify-start shadow-md hover:shadow-lg transition-all duration-300 md:col-span-2">
-                          <ShoppingCart className="h-5 w-5 mr-3" />
-                          <div className="text-left">
-                            <div className="font-semibold">Shopping List</div>
-                            <div className="text-sm opacity-90">Plan your shopping</div>
+                        <Button variant="outline" className="w-full h-auto py-4 flex flex-col items-center justify-center gap-2">
+                          <ShoppingCart className="h-5 w-5 text-accent" />
+                          <div className="text-center">
+                            <div className="font-bold text-[10px] tracking-widest uppercase">Shopping List</div>
+                            <div className="text-[10px] text-muted-foreground mt-0.5">Plan your shopping</div>
                           </div>
                         </Button>
                       </Link>
@@ -313,9 +294,8 @@ export default function Dashboard() {
               >
                 <Card className="bg-white/95 backdrop-blur-sm h-full">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="font-serif text-2xl font-medium tracking-tight">
                       Recent Activity
-                      <Clock className="h-6 w-6 text-blue-500 stroke-2" fill="none" />
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="recent-activity-mobile">
@@ -354,9 +334,8 @@ export default function Dashboard() {
               >
                 <Card className="bg-white/95 backdrop-blur-sm h-full flex flex-col">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="font-serif text-2xl font-medium tracking-tight">
                       Expiring Soon
-                      <Target className="h-6 w-6 text-orange-500" />
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="flex-1 flex flex-col">
@@ -364,7 +343,7 @@ export default function Dashboard() {
                       <div className="flex flex-col h-full">
                         <div className="space-y-3 overflow-y-auto flex-1 min-h-[200px]">
                           {expiringItems.slice(0, 5).map((item) => (
-                            <div key={item.id} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                            <div key={item.id} className="flex items-center justify-between p-3 bg-secondary/10 rounded-lg">
                               <div className="flex-1 min-w-0">
                                 <p className="font-medium text-gray-900 truncate text-sm">{item.name}</p>
                                 <p className="text-xs text-gray-600">Expires in {item.daysLeft ?? 0} days</p>
@@ -395,9 +374,8 @@ export default function Dashboard() {
               >
                 <Card className="bg-white/95 backdrop-blur-sm h-full cooking-tips-card">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="font-serif text-2xl font-medium tracking-tight">
                       Cooking Tips
-                      <TrendingUp className="h-6 w-6 text-green-500 stroke-2" fill="none" />
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="cooking-tips-content">
@@ -408,9 +386,9 @@ export default function Dashboard() {
                           Store fresh herbs in a glass of water in the fridge to keep them fresh longer.
                         </p>
                       </div>
-                      <div className="p-4 bg-blue-50 rounded-lg cooking-tips-item">
-                        <h4 className="font-medium text-blue-700 mb-1 text-2xl">Trending</h4>
-                        <p className="text-xs text-blue-800">
+                       <div className="p-4 bg-secondary/10 rounded-lg cooking-tips-item">
+                        <h4 className="font-medium text-secondary mb-1 text-2xl">Trending</h4>
+                        <p className="text-xs text-secondary/80">
                           One-pot meals are perfect for busy weeknights and easy cleanup.
                         </p>
                       </div>

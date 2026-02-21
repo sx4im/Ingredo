@@ -37,7 +37,10 @@ interface PantryItem {
 }
 
 export default function Pantry() {
-  const { pantryItems, addPantryItem, updatePantryItem, removePantryItem } = useAppStore();
+  const pantryItems = useAppStore(state => state.pantryItems);
+  const addPantryItem = useAppStore(state => state.addPantryItem);
+  const updatePantryItem = useAppStore(state => state.updatePantryItem);
+  const removePantryItem = useAppStore(state => state.removePantryItem);
   const { toast } = useToast();
   
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -98,7 +101,7 @@ export default function Pantry() {
   }, [pantryItems, searchQuery, selectedCategory, sortBy, sortOrder]);
 
   // Get expiry status
-  const getExpiryStatus = (expiryDate: string) => {
+  const getExpiryStatus = (expiryDate: string): { status: string; color: "default" | "secondary" | "destructive" | "outline"; days: number } => {
     const today = new Date();
     const expiry = new Date(expiryDate);
     const diffTime = expiry.getTime() - today.getTime();
@@ -182,25 +185,8 @@ export default function Pantry() {
   };
 
   return (
-    <div className="relative min-h-screen">
-      {/* Background Image */}
-      <div 
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(/pantry.webp)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
-      
-      {/* Blue Overlay */}
-      <div 
-        className="fixed inset-0 z-10"
-        style={{ backgroundColor: 'rgba(30, 64, 175, 0.4)' }}
-      />
-      
-      <div className="relative z-20 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="relative min-h-screen bg-grain bg-background font-sans text-foreground py-12">
+      <div className="relative z-20 container mx-auto px-6 lg:px-12">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <motion.div
@@ -210,11 +196,12 @@ export default function Pantry() {
             className="mb-8"
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <h1 className="text-3xl font-bold text-white mb-2 text-left">
-                  My Pantry 
+              <div className="relative pb-1">
+                <h1 className="font-serif text-4xl lg:text-5xl font-medium tracking-tight text-foreground mb-4">
+                  My Pantry
                 </h1>
-                <p className="text-white text-left">
+                <div className="w-12 h-0.5 mb-6" style={{ background: 'var(--accent-gold)' }} />
+                <p className="text-muted-foreground text-lg italic font-serif">
                   Manage your ingredients and track expiry dates
                 </p>
               </div>
@@ -229,7 +216,7 @@ export default function Pantry() {
                 
                 <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
                   <DialogTrigger asChild>
-                    <Button className="bg-green-600 hover:bg-green-700">
+                    <Button>
                       <Plus className="h-4 w-4 mr-2" />
                       Add Item
                     </Button>
@@ -306,7 +293,7 @@ export default function Pantry() {
                       <div className="flex gap-2 pt-4">
                         <Button
                           onClick={editingItem ? handleUpdateItem : handleAddItem}
-                          className="flex-1 bg-green-600 hover:bg-green-700"
+                          className="flex-1 bg-primary hover:bg-primary/90"
                         >
                           {editingItem ? "Update Item" : "Add Item"}
                         </Button>
@@ -341,52 +328,52 @@ export default function Pantry() {
             transition={{ delay: 0.2 }}
             className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
           >
-            <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+            <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+              <CardContent className="p-8">
+                <div className="flex flex-col items-start gap-4">
+                  <Package className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Total Items</p>
-                    <p className="text-3xl font-bold text-gray-900">{pantryItems.length}</p>
+                    <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>{pantryItems.length}</p>
+                    <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Total Items</p>
                   </div>
-                  <Package className="h-8 w-8 text-green-600" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-red-50 to-pink-50 border-red-200">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+            <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+              <CardContent className="p-8">
+                <div className="flex flex-col items-start gap-4">
+                  <AlertTriangle className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Expiring Soon</p>
-                    <p className="text-3xl font-bold text-gray-900">{getExpiringCount()}</p>
+                    <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>{getExpiringCount()}</p>
+                    <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Expiring Soon</p>
                   </div>
-                  <AlertTriangle className="h-8 w-8 text-red-600" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+            <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+              <CardContent className="p-8">
+                <div className="flex flex-col items-start gap-4">
+                  <CheckCircle className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Categories</p>
-                    <p className="text-3xl font-bold text-gray-900">{new Set(pantryItems.map(item => item.category)).size}</p>
+                    <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>{new Set(pantryItems.map(item => item.category)).size}</p>
+                    <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Categories</p>
                   </div>
-                  <CheckCircle className="h-8 w-8 text-blue-600" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+            <Card className="border-0 shadow-sm transition-colors" style={{ background: 'var(--bg-deep-olive)' }}>
+              <CardContent className="p-8">
+                <div className="flex flex-col items-start gap-4">
+                  <Clock className="h-5 w-5" style={{ color: 'var(--accent-gold)' }} />
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Fresh Items</p>
-                    <p className="text-3xl font-bold text-gray-900">
+                    <p className="text-3xl font-serif font-medium mb-1" style={{ color: 'var(--text-on-dark)' }}>
                       {pantryItems.filter(item => getExpiryStatus(item.expiryDate).status === "fresh").length}
                     </p>
+                    <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--text-on-dark-muted)' }}>Fresh Items</p>
                   </div>
-                  <Clock className="h-8 w-8 text-purple-600" />
                 </div>
               </CardContent>
             </Card>
@@ -497,7 +484,7 @@ export default function Pantry() {
                   </p>
                   {pantryItems.length === 0 && (
                     <div className="flex justify-center">
-                      <Button onClick={() => setShowAddDialog(true)} className="bg-green-600 hover:bg-green-700">
+                      <Button onClick={() => setShowAddDialog(true)}>
                         <Plus className="h-4 w-4 mr-2" />
                         Add Your First Item
                       </Button>
@@ -524,7 +511,7 @@ export default function Pantry() {
                       >
                         <Card className={`hover:shadow-lg transition-all duration-300 ${
                           expiryStatus.status === "expired" ? "border-red-200 bg-red-50" :
-                          expiryStatus.status === "expiring" ? "border-orange-200 bg-orange-50" :
+                          expiryStatus.status === "expiring" ? "border-secondary/30 bg-secondary/10" :
                           "border-gray-200"
                         }`}>
                           <CardContent className="p-6">
@@ -563,7 +550,7 @@ export default function Pantry() {
                             </div>
                             
                             <Badge 
-                              variant={expiryStatus.color as any}
+                              variant={expiryStatus.color}
                               className="w-full justify-center"
                             >
                               {expiryStatus.status === "expired" && "Expired"}

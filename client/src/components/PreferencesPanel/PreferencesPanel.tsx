@@ -64,7 +64,7 @@ function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue;
 }
 
-export function PreferencesPanel({ onFiltersChange, className }: PreferencesPanelProps) {
+export const PreferencesPanel = React.memo(function PreferencesPanel({ onFiltersChange, className }: PreferencesPanelProps) {
   const [location, navigate] = useLocation();
   
   // Custom hook to manage search params since wouter doesn't have useSearchParams
@@ -257,7 +257,7 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
                 <Filter className="h-5 w-5 text-gray-700" />
                 <span className="text-gray-800">Filters</span>
                 {activeFilterCount > 0 && (
-                  <Badge variant="secondary" className="h-6 text-xs bg-blue-100 text-blue-800 border-blue-200">
+                  <Badge variant="secondary" className="h-6 text-xs bg-primary/20 text-primary border-primary/30">
                     {activeFilterCount}
                   </Badge>
                 )}
@@ -280,7 +280,7 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
                     variant="ghost"
                     size="sm"
                     onClick={clearAllFilters}
-                    className="h-auto py-1 px-3 text-xs text-orange-600 hover:text-orange-700 hover:bg-orange-50 border border-orange-200"
+                    className="h-auto py-1 px-3 text-xs text-secondary hover:text-secondary/80 hover:bg-secondary/10 border border-secondary/20"
                     data-testid="clear-all-filters"
                   >
                     Clear All
@@ -291,14 +291,14 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
                     <Badge 
                       key={index}
                       variant="secondary" 
-                      className="text-xs gap-1 bg-orange-50 text-orange-800 border border-orange-200 hover:bg-orange-100"
+                      className="text-xs gap-1 bg-secondary/10 text-secondary border border-secondary/20 hover:bg-secondary/20"
                     >
                       {filter.label}
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={filter.onRemove}
-                        className="h-auto w-auto p-0 hover:bg-transparent hover:text-orange-600"
+                        className="h-auto w-auto p-0 hover:bg-transparent hover:text-secondary"
                       >
                         <X className="h-3 w-3" />
                       </Button>
@@ -318,7 +318,7 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
                 >
                   <SelectTrigger 
                     data-testid="diet-select"
-                    className="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                    className="border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   >
                     <SelectValue />
                   </SelectTrigger>
@@ -341,7 +341,7 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
                   max={12}
                   value={filters.servings}
                   onChange={(e) => updateFilter("servings", parseInt(e.target.value) || 4)}
-                  className="w-full border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  className="w-full border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   data-testid="servings-input"
                 />
               </div>
@@ -351,7 +351,7 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
             <div className="space-y-4 p-4 bg-white rounded-lg border border-gray-200 mt-6">
               <div className="flex justify-between items-center">
                 <Label className="text-sm font-semibold text-gray-700">Max Cook Time</Label>
-                <span className="text-sm font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">{filters.maxCookTime} minutes</span>
+                <span className="text-sm font-medium text-primary bg-primary/10 px-2 py-1 rounded">{filters.maxCookTime} minutes</span>
               </div>
               <Slider
                 value={[filters.maxCookTime]}
@@ -377,7 +377,7 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
                   <RadioGroupItem 
                     value="any" 
                     id="any" 
-                    className="border border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-200"
+                    className="border border-gray-300 text-primary focus:ring-2 focus:ring-primary/20"
                   />
                   <Label htmlFor="any" className="text-sm font-medium text-gray-700">Any</Label>
                 </div>
@@ -417,7 +417,7 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
               >
                 <SelectTrigger 
                   data-testid="cuisine-select"
-                  className="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  className="border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 >
                   <SelectValue placeholder="Any cuisine" />
                 </SelectTrigger>
@@ -443,8 +443,8 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
                     className={cn(
                       "justify-start text-sm h-10 font-medium transition-all duration-200",
                       filters.allergies.includes(allergy.value)
-                        ? "bg-orange-500 hover:bg-orange-600 text-white border-orange-500 shadow-md"
-                        : "border border-gray-300 text-gray-700 hover:border-orange-300 hover:bg-orange-50 hover:text-orange-700"
+                        ? "bg-secondary hover:bg-secondary/90 text-white border-secondary shadow-md"
+                        : "border border-gray-300 text-gray-700 hover:border-secondary/50 hover:bg-secondary/10 hover:text-secondary"
                     )}
                     data-testid={`allergy-${allergy.value}`}
                   >
@@ -474,4 +474,4 @@ export function PreferencesPanel({ onFiltersChange, className }: PreferencesPane
       </Card>
     </Collapsible>
   );
-}
+});

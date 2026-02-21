@@ -116,55 +116,27 @@ export default function Login() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-4">
-      {/* Background with gradient and particles */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50" />
-      <div className="absolute inset-0 bg-[url('/login.webp')] bg-cover bg-center opacity-20" />
-      
-      {/* Floating particles animation */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-blue-200 rounded-full opacity-60"
-            animate={{
-              x: [0, 100, 0],
-              y: [0, -100, 0],
-              scale: [1, 1.5, 1],
-            }}
-            transition={{
-              duration: 10 + i * 2,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
-      </div>
-
+    <div className="relative min-h-screen flex items-center justify-center p-4" style={{ background: 'var(--bg-deep-olive)' }}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="relative z-10 w-full max-w-md"
       >
-        <Card className="backdrop-blur-xl bg-white/80 border-white/20 shadow-2xl">
+        <Card className="bg-[var(--bg-cream)] border-0 shadow-2xl">
           <CardHeader className="space-y-2 text-center pb-8">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-              className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4"
+              className="mx-auto w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mb-4"
             >
               <img src="/logo.webp" alt="Ingredo" className="w-8 h-8 sm:w-10 sm:h-10" />
             </motion.div>
-            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <CardTitle className="font-serif text-2xl font-medium text-foreground">
               Welcome back
             </CardTitle>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground italic font-serif">
               Sign in to your account to continue cooking
             </p>
           </CardHeader>
@@ -173,19 +145,19 @@ export default function Login() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Email Field */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="email" className="text-sm font-medium text-foreground">
                   Email address
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                   <Input
                     id="email"
                     name="email"
                     type="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className={`pl-10 h-12 bg-white/50 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 ${
-                      errors.email ? "border-red-500 focus:border-red-500" : ""
+                    className={`pl-10 h-12 bg-background border-border focus:border-primary focus:ring-primary/20 ${
+                      errors.email ? "border-destructive focus:border-destructive" : ""
                     }`}
                     placeholder="Enter your email"
                     disabled={isLoading}
@@ -207,19 +179,19 @@ export default function Login() {
 
               {/* Password Field */}
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="password" className="text-sm font-medium text-foreground">
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                   <Input
                     id="password"
                     name="password"
                     type={showPassword ? "text" : "password"}
                     value={formData.password}
                     onChange={handleInputChange}
-                    className={`pl-10 pr-10 h-12 bg-white/50 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 ${
-                      errors.password ? "border-red-500 focus:border-red-500" : ""
+                    className={`pl-10 pr-10 h-12 bg-background border-border focus:border-primary focus:ring-primary/20 ${
+                      errors.password ? "border-destructive focus:border-destructive" : ""
                     }`}
                     placeholder="Enter your password"
                     disabled={isLoading}
@@ -227,7 +199,7 @@ export default function Login() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
                     disabled={isLoading}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -251,7 +223,7 @@ export default function Login() {
               <div className="flex justify-end">
                 <button
                   type="button"
-                  className="text-sm text-blue-600 hover:text-blue-500 transition-colors"
+                  className="text-sm text-primary hover:text-primary/80 transition-colors"
                   onClick={() => toast({ title: "Feature coming soon", description: "Password reset will be available soon." })}
                 >
                   Forgot password?
@@ -261,7 +233,7 @@ export default function Login() {
               {/* Submit Button */}
               <Button
                 type="submit"
-                className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium transition-all duration-200 transform hover:scale-[1.02]"
+                className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-200"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -275,9 +247,9 @@ export default function Login() {
 
             {/* Divider */}
             <div className="relative">
-              <Separator className="bg-gray-200" />
+              <Separator className="bg-border" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="bg-white px-4 text-sm text-gray-500">or continue with</span>
+                <span className="bg-card px-4 text-sm text-muted-foreground">or continue with</span>
               </div>
             </div>
 
@@ -288,7 +260,7 @@ export default function Login() {
                 variant="outline"
                 onClick={handleGoogleLogin}
                 disabled={isLoading}
-                className="h-12 bg-white/50 border-gray-200 hover:bg-white/80 transition-all duration-200"
+                className="h-12 bg-background border-border hover:bg-muted transition-all duration-200"
               >
                 <Chrome className="h-4 w-4 mr-2" />
                 Google
@@ -298,7 +270,7 @@ export default function Login() {
                 variant="outline"
                 onClick={handleGitHubLogin}
                 disabled={isLoading}
-                className="h-12 bg-white/50 border-gray-200 hover:bg-white/80 transition-all duration-200"
+                className="h-12 bg-background border-border hover:bg-muted transition-all duration-200"
               >
                 <Github className="h-4 w-4 mr-2" />
                 GitHub
@@ -307,11 +279,11 @@ export default function Login() {
 
             {/* Sign Up Link */}
             <div className="text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 Don't have an account?{" "}
                 <Link
                   href="/auth/signup"
-                  className="text-blue-600 hover:text-blue-500 font-medium transition-colors"
+                  className="text-primary hover:text-primary/80 font-medium transition-colors"
                 >
                   Sign up
                 </Link>

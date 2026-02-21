@@ -7,48 +7,60 @@ import { ErrorBoundary } from "@/components/error-boundary";
 import { AppShell } from "@/components/app-shell";
 import { AuthProvider } from "@/lib/auth-context";
 import { Analytics } from "@vercel/analytics/react";
+import { CustomCursor } from "@/components/effects/CustomCursor";
 
-// Pages
-import Home from "@/pages/home";
-import Search from "@/pages/search";
-import Recipe from "@/pages/recipe";
-import Profile from "@/pages/profile";
-import Admin from "@/pages/admin";
-import NotFound from "@/pages/not-found";
-import Dashboard from "@/pages/dashboard";
-import Pantry from "@/pages/pantry";
-import Shopping from "@/pages/shopping";
-import Favorites from "@/pages/favorites";
-import Settings from "@/pages/settings";
+import { lazy, Suspense } from "react";
+import { Loader2 } from "lucide-react";
 
-// Auth Pages
-import Login from "@/pages/auth/login";
-import Signup from "@/pages/auth/signup";
+// Lazy-loaded Pages
+const Home = lazy(() => import("@/pages/home"));
+const Search = lazy(() => import("@/pages/search"));
+const Recipe = lazy(() => import("@/pages/recipe"));
+const Profile = lazy(() => import("@/pages/profile"));
+const Admin = lazy(() => import("@/pages/admin"));
+const NotFound = lazy(() => import("@/pages/not-found"));
+const Dashboard = lazy(() => import("@/pages/dashboard"));
+const Pantry = lazy(() => import("@/pages/pantry"));
+const Shopping = lazy(() => import("@/pages/shopping"));
+const Favorites = lazy(() => import("@/pages/favorites"));
+const Settings = lazy(() => import("@/pages/settings"));
+
+// Lazy-loaded Auth Pages
+const Login = lazy(() => import("@/pages/auth/login"));
+const Signup = lazy(() => import("@/pages/auth/signup"));
 
 function AppRouter() {
   return (
-    <Switch>
-        {/* Public Routes */}
-        <Route path="/" component={Home} />
-        <Route path="/search" component={Search} />
-        <Route path="/recipe/:slug" component={Recipe} />
-        
-        {/* Auth Routes */}
-        <Route path="/auth/login" component={Login} />
-        <Route path="/auth/signup" component={Signup} />
-        
-        {/* Protected Routes */}
-        <Route path="/dashboard" component={Dashboard} />
-        <Route path="/pantry" component={Pantry} />
-        <Route path="/shopping" component={Shopping} />
-        <Route path="/favorites" component={Favorites} />
-        <Route path="/settings" component={Settings} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/admin" component={Admin} />
-        
-      {/* 404 */}
-      <Route component={NotFound} />
-    </Switch>
+    <Suspense 
+      fallback={
+        <div className="flex h-[50vh] w-full items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      }
+    >
+      <Switch>
+          {/* Public Routes */}
+          <Route path="/" component={Home} />
+          <Route path="/search" component={Search} />
+          <Route path="/recipe/:slug" component={Recipe} />
+          
+          {/* Auth Routes */}
+          <Route path="/auth/login" component={Login} />
+          <Route path="/auth/signup" component={Signup} />
+          
+          {/* Protected Routes */}
+          <Route path="/dashboard" component={Dashboard} />
+          <Route path="/pantry" component={Pantry} />
+          <Route path="/shopping" component={Shopping} />
+          <Route path="/favorites" component={Favorites} />
+          <Route path="/settings" component={Settings} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/admin" component={Admin} />
+          
+        {/* 404 */}
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
   );
 }
 
@@ -58,6 +70,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <TooltipProvider>
+            <CustomCursor />
             <Router>
               <AppShell>
                 <AppRouter />

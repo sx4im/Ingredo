@@ -62,14 +62,14 @@ export default {
           ring: "var(--sidebar-ring)",
         },
         vintage: {
-          "dark-green": "var(--vintage-dark-green)", // Now vibrant blue
-          "warm-brown": "var(--vintage-warm-brown)", // Now warm amber
-          "light-beige": "var(--vintage-light-beige)", // Now clean white
+          "dark-green": "var(--accent-olive)",
+          "warm-brown": "var(--accent-terracotta)",
+          "light-beige": "var(--bg-cream)",
         },
       },
       fontFamily: {
-        sans: ["var(--font-sans)"],
-        serif: ["var(--font-serif)"],
+        sans: ["Manrope", "sans-serif"],
+        serif: ["'Cormorant Garamond'", "serif"],
         mono: ["var(--font-mono)"],
       },
       keyframes: {
