@@ -7,7 +7,6 @@ import { ErrorBoundary } from "@/components/error-boundary";
 import { AppShell } from "@/components/app-shell";
 import { AuthProvider } from "@/lib/auth-context";
 import { Analytics } from "@vercel/analytics/react";
-import { CustomCursor } from "@/components/effects/CustomCursor";
 
 import { lazy, Suspense } from "react";
 import { Loader2 } from "lucide-react";
@@ -70,7 +69,6 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <TooltipProvider>
-            <CustomCursor />
             <Router>
               <AppShell>
                 <AppRouter />

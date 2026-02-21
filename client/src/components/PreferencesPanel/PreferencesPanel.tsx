@@ -443,8 +443,8 @@ export const PreferencesPanel = React.memo(function PreferencesPanel({ onFilters
                     className={cn(
                       "justify-start text-sm h-10 font-medium transition-all duration-200",
                       filters.allergies.includes(allergy.value)
-                        ? "bg-secondary hover:bg-secondary/90 text-white border-secondary shadow-md"
-                        : "border border-gray-300 text-gray-700 hover:border-secondary/50 hover:bg-secondary/10 hover:text-secondary"
+                        ? "bg-secondary text-white border-secondary shadow-md"
+                        : "border border-gray-300 text-gray-700"
                     )}
                     data-testid={`allergy-${allergy.value}`}
                   >

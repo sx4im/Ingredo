@@ -11,7 +11,6 @@ import { type IngredientChip } from "@shared/schema";
 import { Heart, Plus, Star, Bookmark, ArrowRight, Clock, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { FadeUp, FadeDown, ModernFadeUp, ModernFadeDown } from "@/components/ScrollReveal";
-import { FloatingParticles } from "@/components/effects/FloatingParticles";
 import { MagneticButton } from "@/components/effects/MagneticButton";
 import { TiltCard } from "@/components/effects/TiltCard";
 
@@ -77,7 +76,6 @@ export default function Home() {
         {/* Ambient radial glow */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full opacity-20" style={{ background: 'radial-gradient(circle, var(--accent-gold) 0%, transparent 70%)', filter: 'blur(80px)' }} />
-          <FloatingParticles />
         </div>
         <div className="container mx-auto px-6 lg:px-12 relative z-10">
           <div className="grid lg:grid-cols-12 gap-12 items-center">
