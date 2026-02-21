@@ -435,21 +435,20 @@ export const PreferencesPanel = React.memo(function PreferencesPanel({ onFilters
               <Label className="text-sm font-semibold text-gray-700">Avoid Allergens</Label>
               <div className="grid grid-cols-2 gap-3">
                 {ALLERGY_OPTIONS.map(allergy => (
-                  <Button
+                  <button
                     key={allergy.value}
-                    variant={filters.allergies.includes(allergy.value) ? "default" : "outline"}
-                    size="sm"
+                    type="button"
                     onClick={() => toggleAllergy(allergy.value)}
                     className={cn(
-                      "justify-start text-sm h-10 font-medium transition-all duration-200",
+                      "inline-flex items-center justify-start whitespace-nowrap rounded-md px-3 h-10 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                       filters.allergies.includes(allergy.value)
                         ? "bg-secondary text-white border-secondary shadow-md"
-                        : "border border-gray-300 text-gray-700"
+                        : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
                     )}
                     data-testid={`allergy-${allergy.value}`}
                   >
                     {allergy.label}
-                  </Button>
+                  </button>
                 ))}
               </div>
             </div>
