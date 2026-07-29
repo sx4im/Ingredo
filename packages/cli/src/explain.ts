@@ -1,9 +1,5 @@
-// chronos explain (§4.3, optional) — summarize a failing capsule in plain
-// English via multi-provider AI (OpenRouter, Groq, OpenAI, Anthropic, Gemini,
-// DeepSeek, xAI Grok, Mistral, Together AI, Fireworks AI, Cerebras, Perplexity,
-// Qwen, Novita AI, Hyperbolic, NVIDIA NIM, Ollama, LM Studio, or Custom endpoints).
-// Interactive arrow-key selection & automatic model discovery.
-// Zero LLM dependencies in core — CLI-only convenience.
+// chronos explain (§4.3, optional) — summarize a failing capsule in plain English.
+// Zero LLM dependencies in core — CLI-only convenience using native fetch.
 
 import { readCapsule, type FailureCapsule } from "@sx4im/chronos-vitest/engine";
 import type { TraceEvent } from "@sx4im/chronos-core";
@@ -21,182 +17,40 @@ export interface ProviderDefinition {
   envKey: string;
   baseUrl: string;
   defaultModel: string;
-  popularModels: string[];
   type: "openai" | "anthropic" | "gemini";
-  extraHeaders?: Record<string, string>;
 }
 
 export const PROVIDERS: ProviderDefinition[] = [
   {
-    id: "openrouter",
-    name: "OpenRouter (300+ Models Aggregator)",
-    envKey: "OPENROUTER_API_KEY",
-    baseUrl: "https://openrouter.ai/api/v1",
-    defaultModel: "anthropic/claude-3.7-sonnet",
-    popularModels: ["anthropic/claude-3.7-sonnet", "google/gemini-2.0-flash-001", "meta-llama/llama-3.3-70b-instruct", "deepseek/deepseek-r1"],
-    type: "openai",
-    extraHeaders: { "HTTP-Referer": "https://github.com/sx4im/chronos", "X-Title": "Chronos DST" },
-  },
-  {
-    id: "groq",
-    name: "Groq (Ultra-Fast LPU Engine)",
-    envKey: "GROQ_API_KEY",
-    baseUrl: "https://api.groq.com/openai/v1",
-    defaultModel: "llama-3.3-70b-versatile",
-    popularModels: ["llama-3.3-70b-versatile", "deepseek-r1-distill-llama-70b", "mixtral-8x7b-32768"],
-    type: "openai",
-  },
-  {
     id: "openai",
-    name: "OpenAI (GPT-4o & o3-mini)",
+    name: "OpenAI",
     envKey: "OPENAI_API_KEY",
     baseUrl: "https://api.openai.com/v1",
     defaultModel: "gpt-4o",
-    popularModels: ["gpt-4o", "gpt-4o-mini", "o3-mini"],
     type: "openai",
   },
   {
     id: "anthropic",
-    name: "Anthropic (Claude 3.7 Sonnet)",
+    name: "Anthropic",
     envKey: "ANTHROPIC_API_KEY",
     baseUrl: "https://api.anthropic.com/v1",
     defaultModel: "claude-3-7-sonnet-20250219",
-    popularModels: ["claude-3-7-sonnet-20250219", "claude-3-5-haiku-20241022", "claude-3-5-sonnet-20241022"],
     type: "anthropic",
   },
   {
     id: "gemini",
-    name: "Google Gemini (Gemini 2.0 Flash)",
+    name: "Google Gemini",
     envKey: "GEMINI_API_KEY",
     baseUrl: "https://generativelanguage.googleapis.com/v1beta",
     defaultModel: "gemini-2.0-flash",
-    popularModels: ["gemini-2.0-flash", "gemini-1.5-pro"],
     type: "gemini",
   },
   {
-    id: "deepseek",
-    name: "DeepSeek (DeepSeek V3 / R1)",
-    envKey: "DEEPSEEK_API_KEY",
-    baseUrl: "https://api.deepseek.com/v1",
-    defaultModel: "deepseek-reasoner",
-    popularModels: ["deepseek-reasoner", "deepseek-chat"],
-    type: "openai",
-  },
-  {
-    id: "xai",
-    name: "xAI Grok (Grok-2)",
-    envKey: "XAI_API_KEY",
-    baseUrl: "https://api.x.ai/v1",
-    defaultModel: "grok-2-1212",
-    popularModels: ["grok-2-1212", "grok-beta"],
-    type: "openai",
-  },
-  {
-    id: "mistral",
-    name: "Mistral AI (Mistral Large & Codestral)",
-    envKey: "MISTRAL_API_KEY",
-    baseUrl: "https://api.mistral.ai/v1",
-    defaultModel: "mistral-large-latest",
-    popularModels: ["mistral-large-latest", "codestral-latest", "mistral-small-latest"],
-    type: "openai",
-  },
-  {
-    id: "together",
-    name: "Together AI (Open Models Fast API)",
-    envKey: "TOGETHER_API_KEY",
-    baseUrl: "https://api.together.xyz/v1",
-    defaultModel: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
-    popularModels: ["meta-llama/Llama-3.3-70B-Instruct-Turbo", "Qwen/Qwen2.5-Coder-32B-Instruct"],
-    type: "openai",
-  },
-  {
-    id: "fireworks",
-    name: "Fireworks AI",
-    envKey: "FIREWORKS_API_KEY",
-    baseUrl: "https://api.fireworks.ai/inference/v1",
-    defaultModel: "accounts/fireworks/models/llama-v3p3-70b-instruct",
-    popularModels: ["accounts/fireworks/models/llama-v3p3-70b-instruct"],
-    type: "openai",
-  },
-  {
-    id: "cerebras",
-    name: "Cerebras AI (1800+ tokens/sec)",
-    envKey: "CEREBRAS_API_KEY",
-    baseUrl: "https://api.cerebras.ai/v1",
-    defaultModel: "llama3.3-70b",
-    popularModels: ["llama3.3-70b", "llama3.1-8b"],
-    type: "openai",
-  },
-  {
-    id: "perplexity",
-    name: "Perplexity AI (Sonar Pro)",
-    envKey: "PERPLEXITY_API_KEY",
-    baseUrl: "https://api.perplexity.ai",
-    defaultModel: "sonar-pro",
-    popularModels: ["sonar-pro", "sonar"],
-    type: "openai",
-  },
-  {
-    id: "qwen",
-    name: "Qwen / Alibaba DashScope",
-    envKey: "DASHSCOPE_API_KEY",
-    baseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    defaultModel: "qwen-max",
-    popularModels: ["qwen-max", "qwen-plus", "qwen-turbo"],
-    type: "openai",
-  },
-  {
-    id: "novita",
-    name: "Novita AI",
-    envKey: "NOVITA_API_KEY",
-    baseUrl: "https://api.novita.ai/v3/openai",
-    defaultModel: "meta-llama/llama-3.3-70b-instruct",
-    popularModels: ["meta-llama/llama-3.3-70b-instruct"],
-    type: "openai",
-  },
-  {
-    id: "hyperbolic",
-    name: "Hyperbolic AI",
-    envKey: "HYPERBOLIC_API_KEY",
-    baseUrl: "https://api.hyperbolic.xyz/v1",
-    defaultModel: "meta-llama/Llama-3.3-70B-Instruct",
-    popularModels: ["meta-llama/Llama-3.3-70B-Instruct"],
-    type: "openai",
-  },
-  {
-    id: "nvidia",
-    name: "NVIDIA NIM",
-    envKey: "NVIDIA_API_KEY",
-    baseUrl: "https://integrate.api.nvidia.com/v1",
-    defaultModel: "meta/llama-3.3-70b-instruct",
-    popularModels: ["meta/llama-3.3-70b-instruct"],
-    type: "openai",
-  },
-  {
-    id: "ollama",
-    name: "Ollama (Local Desktop)",
-    envKey: "OLLAMA_BASE_URL",
-    baseUrl: "http://localhost:11434/v1",
-    defaultModel: "llama3.3",
-    popularModels: ["llama3.3", "llama3", "deepseek-r1"],
-    type: "openai",
-  },
-  {
-    id: "lmstudio",
-    name: "LM Studio (Local Desktop)",
-    envKey: "LMSTUDIO_BASE_URL",
-    baseUrl: "http://localhost:1234/v1",
-    defaultModel: "local-model",
-    popularModels: ["local-model"],
-    type: "openai",
-  },
-  {
     id: "custom",
-    name: "Custom OpenAI-Compatible Endpoint",
+    name: "Custom (OpenAI-Compatible)",
     envKey: "LLM_BASE_URL",
     baseUrl: "http://localhost:8080/v1",
     defaultModel: "custom-model",
-    popularModels: ["custom-model"],
     type: "openai",
   },
 ];
@@ -243,20 +97,17 @@ function summarize(c: FailureCapsule): string {
   ].join("\n");
 }
 
-/** Detect if an environment key is already configured */
 function detectEnvironmentProvider(): { provider: ProviderDefinition; key: string; model: string; baseUrl: string } | null {
   const env = process.env;
-
-  if (env.CHRONOS_EXPLAIN_BASE_URL || env.LLM_BASE_URL || env.CUSTOM_BASE_URL) {
+  if (env.CHRONOS_EXPLAIN_BASE_URL || env.LLM_BASE_URL) {
     const customProv = PROVIDERS.find((p) => p.id === "custom")!;
     return {
       provider: customProv,
-      key: env.CHRONOS_EXPLAIN_KEY || env.LLM_API_KEY || env.CUSTOM_API_KEY || "dummy",
-      model: env.CHRONOS_EXPLAIN_MODEL || env.LLM_MODEL || env.CUSTOM_MODEL || "default",
-      baseUrl: env.CHRONOS_EXPLAIN_BASE_URL || env.LLM_BASE_URL || env.CUSTOM_BASE_URL || "",
+      key: env.CHRONOS_EXPLAIN_KEY || env.LLM_API_KEY || "dummy",
+      model: env.CHRONOS_EXPLAIN_MODEL || env.LLM_MODEL || "default",
+      baseUrl: env.CHRONOS_EXPLAIN_BASE_URL || env.LLM_BASE_URL || "",
     };
   }
-
   for (const prov of PROVIDERS) {
     if (prov.id === "custom") continue;
     const val = env[prov.envKey] || (prov.id === "gemini" ? env.GOOGLE_API_KEY : undefined);
@@ -269,184 +120,85 @@ function detectEnvironmentProvider(): { provider: ProviderDefinition; key: strin
       };
     }
   }
-
   return null;
 }
 
-/** Fetch online models from OpenAI-compatible GET /models endpoint */
-async function fetchOnlineModels(baseUrl: string, apiKey: string): Promise<string[]> {
-  try {
-    const endpoint = baseUrl.endsWith("/models") ? baseUrl : `${baseUrl.replace(/\/$/, "")}/models`;
-    const ctrl = new AbortController();
-    const to = setTimeout(() => ctrl.abort(), 4000);
-    const res = await fetch(endpoint, {
-      headers: { authorization: `Bearer ${apiKey}` },
-      signal: ctrl.signal,
-    }).finally(() => clearTimeout(to));
+async function runInteractivePrompt(): Promise<{ provider: ProviderDefinition; key: string; model: string; baseUrl: string }> {
+  const providerOptions = PROVIDERS.map((p) => ({ label: p.name, value: p }));
+  const selectedProvider = await selectPrompt("Select AI Provider", providerOptions, 0);
 
-    if (!res.ok) return [];
-    const data = (await res.json()) as { data?: { id: string }[] };
-    if (Array.isArray(data.data)) {
-      return data.data.map((m) => m.id).slice(0, 15);
-    }
-  } catch {
-    // Graceful fallback to static popular models
+  let targetBaseUrl = selectedProvider.baseUrl;
+  if (selectedProvider.id === "custom") {
+    targetBaseUrl = await inputPrompt("Enter Base Endpoint URL", "http://localhost:8080/v1");
   }
-  return [];
+
+  const envKeyVal = process.env[selectedProvider.envKey] || (selectedProvider.id === "gemini" ? process.env.GOOGLE_API_KEY : undefined);
+  let apiKey = envKeyVal || "";
+  if (envKeyVal) {
+    process.stdout.write(`${C.emerald("✔")} ${C.bold("API Key")} ${C.cyan(`Loaded from ${selectedProvider.envKey}`)}\n\n`);
+  } else {
+    apiKey = await inputPrompt(`Enter ${selectedProvider.name} API Key`);
+  }
+
+  const selectedModel = await inputPrompt("Enter Model ID", selectedProvider.defaultModel);
+
+  return { provider: selectedProvider, key: apiKey, model: selectedModel, baseUrl: targetBaseUrl };
 }
 
 export async function explainCommand(capsulePath: string): Promise<ExplainResult> {
   const topHeader = renderTopBanner("0.1.5");
-
   let capsule: FailureCapsule;
   try {
     capsule = await readCapsule(resolveCapsulePath(capsulePath));
   } catch (e) {
-    return {
-      exitCode: 2,
-      message: topHeader + capsuleReadError(capsulePath, e),
-    };
+    return { exitCode: 2, message: topHeader + capsuleReadError(capsulePath, e) };
   }
-
-  let selectedProvider: ProviderDefinition;
-  let apiKey = "";
-  let selectedModel = "";
-  let targetBaseUrl = "";
 
   const envDetect = detectEnvironmentProvider();
-
   if (!process.stdout.isTTY && !envDetect) {
-    const guideLines = [
-      "Chronos Explain translates simulation failure traces into plain-English root cause analysis.",
-      "Set ANY provider environment variable below to use your preferred model:",
-      "",
-      `  ${C.bold("Provider")}           ${C.bold("Environment Variable")}        ${C.bold("Upgraded Default Model")}`,
-      "  ─────────────────────────────────────────────────────────────────────────────",
-      ...PROVIDERS.map(
-        (p) =>
-          `  ${(p.name.split(" ")[0] || p.id).padEnd(16)} export ${p.envKey.padEnd(20)}=...    ${p.defaultModel}`
-      ),
-      "",
-      "To override model for any provider: export CHRONOS_EXPLAIN_MODEL=your-model-id",
-    ];
-
     return {
       exitCode: 0,
-      message:
-        topHeader +
-        `  ${C.badgeIndigo(" CHRONOS EXPLAIN ")} ${C.slate("skipped (no AI provider key set)")}\n\n` +
-        drawBox(`${C.indigo("AI PROVIDER CONFIGURATION GUIDE")}`, guideLines) +
-        "\n",
+      message: topHeader + `  ${C.badgeIndigo(" EXPLAIN ")} skipped: no AI provider key set.\n`,
     };
   }
 
+  let config;
   if (envDetect && (!process.stdout.isTTY || process.env.CI)) {
-    // Non-interactive / CI environment with key: use detected provider directly
-    selectedProvider = envDetect.provider;
-    apiKey = envDetect.key;
-    selectedModel = envDetect.model;
-    targetBaseUrl = envDetect.baseUrl;
+    config = envDetect;
   } else {
-    // Interactive Selection Workflow
     process.stdout.write(topHeader);
     process.stdout.write(`${C.bold("Chronos Failure Capsule AI Explanation")}\n`);
     process.stdout.write(`${C.muted(`Loaded capsule: ${capsulePath}`)}\n\n`);
-
-    // 1. Select Provider via Arrow Keys
-    const providerOptions = PROVIDERS.map((p) => ({
-      label: p.name,
-      value: p,
-      hint: process.env[p.envKey] ? "Key detected in ENV" : p.id === "ollama" || p.id === "lmstudio" ? "Local Desktop" : undefined,
-    }));
-
-    selectedProvider = await selectPrompt("Select AI Provider", providerOptions, 0);
-
-    // 2. Base URL prompt if Custom
-    if (selectedProvider.id === "custom") {
-      targetBaseUrl = await inputPrompt("Enter Base Endpoint URL", "http://localhost:8080/v1");
-    } else {
-      targetBaseUrl = selectedProvider.baseUrl;
-    }
-
-    // 3. API Key prompt if not local / not set
-    const envKeyVal = process.env[selectedProvider.envKey] || (selectedProvider.id === "gemini" ? process.env.GOOGLE_API_KEY : undefined);
-    if (envKeyVal) {
-      apiKey = envKeyVal;
-      process.stdout.write(`${C.emerald("✔")} ${C.bold("API Key")} ${C.cyan(`Loaded from ${selectedProvider.envKey}`)}\n\n`);
-    } else if (selectedProvider.id === "ollama" || selectedProvider.id === "lmstudio") {
-      apiKey = "local";
-    } else {
-      apiKey = await inputPrompt(`Enter ${selectedProvider.name} API Key`);
-    }
-
-    // 4. Auto-discover or Select Model
-    process.stdout.write(`${C.slate("Fetching available models...")}\n`);
-    const fetched = await fetchOnlineModels(targetBaseUrl, apiKey);
-    const combinedModels = Array.from(new Set([...fetched, ...selectedProvider.popularModels]));
-
-    const modelOptions = [
-      ...combinedModels.map((m) => ({ label: m, value: m })),
-      { label: "[ Enter Custom Model ID... ]", value: "custom" },
-    ];
-
-    const modelChoice = await selectPrompt("Select Model ID", modelOptions, 0);
-    if (modelChoice === "custom") {
-      selectedModel = await inputPrompt("Enter Custom Model ID", selectedProvider.defaultModel);
-    } else {
-      selectedModel = modelChoice;
-    }
+    config = await runInteractivePrompt();
   }
 
-  const prompt =
-    "You are a distributed-systems debugging expert. Below is a deterministic-simulation " +
-    "failure capsule (Chronos). Concisely explain the likely root cause of the invariant " +
-    "violation and point to the most suspicious trace events.\n\n" +
-    summarize(capsule);
+  const prompt = "You are a distributed-systems debugging expert. Explain the root cause of this failure:\n\n" + summarize(capsule);
 
   try {
-    const explanationText = await executeLLMCall(selectedProvider, apiKey, selectedModel, targetBaseUrl, prompt);
+    const explanationText = await executeLLMCall(config.provider, config.key, config.model, config.baseUrl, prompt);
     const reportLines = [
-      `${C.bold("Provider")}: ${C.cyan(selectedProvider.name)}  ${C.bold("Model")}: ${C.purple(selectedModel)}`,
-      `${C.bold("Capsule")}:  ${C.white(capsulePath)}  ${C.bold("Seed")}: ${C.amber(capsule.seed.toString())}`,
+      `${C.bold("Provider")}: ${C.cyan(config.provider.name)}  ${C.bold("Model")}: ${C.purple(config.model)}`,
+      `${C.bold("Capsule")}:  ${C.white(capsulePath)}`,
       "",
-      `${C.bold("INVARIANT VIOLATION")}:`,
-      `  ${C.rose("✕")} ${C.bold(capsule.invariant.name)} — ${C.white(capsule.invariant.detail || "violated")}`,
-      "",
-      `${C.bold("AI ROOT CAUSE ANALYSIS & DIAGNOSIS")}:`,
+      `${C.bold("ROOT CAUSE ANALYSIS")}:`,
       ...explanationText.split("\n").map((line) => `  ${line}`),
     ];
-
-    return {
-      exitCode: 0,
-      message: "\n" + drawBox(`${C.indigo("CHRONOS AI FAILURE EXPLANATION")}`, reportLines) + "\n",
-    };
+    return { exitCode: 0, message: "\n" + drawBox(`${C.indigo("EXPLANATION")}`, reportLines) + "\n" };
   } catch (e) {
     const err = e instanceof Error ? e.message : "API call failed";
     return {
       exitCode: 1,
-      message:
-        `\n${C.badgeRose(" EXPLAIN ERROR ")} ${C.rose(`${selectedProvider.name} call failed: ${err}`)} (degraded).\n` +
-        `  The core simulation run is unaffected. Capsule file: ${capsulePath}\n`,
+      message: `\n${C.badgeRose(" ERROR ")} ${C.rose(`${config.provider.name} failed: ${err}`)}\n`,
     };
   }
 }
 
-async function executeLLMCall(
-  provider: ProviderDefinition,
-  key: string,
-  model: string,
-  baseUrl: string,
-  prompt: string
-): Promise<string> {
+async function executeLLMCall(provider: ProviderDefinition, key: string, model: string, baseUrl: string, prompt: string): Promise<string> {
   const ctrl = new AbortController();
   const to = setTimeout(() => ctrl.abort(), 30_000);
-
   try {
     if (provider.type === "gemini") {
-      const endpoint = baseUrl.endsWith("/generateContent")
-        ? `${baseUrl}?key=${key}`
-        : `${baseUrl}/models/${model}:generateContent?key=${key}`;
-
+      const endpoint = baseUrl.endsWith("/generateContent") ? `${baseUrl}?key=${key}` : `${baseUrl}/models/${model}:generateContent?key=${key}`;
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -454,64 +206,31 @@ async function executeLLMCall(
         signal: ctrl.signal,
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = (await res.json()) as { candidates?: { content?: { parts?: { text?: string }[] } }[] };
-      const out = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!out) throw new Error("empty Gemini completion");
-      return out;
+      const data = await res.json() as any;
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
     }
-
     if (provider.type === "anthropic") {
       const endpoint = baseUrl.endsWith("/messages") ? baseUrl : `${baseUrl.replace(/\/$/, "")}/messages`;
       const res = await fetch(endpoint, {
         method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "x-api-key": key,
-          "anthropic-version": "2023-06-01",
-        },
-        body: JSON.stringify({
-          model,
-          max_tokens: 600,
-          messages: [{ role: "user", content: prompt }],
-        }),
+        headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" },
+        body: JSON.stringify({ model, max_tokens: 600, messages: [{ role: "user", content: prompt }] }),
         signal: ctrl.signal,
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = (await res.json()) as { content?: { text?: string }[] };
-      const out = data.content?.[0]?.text;
-      if (!out) throw new Error("empty Anthropic completion");
-      return out;
+      const data = await res.json() as any;
+      return data.content?.[0]?.text || "";
     }
-
-    // Default OpenAI-compatible protocol
     const endpoint = baseUrl.endsWith("/chat/completions") ? baseUrl : `${baseUrl.replace(/\/$/, "")}/chat/completions`;
-    const headers: Record<string, string> = {
-      "content-type": "application/json",
-      authorization: `Bearer ${key}`,
-      ...(provider.extraHeaders || {}),
-    };
-
     const res = await fetch(endpoint, {
       method: "POST",
-      headers,
-      body: JSON.stringify({
-        model,
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.2,
-        max_tokens: 600,
-      }),
+      headers: { "content-type": "application/json", authorization: `Bearer ${key}` },
+      body: JSON.stringify({ model, messages: [{ role: "user", content: prompt }], temperature: 0.2, max_tokens: 600 }),
       signal: ctrl.signal,
     });
-
-    if (!res.ok) {
-      const body = await res.text().catch(() => "");
-      throw new Error(`HTTP ${res.status} ${body.slice(0, 150)}`);
-    }
-
-    const data = (await res.json()) as { choices?: { message?: { content?: string } }[] };
-    const out = data.choices?.[0]?.message?.content;
-    if (!out) throw new Error("empty response");
-    return out;
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json() as any;
+    return data.choices?.[0]?.message?.content || "";
   } finally {
     clearTimeout(to);
   }

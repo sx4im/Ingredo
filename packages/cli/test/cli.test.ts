@@ -254,18 +254,18 @@ describe("chronos explain", () => {
     clearKeys();
     const r = await explainCommand(capsulePath);
     expect(r.exitCode).toBe(0);
-    expect(r.message.toLowerCase()).toContain("openrouter");
+    expect(r.message.toLowerCase()).toContain("skipped");
   });
 
   it("fails gracefully on a missing capsule (exit 2) even with a key set", async () => {
-    process.env.NVIDIA_API_KEY = "test-key";
+    process.env.OPENAI_API_KEY = "test-key";
     const r = await explainCommand(join(dir, "nope.json"));
     expect(r.exitCode).toBe(2);
     expect(r.message).toContain("could not read capsule");
   });
 
   it("sanitizes sensitive tokens in message payload summaries prior to sending to NIM", async () => {
-    process.env.NVIDIA_API_KEY = "test-key";
+    process.env.OPENAI_API_KEY = "test-key";
 
     // Build a synthetic capsule containing a sensitive token in a send trace event summary
     const fakeCapsulePath = join(dir, "sensitive.json");

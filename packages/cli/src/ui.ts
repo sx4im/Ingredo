@@ -42,36 +42,7 @@ export function renderTopBanner(version = "0.1.4"): string {
   );
 }
 
-// Exact Layered Sphere Emblem
-export const ASCII_LOGO_SPHERE = `
-             ▄▄▄▄▄▄▄▄▄▄▄
-         ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-     ▄▄▄▄▄▄               ▄▄▄▄▄▄
-   ▄▄▄▄▄                     ▄▄▄▄▄
-   █                         █
-   ▀▀▀▀▀                     ▀▀▀▀▀
-     ▀▀▀▀▀▀               ▀▀▀▀▀▀
-         ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-             ▀▀▀▀▀▀▀▀▀▀▀
-`;
 
-const rawBannerLines = [
-  "  ▄████████  ▄█    █▄     ▄████████  ▄████████  ███▄▄▄▄      ▄████████  ▄████████ ",
-  " ███    ███ ███    ███   ███    ███ ███    ███ ███▀▀▀██▄   ███    ███ ███    ███ ",
-  " ███    █▀  ███    ███   ███    ███ ███    ███ ███   ███   ███    ███ ███    █▀  ",
-  " ███        ██████████  ▄███▄▄▄▄██▀ ███    ███ ███   ███   ███    ███ ▀████████▄ ",
-  " ███        ██████████ ▀▀███▀▀▀▀▀   ███    ███ ███   ███   ███    ███ ▀▀▀▀▀▀▀███ ",
-  " ███    █▄  ███    ███ ▀███████████ ███    ███ ███   ███   ███    ███ ███    ███ ",
-  " ███    ███ ███    ███   ███    ███ ███    ███ ███   ███   ███    ███ ███    ███ ",
-  "  ▀████████ █▀      ▀    ███    ███  ▀████████  ▀█   █▀     ▀████████  ▀████████ "
-];
-
-// Stylized two-shade CHRONOS banner (Primary Cyan & Crisp White)
-export const ASCII_BANNER = rawBannerLines.map(line => {
-  const left = line.slice(0, 42);
-  const right = line.slice(42);
-  return C.cyan(left) + C.white(right);
-}).join("\n");
 
 export function drawBox(title: string, contentLines: string[]): string {
   const cleanTitle = stripAnsi(title);
@@ -116,67 +87,39 @@ export function selectPrompt<T>(
       return resolve(options[initialIndex]?.value as T);
     }
 
-    let selectedIndex = Math.min(Math.max(0, initialIndex), options.length - 1);
-    const isRaw = process.stdin.isRaw;
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
 
-    try {
-      process.stdin.setRawMode(true);
-    } catch {
-      return resolve(options[initialIndex]?.value as T);
-    }
+    process.stdout.write(`${C.indigo("?")} ${C.bold(title)}\n`);
+    options.forEach((opt, i) => {
+      process.stdout.write(`  ${C.cyan(String(i + 1))}. ${opt.label}${opt.hint ? ` ${C.muted(`(${opt.hint})`)}` : ""}\n`);
+    });
 
-    process.stdin.resume();
-    readline.emitKeypressEvents(process.stdin);
+    const ask = () => {
+      rl.question(`\nSelect [1-${options.length}] (default ${initialIndex + 1}): `, (answer) => {
+        const trimmed = answer.trim();
+        if (trimmed === "") {
+          rl.close();
+          const selected = options[initialIndex]!;
+          process.stdout.write(`${C.emerald("✔")} ${C.bold(title)} ${C.cyan(selected.label)}\n\n`);
+          return resolve(selected.value);
+        }
 
-    const render = () => {
-      // Move up to overwrite previous render
-      process.stdout.write(`\x1b[${options.length + 2}A\x1b[0J`);
-      process.stdout.write(`${C.indigo("?")} ${C.bold(title)} ${C.slate("(Use ↑/↓ arrows, Enter to select)")}\n\n`);
+        const idx = parseInt(trimmed, 10) - 1;
+        if (isNaN(idx) || idx < 0 || idx >= options.length) {
+          process.stdout.write(C.rose("  Invalid selection. Please try again.\n"));
+          return ask();
+        }
 
-      options.forEach((opt, idx) => {
-        const isSelected = idx === selectedIndex;
-        const pointer = isSelected ? C.cyan("❯ ") : "  ";
-        const label = isSelected ? C.bold(C.white(opt.label)) : C.slate(opt.label);
-        const hint = opt.hint ? ` ${C.muted(`(${opt.hint})`)}` : "";
-        process.stdout.write(`${pointer}${label}${hint}\n`);
+        rl.close();
+        const selected = options[idx]!;
+        process.stdout.write(`${C.emerald("✔")} ${C.bold(title)} ${C.cyan(selected.label)}\n\n`);
+        resolve(selected.value);
       });
     };
-
-    // Initial spacing space
-    process.stdout.write("\n".repeat(options.length + 2));
-    render();
-
-    const onKeypress = (_: unknown, key: { name?: string; ctrl?: boolean }) => {
-      if (!key) return;
-      if (key.name === "up" || key.name === "k") {
-        selectedIndex = (selectedIndex - 1 + options.length) % options.length;
-        render();
-      } else if (key.name === "down" || key.name === "j") {
-        selectedIndex = (selectedIndex + 1) % options.length;
-        render();
-      } else if (key.name === "return" || key.name === "enter") {
-        cleanup();
-        process.stdout.write(`${C.emerald("✔")} ${C.bold(title)} ${C.cyan(options[selectedIndex]!.label)}\n\n`);
-        resolve(options[selectedIndex]!.value);
-      } else if (key.ctrl && key.name === "c") {
-        cleanup();
-        process.exit(0);
-      }
-    };
-
-    const cleanup = () => {
-      process.stdin.removeListener("keypress", onKeypress);
-      if (!isRaw) {
-        try {
-          process.stdin.setRawMode(false);
-        } catch {
-          // ignore
-        }
-      }
-      process.stdin.pause();
-    };
-
-    process.stdin.on("keypress", onKeypress);
+    ask();
   });
 }
 

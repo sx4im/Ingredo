@@ -13,13 +13,12 @@ import { doctorCommand } from "./doctor.js";
 import { statsCommand } from "./stats.js";
 import { checkCommand } from "./check.js";
 import { exportCommand } from "./export.js";
-import { C, ASCII_BANNER, ASCII_LOGO_SPHERE, drawBox } from "./ui.js";
+import { C, drawBox } from "./ui.js";
 
 const VERSION = "0.1.5";
 
 function buildHelpText(): string {
-  const header = `${ASCII_BANNER}\n` +
-    `  ${C.badgeIndigo(" CHRONOS CLI ")} ${C.cyan("Deterministic Simulation Tooling")} ${C.slate(`v${VERSION}`)}\n\n`;
+  const header = `  ${C.badgeIndigo(" CHRONOS CLI ")} ${C.cyan("Deterministic Simulation Tooling")} ${C.slate(`v${VERSION}`)}\n\n`;
 
   const helpLines = [
     `${C.bold("Usage")}: ${C.cyan("chronos")} ${C.white("<command>")} ${C.purple("[args]")} ${C.slate("[flags]")}`,
