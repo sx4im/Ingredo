@@ -14,11 +14,13 @@ import { statsCommand } from "./stats.js";
 import { checkCommand } from "./check.js";
 import { exportCommand } from "./export.js";
 import { C, drawBox } from "./ui.js";
+import { ASCII_BANNER } from "./assets/logo.js";
 
 const VERSION = "0.1.5";
 
 function buildHelpText(): string {
-  const header = `  ${C.badgeIndigo(" CHRONOS CLI ")} ${C.cyan("Deterministic Simulation Tooling")} ${C.slate(`v${VERSION}`)}\n\n`;
+  const header = `${ASCII_BANNER}\n` +
+    `  ${C.badgeIndigo(" CHRONOS CLI ")} ${C.cyan("Deterministic Simulation Tooling")} ${C.slate(`v${VERSION}`)}\n\n`;
 
   const helpLines = [
     `${C.bold("Usage")}: ${C.cyan("chronos")} ${C.white("<command>")} ${C.purple("[args]")} ${C.slate("[flags]")}`,
