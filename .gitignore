@@ -6,3 +6,6 @@ config.js
 .env.*.local
 .github-pages/
 
+
+# Strix scan artifacts
+strix_runs/

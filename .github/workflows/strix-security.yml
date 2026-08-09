@@ -1,0 +1,75 @@
+name: Strix Security Scan
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  strix-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Require Strix secrets
+        env:
+          STRIX_LLM: ${{ secrets.STRIX_LLM }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+        run: |
+          if [ -z "$STRIX_LLM" ] || [ -z "$LLM_API_KEY" ]; then
+            echo "::error::Missing repository secrets STRIX_LLM and/or LLM_API_KEY."
+            echo "Add them under Settings → Secrets and variables → Actions, then re-run."
+            echo "Example STRIX_LLM value: openai/gpt-5.4"
+            exit 1
+          fi
+
+      - name: Install Strix
+        run: curl -sSL https://strix.ai/install | bash
+
+      - name: Run Strix (quick, PR diff-scoped)
+        env:
+          STRIX_LLM: ${{ secrets.STRIX_LLM }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+        run: |
+          export PATH="$HOME/.strix/bin:$PATH"
+          BASE_REF="${{ github.base_ref }}"
+          if [ -z "$BASE_REF" ]; then
+            BASE_REF="main"
+          fi
+          strix -n -t ./ \
+            --scan-mode quick \
+            --scope-mode auto \
+            --diff-base "origin/${BASE_REF}" \
+            --max-budget 10 \
+            --instruction "White-box security review of Chronos (Node.js/TypeScript DST framework). Focus on supply-chain risks, unsafe deserialization of Trace/capsule JSON, CLI command injection, path traversal in inspector/trace loading, prototype pollution, and accidental entropy/network exposure. Do not attack third-party systems."
+
+      - name: Fail unless the scan completed
+        if: always() && hashFiles('strix_runs/**/run.json') != ''
+        run: |
+          run_json=$(ls -t strix_runs/*/run.json | head -1)
+          status=$(jq -r .status "$run_json")
+          echo "Strix run status: $status"
+          if [ "$status" != "completed" ]; then
+            echo "Strix run status is '$status' — scan did not complete (likely budget exhausted)." >&2
+            exit 1
+          fi
+
+      - name: Upload SARIF
+        if: always()
+        continue-on-error: true
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: strix_runs
+
+      - name: Upload Strix artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: strix-scan-results
+          path: strix_runs/
+          if-no-files-found: ignore
