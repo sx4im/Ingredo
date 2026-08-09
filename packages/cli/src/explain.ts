@@ -3,8 +3,10 @@
 
 import { readCapsule, type FailureCapsule } from "@sx4im/chronos-vitest/engine";
 import type { TraceEvent } from "@sx4im/chronos-core";
+import { CHRONOS_VERSION } from "@sx4im/chronos-core";
 import { resolveCapsulePath, capsuleReadError } from "./util.js";
-import { C, drawBox, selectPrompt, inputPrompt, renderTopBanner } from "./ui.js";
+import { safeText } from "./sanitize.js";
+import { C, drawBox, selectPrompt, inputPrompt, secretPrompt, renderTopBanner } from "./ui.js";
 
 export interface ExplainResult {
   exitCode: number;
@@ -56,9 +58,39 @@ export const PROVIDERS: ProviderDefinition[] = [
 ];
 
 function sanitizeSummary(summary: string): string {
-  return summary
+  // Control characters first: this text is bound for a third-party API AND for
+  // the terminal, and the credential redaction below should not be dodgeable by
+  // splicing an escape sequence into the middle of a token.
+  return safeText(summary)
     .replace(/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g, "[REDACTED_JWT]")
     .replace(/(bearer\s+|token[=:]\s*|key[=:]\s*|secret[=:]\s*|password[=:]\s*)(?!\[REDACTED)[^\s,;"]+/gi, "$1[REDACTED]");
+}
+
+/** An LLM endpoint must be plain `http:`/`https:`.
+ *
+ *  The base URL comes from `CHRONOS_EXPLAIN_BASE_URL`/`LLM_BASE_URL` or an
+ *  interactive prompt, and the API key is attached to whatever it names — so a
+ *  malformed or hostile value is a credential-exfiltration path, and a scheme
+ *  like `file:` is a request the user never intended. Validate before the key
+ *  is ever attached. */
+function assertUsableEndpoint(baseUrl: string): URL {
+  let url: URL;
+  try {
+    url = new URL(baseUrl);
+  } catch {
+    throw new Error("LLM base URL is not a valid absolute URL (expected http:// or https://)");
+  }
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    throw new Error(`LLM base URL scheme ${url.protocol} is not allowed (use http: or https:)`);
+  }
+  return url;
+}
+
+/** Loopback hosts are the legitimate plaintext case (Ollama, LM Studio, a local
+ *  vLLM). Anywhere else, `http:` puts the API key on the wire in the clear. */
+function isLoopback(url: URL): boolean {
+  const h = url.hostname.toLowerCase();
+  return h === "localhost" || h === "127.0.0.1" || h === "::1" || h === "[::1]";
 }
 
 function formatEvent(e: TraceEvent): string {
@@ -137,7 +169,8 @@ async function runInteractivePrompt(): Promise<{ provider: ProviderDefinition; k
   if (envKeyVal) {
     process.stdout.write(`${C.emerald("✔")} ${C.bold("API Key")} ${C.cyan(`Loaded from ${selectedProvider.envKey}`)}\n\n`);
   } else {
-    apiKey = await inputPrompt(`Enter ${selectedProvider.name} API Key`);
+    // Never `inputPrompt` for a credential — that echoes it into the scrollback.
+    apiKey = await secretPrompt(`Enter ${selectedProvider.name} API Key`);
   }
 
   const selectedModel = await inputPrompt("Enter Model ID", selectedProvider.defaultModel);
@@ -146,7 +179,7 @@ async function runInteractivePrompt(): Promise<{ provider: ProviderDefinition; k
 }
 
 export async function explainCommand(capsulePath: string): Promise<ExplainResult> {
-  const topHeader = renderTopBanner("0.1.5");
+  const topHeader = renderTopBanner(CHRONOS_VERSION);
   let capsule: FailureCapsule;
   try {
     capsule = await readCapsule(resolveCapsulePath(capsulePath));
@@ -168,7 +201,7 @@ export async function explainCommand(capsulePath: string): Promise<ExplainResult
   } else {
     process.stdout.write(topHeader);
     process.stdout.write(`${C.bold("Chronos Failure Capsule AI Explanation")}\n`);
-    process.stdout.write(`${C.muted(`Loaded capsule: ${capsulePath}`)}\n\n`);
+    process.stdout.write(`${C.muted(`Loaded capsule: ${safeText(capsulePath)}`)}\n\n`);
     config = await runInteractivePrompt();
   }
 
@@ -178,10 +211,13 @@ export async function explainCommand(capsulePath: string): Promise<ExplainResult
     const explanationText = await executeLLMCall(config.provider, config.key, config.model, config.baseUrl, prompt);
     const reportLines = [
       `${C.bold("Provider")}: ${C.cyan(config.provider.name)}  ${C.bold("Model")}: ${C.purple(config.model)}`,
-      `${C.bold("Capsule")}:  ${C.white(capsulePath)}`,
+      `${C.bold("Capsule")}:  ${C.white(safeText(capsulePath))}`,
       "",
       `${C.bold("ROOT CAUSE ANALYSIS")}:`,
-      ...explanationText.split("\n").map((line) => `  ${line}`),
+      // The model's reply is doubly untrusted: it is generated text, and the
+      // capsule that shaped the prompt is attacker-controlled, so this is the
+      // exit of a prompt-injection path straight onto the user's terminal.
+      ...explanationText.split("\n").map((line) => `  ${safeText(line)}`),
     ];
     return { exitCode: 0, message: "\n" + drawBox(`${C.indigo("EXPLANATION")}`, reportLines) + "\n" };
   } catch (e) {
@@ -193,21 +229,45 @@ export async function explainCommand(capsulePath: string): Promise<ExplainResult
   }
 }
 
+// Minimal structural views of the three response shapes. Typing them (rather
+// than `as any`) is what makes the optional chaining below actually checked.
+interface GeminiResponse {
+  candidates?: { content?: { parts?: { text?: string }[] } }[];
+}
+interface AnthropicResponse {
+  content?: { text?: string }[];
+}
+interface OpenAIResponse {
+  choices?: { message?: { content?: string } }[];
+}
+
 async function executeLLMCall(provider: ProviderDefinition, key: string, model: string, baseUrl: string, prompt: string): Promise<string> {
+  const url = assertUsableEndpoint(baseUrl);
+  if (url.protocol === "http:" && !isLoopback(url) && key) {
+    throw new Error(
+      `refusing to send an API key over plaintext http to ${url.hostname} — use https (loopback is exempt)`,
+    );
+  }
   const ctrl = new AbortController();
   const to = setTimeout(() => ctrl.abort(), 30_000);
   try {
     if (provider.type === "gemini") {
-      const endpoint = baseUrl.endsWith("/generateContent") ? `${baseUrl}?key=${key}` : `${baseUrl}/models/${model}:generateContent?key=${key}`;
+      // The key goes in a HEADER, never `?key=`. Query strings are logged by
+      // proxies, CDNs, and the server's own access log, and they leak through
+      // `Referer` — putting a long-lived credential there means it outlives the
+      // request in places nobody audits.
+      const endpoint = baseUrl.endsWith("/generateContent")
+        ? baseUrl
+        : `${baseUrl.replace(/\/$/, "")}/models/${encodeURIComponent(model)}:generateContent`;
       const res = await fetch(endpoint, {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: { "content-type": "application/json", "x-goog-api-key": key },
         body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
         signal: ctrl.signal,
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json() as any;
-      return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      const data = (await res.json()) as GeminiResponse;
+      return data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
     }
     if (provider.type === "anthropic") {
       const endpoint = baseUrl.endsWith("/messages") ? baseUrl : `${baseUrl.replace(/\/$/, "")}/messages`;
@@ -218,8 +278,8 @@ async function executeLLMCall(provider: ProviderDefinition, key: string, model: 
         signal: ctrl.signal,
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json() as any;
-      return data.content?.[0]?.text || "";
+      const data = (await res.json()) as AnthropicResponse;
+      return data.content?.[0]?.text ?? "";
     }
     const endpoint = baseUrl.endsWith("/chat/completions") ? baseUrl : `${baseUrl.replace(/\/$/, "")}/chat/completions`;
     const res = await fetch(endpoint, {
@@ -229,8 +289,8 @@ async function executeLLMCall(provider: ProviderDefinition, key: string, model: 
       signal: ctrl.signal,
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json() as any;
-    return data.choices?.[0]?.message?.content || "";
+    const data = (await res.json()) as OpenAIResponse;
+    return data.choices?.[0]?.message?.content ?? "";
   } finally {
     clearTimeout(to);
   }

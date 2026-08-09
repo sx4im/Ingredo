@@ -2,7 +2,9 @@
 
 import { readCapsule, type FailureCapsule } from "@sx4im/chronos-vitest/engine";
 import { resolveCapsulePath, capsuleReadError } from "./util.js";
+import { safeText } from "./sanitize.js";
 import { C, drawBox, renderTopBanner } from "./ui.js";
+import { CHRONOS_VERSION } from "@sx4im/chronos-core";
 
 export interface StatsResult {
   exitCode: number;
@@ -93,8 +95,8 @@ export async function statsCommand(capsulePath: string): Promise<StatsResult> {
 
   const lines: string[] = [
     `${C.bold("Simulation Metadata")}:`,
-    `  ${C.cyan("•")} Seed:            ${C.white(seed)}`,
-    `  ${C.cyan("•")} Nodes:           ${C.white(String(nodes.length))} [${nodes.join(", ")}]`,
+    `  ${C.cyan("•")} Seed:            ${C.white(safeText(seed))}`,
+    `  ${C.cyan("•")} Nodes:           ${C.white(String(nodes.length))} [${nodes.map((n) => safeText(n)).join(", ")}]`,
     `  ${C.cyan("•")} Steps Budget:    ${C.white(String(maxSteps))}`,
     `  ${C.cyan("•")} Result Outcome:  ${status === "violation" ? C.rose("✕ Invariant Violation") : C.emerald("✔ OK")}`,
     "",
@@ -121,15 +123,15 @@ export async function statsCommand(capsulePath: string): Promise<StatsResult> {
     lines.push(
       "",
       `${C.bold("Violation Context")}:`,
-      `  ${C.rose("✕")} Invariant:       ${C.bold(invariant.name)}`,
-      `  ${C.rose("•")} Detail:          ${C.white(invariant.detail || "(no detail)")}`,
+      `  ${C.rose("✕")} Invariant:       ${C.bold(safeText(invariant.name))}`,
+      `  ${C.rose("•")} Detail:          ${C.white(safeText(invariant.detail) || "(no detail)")}`,
     );
   }
 
-  const title = `${C.indigo("CHRONOS TRACE STATS")} ${C.muted(`v0.1.4`)}`;
+  const title = `${C.indigo("CHRONOS TRACE STATS")} ${C.muted(`v${CHRONOS_VERSION}`)}`;
 
   return {
     exitCode: 0,
-    message: renderTopBanner("0.1.4") + drawBox(title, lines),
+    message: renderTopBanner() + drawBox(title, lines),
   };
 }

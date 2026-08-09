@@ -2,6 +2,7 @@
 // Pure zero-dependency ANSI 24-bit RGB color styling and box-drawing layout primitives.
 
 import readline from "node:readline";
+import { CHRONOS_VERSION } from "@sx4im/chronos-core";
 
 function useColor(): boolean {
   return !process.env.NO_COLOR && (!!process.stdout.isTTY || process.env.FORCE_COLOR === "1");
@@ -35,7 +36,7 @@ function paint(s: string, code: string): string {
   return useColor() ? `${code}${s}${C.reset}` : s;
 }
 
-export function renderTopBanner(version = "0.1.4"): string {
+export function renderTopBanner(version = CHRONOS_VERSION): string {
   return (
     `  ${C.badgeIndigo(" CHRONOS CLI ")} ${C.cyan("Deterministic Simulation Tooling")} ${C.slate(`v${version}`)}\n` +
     `  ${C.muted("Tip: Run 'chronos --help' for full command & ecosystem guide.")}\n\n`
@@ -120,6 +121,53 @@ export function selectPrompt<T>(
       });
     };
     ask();
+  });
+}
+
+/** Prompt for a SECRET (an API key) without echoing it.
+ *
+ *  `inputPrompt` uses readline's default echo, so an API key typed at the
+ *  `chronos explain` prompt is painted in the clear — it stays in the terminal
+ *  scrollback, in any `script`/CI capture of the session, and in a screen share
+ *  or recording, which is precisely how pasted keys leak. Mask the echo and
+ *  confirm only the length.
+ *
+ *  Falls back to the plain prompt when stdin is not a TTY (nothing to mask). */
+export function secretPrompt(questionText: string): Promise<string> {
+  return new Promise((resolve) => {
+    if (!process.stdin.isTTY) {
+      return resolve("");
+    }
+
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+      terminal: true,
+    });
+
+    const promptMsg = `${C.indigo("?")} ${C.bold(questionText)}: `;
+    // readline writes the prompt through the same `_writeToOutput` hook we are
+    // about to override, so echo the prompt itself and mask everything after.
+    const mutable = rl as unknown as { _writeToOutput?: (s: string) => void };
+    let masking = false;
+    mutable._writeToOutput = (chunk: string): void => {
+      if (!masking) {
+        process.stdout.write(chunk);
+        return;
+      }
+      // Preserve line terminators so the cursor still moves on Enter.
+      process.stdout.write(chunk.includes("\n") ? "\n" : "*");
+    };
+
+    rl.question(promptMsg, (answer) => {
+      rl.close();
+      const val = answer.trim();
+      process.stdout.write(
+        `${C.emerald("✔")} ${C.bold(questionText)} ${C.cyan(val ? `[${val.length} chars, hidden]` : "[Skipped]")}\n\n`,
+      );
+      resolve(val);
+    });
+    masking = true;
   });
 }
 

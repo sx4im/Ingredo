@@ -6,6 +6,7 @@
 import { readCapsule, type FailureCapsule } from "@sx4im/chronos-vitest/engine";
 import type { Trace, TraceEvent } from "@sx4im/chronos-core";
 import { resolveCapsulePath, capsuleReadError } from "./util.js";
+import { safeText } from "./sanitize.js";
 
 function useColor(): boolean {
   return !!process.stdout.isTTY && !process.env.NO_COLOR;
@@ -28,35 +29,39 @@ function paint(s: string, c: string): string {
   return useColor() ? `${c}${s}${C.reset}` : s;
 }
 
+// Every capsule-derived string below goes through `safeText` before it reaches
+// stdout. A `summary` is attacker-chosen text; raw, its ANSI escapes could
+// repaint the very output a human is reading to decide what went wrong.
 function formatEvent(ev: TraceEvent): string {
   const where = `${paint(`t=${ev.t}`, C.gray)} ${paint(`seq=${ev.seq}`, C.gray)}`;
   switch (ev.kind) {
     case "timer":
-      return `${where} ${paint("timer", C.blue)}${ev.nodeId ? " " + paint(ev.nodeId, C.cyan) : ""}`;
+      return `${where} ${paint("timer", C.blue)}${ev.nodeId ? " " + paint(safeText(ev.nodeId), C.cyan) : ""}`;
     case "wake":
-      return `${where} ${paint("wake", C.blue)} ${paint(ev.nodeId, C.cyan)}`;
+      return `${where} ${paint("wake", C.blue)} ${paint(safeText(ev.nodeId), C.cyan)}`;
     case "send":
-      return `${where} ${paint("send", C.yellow)} ${paint(ev.from, C.cyan)}→${paint(ev.to, C.cyan)} ${ev.summary}`;
+      return `${where} ${paint("send", C.yellow)} ${paint(safeText(ev.from), C.cyan)}→${paint(safeText(ev.to), C.cyan)} ${safeText(ev.summary)}`;
     case "deliver":
-      return `${where} ${paint("deliver", C.green)} ${paint(ev.from, C.cyan)}→${paint(ev.to, C.cyan)} ${ev.summary}`;
+      return `${where} ${paint("deliver", C.green)} ${paint(safeText(ev.from), C.cyan)}→${paint(safeText(ev.to), C.cyan)} ${safeText(ev.summary)}`;
     case "crash":
-      return `${where} ${paint("crash", C.red)} ${paint(ev.nodeId, C.red)}`;
+      return `${where} ${paint("crash", C.red)} ${paint(safeText(ev.nodeId), C.red)}`;
     case "restart":
-      return `${where} ${paint("restart", C.green)} ${paint(ev.nodeId, C.green)}`;
+      return `${where} ${paint("restart", C.green)} ${paint(safeText(ev.nodeId), C.green)}`;
     case "partition":
-      return `${where} ${paint("partition", C.magenta)} ${ev.groups.map((g) => `[${g.join(",")}]`).join(" | ")} healAt=${ev.healAt}`;
+      return `${where} ${paint("partition", C.magenta)} ${ev.groups.map((g) => `[${g.map((n) => safeText(n)).join(",")}]`).join(" | ")} healAt=${ev.healAt}`;
     case "invariant-violation":
-      return `${where} ${paint("VIOLATION", C.red + C.bold)} ${paint(ev.name, C.red)} — ${ev.detail}`;
+      return `${where} ${paint("VIOLATION", C.red + C.bold)} ${paint(safeText(ev.name), C.red)} — ${safeText(ev.detail)}`;
     default:
       // Defensive fallback for unknown event kinds
-      return `${where} ${paint(String((ev as { kind: string }).kind), C.bold)} ${JSON.stringify(ev)}`;
+      return `${where} ${paint(safeText((ev as { kind: string }).kind), C.bold)} ${safeText(JSON.stringify(ev))}`;
   }
 }
 
 /** Render a Trace as a header line plus one line per event (ordered by seq). */
 export function formatTraceLines(trace: Trace): string[] {
+  const nodes = trace.nodes.map((n) => paint(safeText(n), C.cyan)).join(", ");
   return [
-    `${paint("seed", C.gray)} ${paint(trace.seed, C.bold)} | ${paint("nodes", C.gray)} ${trace.nodes.map((n) => paint(n, C.cyan)).join(", ")} | ${paint(trace.result, trace.result === "violation" ? C.red : C.green)} | ${trace.events.length} events`,
+    `${paint("seed", C.gray)} ${paint(safeText(trace.seed), C.bold)} | ${paint("nodes", C.gray)} ${nodes} | ${paint(safeText(trace.result), trace.result === "violation" ? C.red : C.green)} | ${trace.events.length} events`,
     ...trace.events.map(formatEvent),
   ];
 }

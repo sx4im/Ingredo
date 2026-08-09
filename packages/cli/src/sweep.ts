@@ -13,7 +13,7 @@ import {
   type SimTestOptions,
 } from "@sx4im/chronos-vitest/engine";
 import type { ChaosConfig, NetworkConfig, NetworkFactory } from "@sx4im/chronos-core";
-import { toFileUrl } from "./util.js";
+import { toFileUrl, resolveScenarioPath } from "./util.js";
 
 /** A scenario module for sweeps: the system-under-test plus its config. `seeds`
  * is supplied by the sweep itself, never the module. */
@@ -52,7 +52,11 @@ export interface SweepResult {
 /** Dynamic-import a scenario module that exports the fields a sweep needs.
  * Validates `body` (function) and `nodes` (present). */
 async function loadSweepScenario(scenarioPath: string): Promise<ScenarioSweepModule> {
-  const url = toFileUrl(scenarioPath);
+  // Confine the scenario before importing it, exactly as `replay` and `shrink`
+  // already do. Importing a module IS executing it, so without this the sweep
+  // was the one command that would run code from any absolute path on the
+  // machine — a hole in an otherwise consistent policy.
+  const url = toFileUrl(resolveScenarioPath(scenarioPath));
   const mod = (await import(url)) as Partial<ScenarioSweepModule> & {
     default?: ScenarioSweepModule;
   };
