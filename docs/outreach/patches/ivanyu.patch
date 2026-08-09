@@ -1,0 +1,13 @@
+--- a/README.md	2026-08-09 10:35:48.751516531 +0000
++++ b/README.md	2026-08-09 10:35:49.675513074 +0000
+@@ -69,6 +69,10 @@
+ 
+ > Antithesis is a continuous reliability platform that autonomously searches for problems in your software within a simulated environment. Every problem we find can be perfectly reproduced, allowing for efficient debugging of even the most complex problems.
+ 
++### [Chronos](https://github.com/sx4im/chronos)
++
++Deterministic Simulation Testing framework for Node.js and TypeScript. Virtual clock, seeded PRNG, simulated network (latency/drop/dup/partition), crash/restart, Vitest integration, and bit-identical replay from a single seed.
++
+ ### [MadSim](https://github.com/madsim-rs/madsim)
+ 
+ A deterministic simulator for distributed systems in Rust.

@@ -1,0 +1,10 @@
+--- a/README.md	2026-08-09 10:35:49.211514812 +0000
++++ b/README.md	2026-08-09 10:35:49.711512940 +0000
+@@ -196,6 +196,7 @@
+ * [gorm-sqlchaos](https://github.com/u2386/gorm-sqlchaos) - A runtime SQL manipulator for your Golang applications based on gorm.
+ * [Chaos Frontend Toolkit](https://chaos-frontend-toolkit.web.app/) - A set of tools to apply Chaos Engineering to frontend
+ * [Mitigant](https://mitigant.io/) - The Continuos Security Verification Platform, enables confidence in cloud security posture by leveraging security chaos engineering.
++* [Chronos](https://github.com/sx4im/chronos) - Deterministic simulation testing for Node.js and TypeScript with seeded network chaos, partitions, and crash injection; bit-identical replay from a single seed.
+ 
+ ## Retired tools
+ * [The Simian Army](https://github.com/Netflix/SimianArmy) - A suite of tools for keeping your cloud operating in top form.

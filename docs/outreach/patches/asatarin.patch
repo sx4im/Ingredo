@@ -1,0 +1,15 @@
+--- a/README.md	2026-08-09 10:35:48.967515725 +0000
++++ b/README.md	2026-08-09 10:35:49.695513000 +0000
+@@ -931,6 +931,12 @@
+ * [Chaos Mesh](https://chaos-mesh.org/) — [chaos engineering](#chaos-engineering) platform for Kubernetes. See
+   also [PingCap](#pingcap-tidb), company behind Chaos Mesh.
+ 
++### Deterministic Simulation Testing
++
++* [Chronos](https://github.com/sx4im/chronos) — Deterministic Simulation Testing framework for Node.js and TypeScript.
++  Virtual clock, seeded PRNG, simulated network chaos (latency, drop, duplication, partitions), node crash/restart,
++  Vitest integration, and bit-identical replay from a single seed. Docs: https://docs-site-chronos.vercel.app/
++
+ ### QuickCheck
+ 
+ * [PolyConf 14: Testing the Hard Stuff and Staying Sane / John Hughes](https://youtu.be/F6LzB6SdFKA)

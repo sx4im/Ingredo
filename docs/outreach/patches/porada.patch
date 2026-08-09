@@ -1,0 +1,10 @@
+--- a/README.md	2026-08-09 10:35:49.651513163 +0000
++++ b/README.md	2026-08-09 10:35:49.747512806 +0000
+@@ -129,6 +129,7 @@
+ - [**@cloudflare/vitest-pool-workers**](https://developers.cloudflare.com/workers/testing/vitest-integration/) — Run tests in a Cloudflare Workers runtime.
+ - [**@logtape/testing-vitest**](https://github.com/dahlia/logtape/tree/main/packages/testing-vitest) — Report LogTape logs when tests fail.
+ - [**@storybook/addon-vitest**](https://storybook.js.org/docs/writing-tests/integrations/vitest-addon) — Run Storybook stories as Vitest tests.
++- [**@sx4im/chronos-vitest**](https://github.com/sx4im/chronos) — Deterministic simulation testing with seeded PRNG, virtual clock, network chaos, and bit-identical replay.
+ - [**eslint-vitest-rule-tester**](https://github.com/antfu-collective/eslint-vitest-rule-tester) — Test ESLint rules using Vitest.
+ - [**neon-testing**](https://github.com/starmode-base/neon-testing) — Test projects that rely on Neon Postgres databases.
+ - [**rescript-vitest**](https://github.com/cometkim/rescript-vitest) — Write tests in ReScript.
