@@ -14,7 +14,7 @@
 // embeds the offending file bytes, which on `chronos replay <arbitrary-file>`
 // would disclose that file's contents via the error string.
 
-import { mkdir, writeFile, readFile, rename } from "node:fs/promises";
+import { mkdir, writeFile, readFile, rename, stat, unlink } from "node:fs/promises";
 import { dirname, join, basename } from "node:path";
 import { CHRONOS_VERSION } from "@sx4im/chronos-core";
 import type { Simulator, NetworkConfig, ChaosConfig, Trace } from "@sx4im/chronos-core";
@@ -59,6 +59,23 @@ const MAX_VERSION = 64; // chronosVersion field — bound it so a malformed caps
 // can't ship a multi-GB string as a trivial memory DoS.
 const MAX_STEPS = 10_000_000; // matches the engine's safe upper bound
 const MAX_EVENTS = 2_000_000; // bounds the parse; the replay cap is maxSteps anyway
+const MAX_SUMMARY = 4096; // per-event `summary`/`detail`; the writer caps summaries at 80
+
+/** Hard ceiling on a capsule file, enforced BEFORE the bytes are read. Every
+ *  other bound in this file is a post-parse check, which is too late: `readFile`
+ *  materializes the whole file and `JSON.parse` materializes the whole object
+ *  graph, so a 4 GB `.json` handed to `chronos trace` is an OOM crash long
+ *  before `MAX_EVENTS` gets a say. A real capsule is a few MB at the 2M-event
+ *  ceiling; 128 MB leaves two orders of magnitude of headroom.
+ *  `CHRONOS_MAX_CAPSULE_BYTES` raises it for a deliberately huge local capsule. */
+const DEFAULT_MAX_CAPSULE_BYTES = 128 * 1024 * 1024;
+
+function maxCapsuleBytes(): number {
+  const raw = process.env.CHRONOS_MAX_CAPSULE_BYTES;
+  if (raw === undefined || !/^\d{1,19}$/.test(raw)) return DEFAULT_MAX_CAPSULE_BYTES;
+  const n = Number(raw);
+  return Number.isSafeInteger(n) && n > 0 ? n : DEFAULT_MAX_CAPSULE_BYTES;
+}
 
 function inUnitInterval(x: unknown, label: string): void {
   if (!isFiniteNum(x) || (x as number) < 0 || (x as number) > 1) {
@@ -95,14 +112,128 @@ function validateChaos(c: unknown): asserts c is Required<ChaosConfig> {
   inUnitInterval(o.maxCrashFraction, "chaos.maxCrashFraction");
 }
 
+function isBoundedString(x: unknown, max: number): x is string {
+  return typeof x === "string" && x.length <= max;
+}
+
+/** Validate one `trace.events` entry.
+ *
+ *  Trace events are never re-scheduled — replay rebuilds them from the seed —
+ *  so a malformed event cannot poison a run. It can, however, poison every
+ *  CONSUMER of the trace: `chronos trace` interpolates `ev.summary` into a
+ *  terminal line, `chronos export` writes it into a CSV cell, and the Inspector
+ *  renders it into the DOM. Those readers all assume the discriminated union in
+ *  `@sx4im/chronos-core`'s `TraceEvent` actually holds, and an event whose
+ *  `groups` is a string or whose `kind` is unknown crashes them with a raw
+ *  stack trace. Validating the union here — once, at the trust boundary — is
+ *  what lets every downstream renderer stay simple. */
+function validateEvent(e: unknown, i: number): void {
+  const at = `\`trace.events[${i}]\``;
+  if (typeof e !== "object" || e === null || Array.isArray(e)) {
+    fail(`${at} is not an object`);
+  }
+  const ev = e as Record<string, unknown>;
+  if (!isFiniteNum(ev.t)) fail(`${at}.t must be a finite number`);
+  if (!isFiniteInt(ev.seq)) fail(`${at}.seq must be an integer`);
+
+  const nodeId = (label: string): void => {
+    if (!isBoundedString(ev.nodeId, MAX_NODE_ID)) {
+      fail(`${at}.nodeId must be a string (max ${MAX_NODE_ID} chars) for kind "${label}"`);
+    }
+  };
+  const endpoints = (label: string): void => {
+    if (!isBoundedString(ev.from, MAX_NODE_ID) || !isBoundedString(ev.to, MAX_NODE_ID)) {
+      fail(`${at}.from/.to must be strings (max ${MAX_NODE_ID} chars) for kind "${label}"`);
+    }
+    if (!isBoundedString(ev.summary, MAX_SUMMARY)) {
+      fail(`${at}.summary must be a string (max ${MAX_SUMMARY} chars) for kind "${label}"`);
+    }
+  };
+
+  switch (ev.kind) {
+    case "timer":
+      // The only kind with an optional nodeId (a global timer has none).
+      if (ev.nodeId !== undefined && !isBoundedString(ev.nodeId, MAX_NODE_ID)) {
+        fail(`${at}.nodeId must be a string (max ${MAX_NODE_ID} chars) when present`);
+      }
+      return;
+    case "wake":
+    case "crash":
+    case "restart":
+      nodeId(ev.kind);
+      return;
+    case "send":
+    case "deliver":
+      endpoints(ev.kind);
+      return;
+    case "partition": {
+      if (!Array.isArray(ev.groups) || ev.groups.length > MAX_NODES) {
+        fail(`${at}.groups must be an array of at most ${MAX_NODES} groups`);
+      }
+      for (const g of ev.groups as unknown[]) {
+        if (!Array.isArray(g) || g.length > MAX_NODES) {
+          fail(`${at}.groups entries must be arrays of at most ${MAX_NODES} node ids`);
+        }
+        for (const n of g as unknown[]) {
+          if (!isBoundedString(n, MAX_NODE_ID)) {
+            fail(`${at}.groups node ids must be strings (max ${MAX_NODE_ID} chars)`);
+          }
+        }
+      }
+      if (!isFiniteNum(ev.healAt)) fail(`${at}.healAt must be a finite number`);
+      return;
+    }
+    case "invariant-violation":
+      if (!isBoundedString(ev.name, MAX_NAME)) {
+        fail(`${at}.name must be a string (max ${MAX_NAME} chars)`);
+      }
+      if (!isBoundedString(ev.detail, MAX_DETAIL)) {
+        fail(`${at}.detail must be a string (max ${MAX_DETAIL} chars)`);
+      }
+      return;
+    default:
+      fail(`${at}.kind is not a known trace event kind`);
+  }
+}
+
+/** Validate the `trace` envelope AND every event in it. The envelope fields
+ *  (`seed`, `nodes`, `result`) are what `chronos trace`/`stats`/`export` and the
+ *  Inspector's header read directly; before this check a capsule that merely
+ *  omitted `trace.nodes` crashed `chronos trace` with a TypeError. */
+function validateTrace(t: unknown): void {
+  if (typeof t !== "object" || t === null || Array.isArray(t)) {
+    fail("`trace` is not an object");
+  }
+  const tr = t as Record<string, unknown>;
+  if (typeof tr.seed !== "string" || !RE_SEED.test(tr.seed)) {
+    fail("`trace.seed` must be a decimal integer string");
+  }
+  if (!Array.isArray(tr.nodes) || tr.nodes.length > MAX_NODES) {
+    fail(`\`trace.nodes\` must be an array of at most ${MAX_NODES} strings`);
+  }
+  for (let i = 0; i < tr.nodes.length; i++) {
+    if (!isBoundedString(tr.nodes[i], MAX_NODE_ID)) {
+      fail(`\`trace.nodes[${i}]\` must be a string (max ${MAX_NODE_ID} chars)`);
+    }
+  }
+  if (tr.result !== "ok" && tr.result !== "violation") {
+    fail('`trace.result` must be "ok" or "violation"');
+  }
+  if (!Array.isArray(tr.events) || tr.events.length > MAX_EVENTS) {
+    fail(`\`trace.events\` must be an array (max ${MAX_EVENTS} entries)`);
+  }
+  for (let i = 0; i < tr.events.length; i++) validateEvent(tr.events[i], i);
+}
+
 /** Strictly validate an already-parsed capsule object. Returns the object typed
  *  as a `FailureCapsule`; throws `InvalidCapsule` (content-free message) on any
  *  shape/range violation. The fields the Simulator reads (`seed`, `nodes`,
  *  `maxSteps`, `config.network`, `config.chaos`) are the load-bearing checks:
  *  a NaN/Infinity/negative there is the scheduler-corruption / silent-chaos-off
- *  path (B2). `trace.events` is bounded but not deeply validated — entries there
- *  are never re-scheduled (they're compared for reproduction only), so they
- *  cannot poison the run. */
+ *  path (B2). The `trace` envelope and every event in it are validated too —
+ *  not because they can poison a run (they are never re-scheduled) but because
+ *  every renderer downstream (CLI trace/stats/export, the Inspector) treats the
+ *  `TraceEvent` union as a guarantee. */
 export function validateCapsule(obj: unknown): FailureCapsule {
   if (typeof obj !== "object" || obj === null || Array.isArray(obj)) {
     fail("capsule root is not a JSON object");
@@ -150,14 +281,7 @@ export function validateCapsule(obj: unknown): FailureCapsule {
     fail(`\`invariant.detail\` must be a string (max ${MAX_DETAIL} chars)`);
   }
 
-  const trace = c.trace;
-  if (typeof trace !== "object" || trace === null || Array.isArray(trace)) {
-    fail("`trace` is not an object");
-  }
-  const traceRec = trace as Record<string, unknown>;
-  if (!Array.isArray(traceRec.events) || traceRec.events.length > MAX_EVENTS) {
-    fail(`\`trace.events\` must be an array (max ${MAX_EVENTS} entries)`);
-  }
+  validateTrace(c.trace);
 
   // After validation the object satisfies the FailureCapsule shape; the
   // chronosVersion is optional (older capsules omitted it) and defaulted here.
@@ -171,7 +295,7 @@ export function validateCapsule(obj: unknown): FailureCapsule {
     config: config as { network: NetworkConfig; chaos: Required<ChaosConfig> },
     maxSteps,
     invariant: invRec as { name: string; detail: string },
-    trace: trace as Trace,
+    trace: c.trace as Trace,
   };
 }
 
@@ -219,9 +343,35 @@ export async function writeCapsuleTo(path: string, capsule: FailureCapsule): Pro
   });
   const json = JSON.stringify(capsule, null, 2);
   // Same directory as the final file → same filesystem → `rename` is atomic.
-  const tmp = `${path}.${process.pid}.tmp`;
-  await writeFile(tmp, json, "utf8");
-  await rename(tmp, path);
+  //
+  // The temp name must be UNPREDICTABLE and the create must be EXCLUSIVE. With
+  // a name derived only from the pid, anyone who can write the capsule
+  // directory (a shared CI workspace, a world-writable output dir) can
+  // pre-create that path as a symlink to a file they want clobbered; a plain
+  // `writeFile` follows the symlink and writes through it with the running
+  // user's privileges. `wx` makes the open fail if the path exists at all —
+  // symlink included — and `0o600` keeps the capsule unreadable by other users
+  // in the window before the rename.
+  const tmp = `${path}.${process.pid}.${nextTmpSuffix()}.tmp`;
+  await writeFile(tmp, json, { encoding: "utf8", flag: "wx", mode: 0o600 });
+  try {
+    await rename(tmp, path);
+  } catch (e) {
+    await unlink(tmp).catch(() => {
+      /* best effort — the rename failure is the real error */
+    });
+    throw e;
+  }
+}
+
+// A process-local counter for temp-file names. Deliberately NOT `Math.random()`:
+// this is harness code, but the prime directive's "one entropy source" rule is
+// easier to keep honest when there is simply no `Math.random()` anywhere outside
+// `real.ts`. Uniqueness within a pid is all `wx` needs to avoid a self-collision.
+let tmpCounter = 0;
+function nextTmpSuffix(): string {
+  tmpCounter = (tmpCounter + 1) >>> 0;
+  return tmpCounter.toString(36);
 }
 
 /** Write a capsule to `<dir>/failures/<seed>.json` and return its path.
@@ -243,12 +393,36 @@ export async function writeCapsule(
  *  content-free message — never the raw `JSON.parse` SyntaxError, which embeds
  *  file bytes and would disclose e.g. `/etc/passwd` on a misdirected path. */
 export async function readCapsule(path: string): Promise<FailureCapsule> {
+  const limit = maxCapsuleBytes();
+  const info = await stat(path);
+  if (info.size > limit) {
+    throw new InvalidCapsule(
+      `capsule file is larger than the ${limit}-byte limit (set CHRONOS_MAX_CAPSULE_BYTES to raise it)`,
+    );
+  }
   const data = await readFile(path, "utf8");
   let obj: unknown;
   try {
-    obj = JSON.parse(data);
-  } catch {
+    obj = JSON.parse(data, reviveSafely);
+  } catch (e) {
+    if (e instanceof InvalidCapsule) throw e;
     throw new InvalidCapsule("capsule is not valid JSON");
   }
   return validateCapsule(obj);
+}
+
+/** `JSON.parse` reviver that refuses `__proto__` outright.
+ *
+ *  `JSON.parse('{"__proto__":{"isAdmin":true}}')` does not itself pollute
+ *  anything — it creates a plain own property. The danger is downstream: the
+ *  parsed `config`/`trace` objects are spread, merged, and passed into the
+ *  Simulator, and any one of those steps performed with `Object.assign` or a
+ *  hand-written deep merge WOULD trigger the `__proto__` setter and mutate
+ *  `Object.prototype` for the whole process. Dropping the key at the parse
+ *  boundary means no future refactor downstream can reintroduce that path. */
+function reviveSafely(this: unknown, key: string, value: unknown): unknown {
+  if (key === "__proto__") {
+    throw new InvalidCapsule("capsule contains a forbidden `__proto__` key");
+  }
+  return value;
 }

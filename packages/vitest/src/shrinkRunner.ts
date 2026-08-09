@@ -1,6 +1,6 @@
 // Candidate simulator runner and greedy/binary search shrink algorithm for Failure Shrinking.
 
-import { Simulator, type NetworkFactory } from "@sx4im/chronos-core";
+import { Simulator, StrictModeViolation, type NetworkFactory } from "@sx4im/chronos-core";
 import type { FailureCapsule, SimTestBody } from "./types.js";
 import { executeScenario } from "./engine.js";
 
@@ -71,7 +71,14 @@ export async function runCandidate(
       return { reproduced: true, sim, violation };
     }
     return { reproduced: false };
-  } catch {
+  } catch (e) {
+    // "The scenario threw" is a legitimate shrink outcome: a candidate config
+    // may drive the SUT down a path where an assertion or a scenario-level
+    // precondition fails, and that is simply "did not reproduce the recorded
+    // invariant". What must NOT be swallowed is a fault in the harness itself —
+    // a strict-mode entropy leak or an out-of-memory abort — because reporting
+    // that as "already minimal" hides a broken run behind a confident answer.
+    if (e instanceof StrictModeViolation || e instanceof RangeError) throw e;
     return { reproduced: false };
   }
 }
