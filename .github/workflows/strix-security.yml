@@ -16,22 +16,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Require Strix secrets
+      - name: Check Strix secrets
+        id: secrets
         env:
           STRIX_LLM: ${{ secrets.STRIX_LLM }}
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
         run: |
           if [ -z "$STRIX_LLM" ] || [ -z "$LLM_API_KEY" ]; then
-            echo "::error::Missing repository secrets STRIX_LLM and/or LLM_API_KEY."
-            echo "Add them under Settings → Secrets and variables → Actions, then re-run."
-            echo "Example STRIX_LLM value: openai/gpt-5.4"
-            exit 1
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Skipping Strix scan — add repository secrets STRIX_LLM and LLM_API_KEY, then re-run."
+            echo "Example STRIX_LLM: openai/gpt-5.4"
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Install Strix
+        if: steps.secrets.outputs.configured == 'true'
         run: curl -sSL https://strix.ai/install | bash
 
       - name: Run Strix (quick, PR diff-scoped)
+        if: steps.secrets.outputs.configured == 'true'
         env:
           STRIX_LLM: ${{ secrets.STRIX_LLM }}
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
@@ -49,7 +53,7 @@ jobs:
             --instruction "White-box security review of Chronos (Node.js/TypeScript DST framework). Focus on supply-chain risks, unsafe deserialization of Trace/capsule JSON, CLI command injection, path traversal in inspector/trace loading, prototype pollution, and accidental entropy/network exposure. Do not attack third-party systems."
 
       - name: Fail unless the scan completed
-        if: always() && hashFiles('strix_runs/**/run.json') != ''
+        if: steps.secrets.outputs.configured == 'true'
         run: |
           run_json=$(ls -t strix_runs/*/run.json | head -1)
           status=$(jq -r .status "$run_json")
@@ -60,14 +64,14 @@ jobs:
           fi
 
       - name: Upload SARIF
-        if: always()
+        if: steps.secrets.outputs.configured == 'true'
         continue-on-error: true
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: strix_runs
 
       - name: Upload Strix artifacts
-        if: always()
+        if: steps.secrets.outputs.configured == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: strix-scan-results
