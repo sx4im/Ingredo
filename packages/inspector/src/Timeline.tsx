@@ -7,7 +7,7 @@
 
 import { useMemo, useState } from "react";
 import type { TraceEvent } from "@sx4im/chronos-core";
-import { timeBounds, partitionSpans, describeEvent } from "./capsule.js";
+import { timeBounds, partitionSpans, describeEvent, MAX_RENDERED_SPAN } from "./capsule.js";
 import { KIND_STYLE, KIND_ORDER } from "./colors.js";
 
 interface TimelineProps {
@@ -40,12 +40,16 @@ export function Timeline({ events, selectedSeq, highlight, onSelect }: TimelineP
   const { tMin, tMax } = useMemo(() => timeBounds(events), [events]);
   const spans = useMemo(() => partitionSpans(events), [events]);
 
-  const span = Math.max(1, tMax - tMin);
+  // Clamp the laid-out span: `t` is unbounded in a capsule, and `span × scale`
+  // is the SVG width, so an event at t=1e12 would ask the browser for a canvas
+  // of ~4e13 px. Clamping squashes such a trace instead of hanging the tab.
+  const span = Math.min(MAX_RENDERED_SPAN, Math.max(1, tMax - tMin));
+  const tEnd = tMin + span;
   const innerW = span * scale + PAD_R;
   const width = PAD_L + innerW;
   const step = niceStep(span);
   const ticks: number[] = [];
-  for (let t = Math.ceil(tMin / step) * step; t <= tMax; t += step) ticks.push(t);
+  for (let t = Math.ceil(tMin / step) * step; t <= tEnd; t += step) ticks.push(t);
 
   const xOf = (t: number) => PAD_L + (t - tMin) * scale;
   const selected = events.find((e) => e.seq === selectedSeq) ?? null;
@@ -54,7 +58,7 @@ export function Timeline({ events, selectedSeq, highlight, onSelect }: TimelineP
     const rect = svg.getBoundingClientRect();
     const svgX = ((clientX - rect.left) / rect.width) * width;
     const t = Math.round(tMin + (svgX - PAD_L) / scale);
-    return Math.min(tMax, Math.max(tMin, t));
+    return Math.min(tEnd, Math.max(tMin, t));
   };
 
   return (

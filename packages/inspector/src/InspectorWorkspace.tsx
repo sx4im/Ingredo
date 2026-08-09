@@ -36,7 +36,7 @@ export function InspectorWorkspace({
   searchQuery: string;
   onSearchQuery: (q: string) => void;
 }): JSX.Element {
-  const { nodes, seed, invariant, trace } = capsule;
+  const { nodes, seed, invariant, trace, droppedEvents, truncatedEvents } = capsule;
   const rawEvents = trace.events;
 
   const filteredEvents = useMemo(() => {
@@ -112,6 +112,20 @@ export function InspectorWorkspace({
             <span className="k">events</span>
             <span className="v">{rawEvents.length}</span>
           </div>
+          {/* Say so when the rendered trace isn't the whole file — a silently
+              partial timeline would be read as a complete one. */}
+          {truncatedEvents > 0 && (
+            <div className="chip">
+              <span className="k">truncated</span>
+              <span className="v badge-viol">{truncatedEvents} not shown</span>
+            </div>
+          )}
+          {droppedEvents > 0 && (
+            <div className="chip">
+              <span className="k">malformed</span>
+              <span className="v badge-viol">{droppedEvents} skipped</span>
+            </div>
+          )}
         </div>
 
         {violation && (

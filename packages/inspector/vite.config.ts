@@ -23,6 +23,10 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
-    sourcemap: true,
+    // Source maps are published alongside the bundle on the hosted Inspector,
+    // which hands anyone the full unminified source tree and any comment or
+    // path in it. Keep them for local debugging (`vite build` during dev, or an
+    // explicit CHRONOS_SOURCEMAP=1) and off for the deployed build.
+    sourcemap: process.env.CHRONOS_SOURCEMAP === "1" || process.env.NODE_ENV === "development",
   },
 });
