@@ -3,6 +3,7 @@
 import { writeFile } from "node:fs/promises";
 import { readCapsule, type FailureCapsule } from "@sx4im/chronos-vitest/engine";
 import { resolveCapsulePath, capsuleReadError } from "./util.js";
+import { escapeCsvCell, escapeMarkdownCell } from "./sanitize.js";
 import { C } from "./ui.js";
 
 export interface ExportResult {
@@ -13,13 +14,6 @@ export interface ExportResult {
 export interface ExportOptions {
   format?: "csv" | "markdown" | "md" | undefined;
   output?: string | undefined;
-}
-
-function escapeCSV(val: string): string {
-  if (val.includes(",") || val.includes('"') || val.includes("\n") || val.includes("\r")) {
-    return `"${val.replace(/"/g, '""')}"`;
-  }
-  return val;
 }
 
 export async function exportCommand(
@@ -57,44 +51,47 @@ export async function exportCommand(
         (ev as { summary?: string }).summary ?? "",
         (ev as { detail?: string }).detail ?? "",
       ];
-      content += row.map(escapeCSV).join(",") + "\n";
+      content += row.map(escapeCsvCell).join(",") + "\n";
     }
   } else {
     // Markdown/md
     ext = ".md";
     content += `# Chronos Simulation Trace Export\n\n`;
-    content += `- **Seed**: ${capsule.seed}\n`;
-    content += `- **Nodes**: ${capsule.nodes.join(", ")}\n`;
-    content += `- **Invariant**: ${capsule.invariant.name} (${capsule.invariant.detail || "no detail"})\n`;
-    content += `- **Outcome**: ${capsule.trace.result}\n\n`;
+    content += `- **Seed**: ${escapeMarkdownCell(capsule.seed)}\n`;
+    content += `- **Nodes**: ${capsule.nodes.map(escapeMarkdownCell).join(", ")}\n`;
+    content += `- **Invariant**: ${escapeMarkdownCell(capsule.invariant.name)} (${escapeMarkdownCell(capsule.invariant.detail) || "no detail"})\n`;
+    content += `- **Outcome**: ${escapeMarkdownCell(capsule.trace.result)}\n\n`;
 
     content += `## Event Timeline\n\n`;
     content += `| Virtual Time (t) | Log Index (seq) | Event Kind | Node / Lane | Description |\n`;
     content += `|---|---|---|---|---|\n`;
 
     for (const ev of events) {
-      const nodeId = (ev as { nodeId?: string }).nodeId ?? "";
+      const nodeId = escapeMarkdownCell((ev as { nodeId?: string }).nodeId ?? "");
       let desc = "";
 
       if (ev.kind === "send" || ev.kind === "deliver") {
-        const from = (ev as { from?: string }).from ?? "";
-        const to = (ev as { to?: string }).to ?? "";
-        const sum = (ev as { summary?: string }).summary ?? "";
+        const from = escapeMarkdownCell((ev as { from?: string }).from ?? "");
+        const to = escapeMarkdownCell((ev as { to?: string }).to ?? "");
+        const sum = escapeMarkdownCell((ev as { summary?: string }).summary ?? "");
         const dir = ev.kind === "send" ? "→" : "📥";
-        desc = `\`${from}\` ${dir} \`${to}\` : \`${sum}\``;
+        desc = `${from} ${dir} ${to} : ${sum}`;
       } else if (ev.kind === "partition") {
         const groups = (ev as { groups?: string[][] }).groups ?? [];
         const healAt = (ev as { healAt?: number }).healAt ?? 0;
-        desc = `Partition [${groups.map((g) => g.join(",")).join("] | [")}] healAt=${healAt}`;
+        const rendered = groups.map((g) => g.map(escapeMarkdownCell).join(",")).join("] | [");
+        desc = `Partition [${rendered}] healAt=${healAt}`;
       } else if (ev.kind === "invariant-violation") {
-        const detail = (ev as { detail?: string }).detail ?? "";
-        desc = `**VIOLATION** - ${detail}`;
+        desc = `**VIOLATION** - ${escapeMarkdownCell((ev as { detail?: string }).detail ?? "")}`;
       } else {
-        desc = (ev as { summary?: string }).summary || (ev as { detail?: string }).detail || JSON.stringify(ev);
+        const fallback =
+          (ev as { summary?: string }).summary ||
+          (ev as { detail?: string }).detail ||
+          JSON.stringify(ev);
+        desc = escapeMarkdownCell(fallback);
       }
 
-      const nodeCol = nodeId ? `\`${nodeId}\`` : "";
-      content += `| ${ev.t} | ${ev.seq} | \`${ev.kind}\` | ${nodeCol} | ${desc} |\n`;
+      content += `| ${ev.t} | ${ev.seq} | ${escapeMarkdownCell(ev.kind)} | ${nodeId} | ${desc} |\n`;
     }
   }
 

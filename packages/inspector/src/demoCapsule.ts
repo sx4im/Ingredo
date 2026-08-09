@@ -65,4 +65,7 @@ export const DEMO_CAPSULE: ParsedCapsule = {
       { seq: 32, t: 355, kind: "invariant-violation", name: "at-most-one-leader", detail: "nodes node-1 and node-3 both claim term 4 leadership during network partition" },
     ],
   },
+  totalEvents: 33,
+  droppedEvents: 0,
+  truncatedEvents: 0,
 };

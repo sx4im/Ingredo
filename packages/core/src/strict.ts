@@ -118,9 +118,20 @@ export function installGuards(env: SimEnv, level: StrictLevel = "route"): Instal
 
     // --- setTimeout & clearTimeout: route to env in BOTH levels (a forgotten timer is
     //     recoverable; forcing it onto the sim keeps the run deterministic). ---
+    //
+    // String handlers are REFUSED, exactly as Node's own `setTimeout` refuses
+    // them. Compiling one (`new Function(handler)`) would turn any string that
+    // reaches a forgotten global timer — a message payload from a simulated
+    // peer, a field of an untrusted capsule — into executed code, adding an
+    // eval sink to the harness that the runtime it emulates does not even have.
     globalThis.setTimeout = ((handler: ((...args: unknown[]) => void) | string, ms = 0, ...args: unknown[]) => {
-      const fn = typeof handler === "function" ? handler : () => new Function(String(handler))();
-      const handle = env.setTimeout(() => fn(...args), ms);
+      if (typeof handler !== "function") {
+        throw new TypeError(
+          `The "callback" argument must be of type function. Received type ${typeof handler}. ` +
+            `Chronos strict mode does not compile string timer handlers (neither does Node).`,
+        );
+      }
+      const handle = env.setTimeout(() => handler(...args), ms);
       return handle as unknown as ReturnType<typeof globalThis.setTimeout>;
     }) as unknown as typeof globalThis.setTimeout;
 

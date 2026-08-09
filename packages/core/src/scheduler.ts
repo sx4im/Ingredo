@@ -28,20 +28,31 @@ export interface ScheduleMeta {
   summary?: string;
 }
 
+// The real macrotask primitives, captured at MODULE LOAD — before any run can
+// install the strict-mode guards. The guards replace `globalThis.setTimeout`
+// with one that schedules into the simulator, so a barrier that looked the
+// global up at call time would, on the `setTimeout` fallback path, enqueue its
+// own resolution as a simulated event that only this loop can run: a deadlock
+// in the one function the whole scheduler awaits every step. Binding the
+// originals here makes that unreachable regardless of what is patched.
+const realSetImmediate: typeof setImmediate | undefined =
+  typeof setImmediate === "function" ? setImmediate : undefined;
+const realSetTimeout = globalThis.setTimeout;
+
 /** Flush microtasks using a single real macrotask barrier per step.
  *  This is the ONLY allowed real macrotask primitive. It introduces no
  *  nondeterminism because no user-visible timing flows through it. */
 export function drainMicrotasks(): Promise<void> {
   return new Promise<void>((resolve) => {
-    if (typeof setImmediate === "function") {
-      setImmediate(resolve);
+    if (realSetImmediate) {
+      realSetImmediate(resolve);
     } else if (typeof MessageChannel !== "undefined") {
       const channel = new MessageChannel();
       channel.port1.addEventListener("message", () => resolve(), { once: true });
       channel.port1.start?.();
       channel.port2.postMessage(null);
     } else {
-      setTimeout(resolve, 0);
+      realSetTimeout(resolve, 0);
     }
   });
 }

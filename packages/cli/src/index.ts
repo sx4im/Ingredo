@@ -3,6 +3,7 @@
 // the pure command functions (replay/trace/sweep/open/explain/doctor).
 
 import { pathToFileURL } from "node:url";
+import { CHRONOS_VERSION } from "@sx4im/chronos-core";
 import { traceCommand } from "./trace.js";
 import { replayCommand } from "./replay.js";
 import { sweepCommand } from "./sweep.js";
@@ -16,7 +17,12 @@ import { exportCommand } from "./export.js";
 import { C, drawBox } from "./ui.js";
 import { ASCII_BANNER } from "./assets/logo.js";
 
-const VERSION = "0.1.5";
+const VERSION = CHRONOS_VERSION;
+
+/** Upper bound on `chronos sweep <scenario> <seeds>`. A million seeds is already
+ *  far past any interactive use; beyond that the seed array alone exhausts
+ *  memory before a single simulation runs. */
+const MAX_SWEEP_SEEDS = 1_000_000;
 
 function buildHelpText(): string {
   const header = `${ASCII_BANNER}\n` +
@@ -31,7 +37,7 @@ function buildHelpText(): string {
     `  ${C.cyan("sweep")}   ${C.purple("<scenario>")} ${C.slate("[seeds]")}     Run scenario across N seeds (capsules first violator)`,
     `  ${C.cyan("shrink")}  ${C.purple("<capsule>")} ${C.purple("<scenario>")}   Reduce failing fault config to minimal reproduction`,
     `  ${C.cyan("open")}    ${C.purple("<capsule>")}              Open Time-Travel Inspector UI preloaded with capsule`,
-    `  ${C.cyan("explain")} ${C.purple("<capsule>")}              Summarize failure via AI (OpenRouter, Groq, OpenAI, etc.)`,
+    `  ${C.cyan("explain")} ${C.purple("<capsule>")}              Summarize failure via AI (OpenAI, Anthropic, Gemini, custom)`,
     `  ${C.cyan("stats")}   ${C.purple("<capsule>")}              Display detailed trace metrics from a capsule`,
     `  ${C.cyan("check")}   ${C.slate("[paths...]")}              Statically scan source files for DST determinism leaks`,
     `  ${C.cyan("export")}  ${C.purple("<capsule>")} ${C.slate("[flags]")}       Export trace to Markdown/CSV formats`,
@@ -51,13 +57,15 @@ function buildHelpText(): string {
     `  ${C.amber("--help")}, ${C.amber("-h")}    Show help documentation`,
     "",
     `${C.bold("AI Explanation Providers (chronos explain)")}:`,
-    `  Set any key: ${C.purple("OPENROUTER_API_KEY")} | ${C.purple("GROQ_API_KEY")} | ${C.purple("OPENAI_API_KEY")} | ${C.purple("ANTHROPIC_API_KEY")}`,
-    `            ${C.purple("GEMINI_API_KEY")} | ${C.purple("DEEPSEEK_API_KEY")} | ${C.purple("MISTRAL_API_KEY")} | ${C.purple("NVIDIA_API_KEY")}`,
-    `  Or Custom:  ${C.purple("LLM_BASE_URL")} + ${C.purple("LLM_API_KEY")} | ${C.purple("OLLAMA_MODEL")} (Local)`,
+    `  Set any key: ${C.purple("OPENAI_API_KEY")} | ${C.purple("ANTHROPIC_API_KEY")} | ${C.purple("GEMINI_API_KEY")}`,
+    `  Or Custom:   ${C.purple("LLM_BASE_URL")} + ${C.purple("LLM_API_KEY")} — any OpenAI-compatible endpoint`,
+    `               (Ollama, LM Studio, vLLM, OpenRouter, Groq, …). https required off-loopback.`,
     "",
     `${C.bold("Environment Variables")}:`,
     `  ${C.purple("CHRONOS_SEED")}       Force a single seed for simulation runs`,
     `  ${C.purple("CHRONOS_DIR")}        Override default output directory (default: .chronos)`,
+    `  ${C.purple("CHRONOS_STRICT")}     Entropy guard level: route (default) | throw | off`,
+    `  ${C.purple("CHRONOS_MAX_CAPSULE_BYTES")}  Raise the 128 MB capsule read limit`,
   ];
 
   return header + drawBox(`${C.indigo("COMMAND REFERENCE")}`, helpLines) + "\n";
@@ -113,6 +121,11 @@ async function main(): Promise<void> {
       if (seedsArg !== undefined && !seedsArg.startsWith("-")) {
         const n = Number(seedsArg);
         if (!Number.isInteger(n) || n <= 0) fail("sweep seeds must be a positive integer");
+        // `resolveSeeds` materializes the seed list before the first run, so an
+        // unbounded count is an out-of-memory abort rather than a long sweep.
+        if (n > MAX_SWEEP_SEEDS) {
+          fail(`sweep seeds must be <= ${MAX_SWEEP_SEEDS} (got ${n})`);
+        }
         seeds = n;
       }
       const r = await sweepCommand(scenario, seeds);

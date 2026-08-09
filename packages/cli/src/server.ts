@@ -17,13 +17,27 @@ const MIME: Record<string, string> = {
 };
 
 // Security headers applied to EVERY response from the inspector server.
+//
+// `style-src`/`font-src` must ALLOW the Google Fonts origins that index.html
+// references. A response carrying both a meta CSP and a header CSP enforces the
+// INTERSECTION, so a header that omitted them silently blocked the app's own
+// webfonts — the strictness bought nothing (the fonts are static assets, not a
+// script vector) and only broke `chronos open`'s rendering. `script-src 'self'`
+// stays stricter than the meta policy on purpose: that intersection is what
+// blocks inline scripts in the built app while Vite's dev preamble keeps working.
 const SECURITY_HEADERS = {
   "x-content-type-options": "nosniff",
   "referrer-policy": "no-referrer",
+  // The capsule under inspection is untrusted data; framing this page lets a
+  // hostile site overlay it and harvest clicks. `frame-ancestors` covers modern
+  // browsers, `x-frame-options` the rest.
+  "x-frame-options": "DENY",
   "content-security-policy":
-    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; " +
-    "connect-src 'self'; img-src 'self' data:; font-src 'self' data:; " +
-    "base-uri 'self'; form-action 'none'",
+    "default-src 'self'; script-src 'self'; " +
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+    "connect-src 'self'; img-src 'self' data:; " +
+    "font-src 'self' data: https://fonts.gstatic.com; " +
+    "base-uri 'self'; form-action 'none'; frame-ancestors 'none'; object-src 'none'",
 } as const;
 
 // Require the Host header to be a loopback host

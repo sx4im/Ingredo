@@ -19,7 +19,17 @@ import { InspectorWorkspace, ErrorView } from "./InspectorWorkspace.js";
 
 type LoadResult = { ok: true; capsule: ParsedCapsule; filename: string } | { ok: false; error: string };
 
+/** Reject an oversized capsule BEFORE reading it. `file.text()` materializes
+ *  the whole file as a JS string and `JSON.parse` then materializes the object
+ *  graph, so a multi-gigabyte drop is an out-of-memory tab crash long before
+ *  any of `parseCapsule`'s bounds get a say. Mirrors the CLI's read limit. */
+const MAX_CAPSULE_BYTES = 128 * 1024 * 1024;
+
 async function loadFile(file: File): Promise<LoadResult> {
+  if (file.size > MAX_CAPSULE_BYTES) {
+    const mb = Math.round(MAX_CAPSULE_BYTES / (1024 * 1024));
+    return { ok: false, error: `capsule is too large to open in the browser (limit ${mb} MB)` };
+  }
   try {
     const text = await file.text();
     const capsule = parseCapsule(text);

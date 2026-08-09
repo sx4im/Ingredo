@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [main]
 
+# CI only reads the repository. Without this, the workflow's GITHUB_TOKEN
+# inherits the repo-wide default, which on many repos is write-all — meaning a
+# compromised dependency running during `pnpm install` or a test could push
+# commits or publish releases.
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -26,3 +33,7 @@ jobs:
       - run: pnpm lint
 
       - run: pnpm test
+
+      # The published artifact is the build output, not the sources tsc checks.
+      # Without this step a tsup/vite build break only surfaces at publish time.
+      - run: pnpm build

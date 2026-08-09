@@ -27,6 +27,7 @@ import {
   InvalidCapsule,
   readCapsule,
   writeCapsule,
+  writeCapsuleTo,
   runSimTest,
   resolveSeeds,
   type SimTestBody,
@@ -191,6 +192,114 @@ describe("validateCapsule — rejects malformed shape (B1/B2)", () => {
 
   it("rejects a chronosVersion over the length bound (memory DoS guard)", () => {
     rej((c) => (c.chronosVersion = "x".repeat(65)), /chronosVersion/); // > MAX_VERSION (64)
+  });
+});
+
+// Everything that renders a capsule — chronos trace/stats/export, the Inspector
+// — treats core's TraceEvent union as a guarantee. Nothing enforced it, so a
+// capsule that merely omitted `trace.nodes` crashed `chronos trace` with a raw
+// TypeError, and an event with an unknown `kind` white-screened the Inspector.
+// The union is a trust boundary; it is checked here so renderers stay simple.
+describe("validateCapsule — trace envelope (renderer crash surface)", () => {
+  it("rejects a trace missing the fields every renderer reads", () => {
+    rej((c) => delete asMap(c.trace).nodes, /trace\.nodes/);
+    rej((c) => delete asMap(c.trace).seed, /trace\.seed/);
+    rej((c) => delete asMap(c.trace).result, /trace\.result/);
+    rej((c) => (asMap(c.trace).result = "maybe"), /trace\.result/);
+    rej((c) => (asMap(c.trace).nodes = [42]), /trace\.nodes\[0\]/);
+  });
+
+  it("accepts a well-formed trace envelope", () => {
+    expect(validateCapsule(base()).trace.result).toBe("violation");
+  });
+});
+
+describe("validateCapsule — per-event shape", () => {
+  const withEvents = (events: unknown[]) => (c: Record<string, unknown>) => {
+    asMap(c.trace).events = events;
+  };
+
+  it("rejects an unknown event kind", () => {
+    rej(withEvents([{ t: 0, seq: 0, kind: "exec" }]), /kind is not a known/);
+  });
+
+  it("rejects an event with a non-numeric t or seq", () => {
+    rej(withEvents([{ t: "0", seq: 0, kind: "timer" }]), /\.t must be a finite number/);
+    rej(withEvents([{ t: 0, seq: 1.5, kind: "timer" }]), /\.seq must be an integer/);
+    rej(withEvents([{ t: Infinity, seq: 0, kind: "timer" }]), /\.t must be a finite number/);
+  });
+
+  it("rejects a send/deliver missing its endpoints or summary", () => {
+    rej(withEvents([{ t: 0, seq: 0, kind: "send", from: "a", to: "b" }]), /summary/);
+    rej(withEvents([{ t: 0, seq: 0, kind: "deliver", from: "a", summary: "s" }]), /from\/\.to/);
+  });
+
+  it("rejects a partition whose groups are not arrays of node ids", () => {
+    // Math.min(...[]) is Infinity and `"abc".flat` is not a function — both are
+    // renderer crashes in the Inspector's sequence diagram.
+    rej(withEvents([{ t: 0, seq: 0, kind: "partition", groups: "ab", healAt: 5 }]), /groups/);
+    rej(withEvents([{ t: 0, seq: 0, kind: "partition", groups: [["a"], [7]], healAt: 5 }]), /groups/);
+    rej(withEvents([{ t: 0, seq: 0, kind: "partition", groups: [["a"]] }]), /healAt/);
+  });
+
+  it("accepts every legitimate event kind", () => {
+    const c = base();
+    asMap(c.trace).events = [
+      { t: 0, seq: 0, kind: "timer" },
+      { t: 0, seq: 1, kind: "timer", nodeId: "a" },
+      { t: 1, seq: 2, kind: "wake", nodeId: "a" },
+      { t: 2, seq: 3, kind: "send", from: "a", to: "b", summary: "ping" },
+      { t: 3, seq: 4, kind: "deliver", from: "a", to: "b", summary: "ping" },
+      { t: 4, seq: 5, kind: "crash", nodeId: "b" },
+      { t: 5, seq: 6, kind: "restart", nodeId: "b" },
+      { t: 6, seq: 7, kind: "partition", groups: [["a"], ["b"]], healAt: 20 },
+      { t: 7, seq: 8, kind: "invariant-violation", name: "inv", detail: "d" },
+    ];
+    expect(validateCapsule(c).trace.events).toHaveLength(9);
+  });
+});
+
+describe("readCapsule — resource and pollution guards", () => {
+  it("refuses a file over the size limit before reading it", async () => {
+    // MAX_EVENTS is a POST-parse bound: readFile and JSON.parse each
+    // materialize the whole file first, so an oversized capsule is an OOM
+    // crash long before any post-parse bound applies.
+    const dir = freshDir();
+    const p = join(dir, "huge.json");
+    writeFileSync(p, JSON.stringify(base()));
+    const prev = process.env.CHRONOS_MAX_CAPSULE_BYTES;
+    process.env.CHRONOS_MAX_CAPSULE_BYTES = "10"; // smaller than any real capsule
+    try {
+      await expect(readCapsule(p)).rejects.toThrow(/larger than the 10-byte limit/);
+    } finally {
+      if (prev === undefined) delete process.env.CHRONOS_MAX_CAPSULE_BYTES;
+      else process.env.CHRONOS_MAX_CAPSULE_BYTES = prev;
+    }
+  });
+
+  // JSON.parse alone would not pollute anything, but the parsed config and
+  // trace are spread and merged downstream, where an Object.assign or a
+  // hand-rolled deep merge WOULD trigger the setter.
+  it.each(["__proto__", "constructor", "prototype"])(
+    "rejects a capsule carrying a %s key",
+    async (key) => {
+      const dir = freshDir();
+      const p = join(dir, `${key.replace(/_/g, "")}.json`);
+      const raw = JSON.stringify(base()).replace(/^\{/, `{${JSON.stringify(key)}:{"polluted":true},`);
+      writeFileSync(p, raw);
+      await expect(readCapsule(p)).rejects.toThrow(new RegExp(key));
+      expect(({} as Record<string, unknown>).polluted).toBeUndefined();
+    },
+  );
+
+  it("writes the capsule with owner-only permissions", async () => {
+    const dir = freshDir();
+    const p = join(dir, "perm.json");
+    await writeCapsuleTo(p, validateCapsule(base()));
+    // The temp file is created exclusively at 0600 so a pre-planted symlink in
+    // a shared output directory cannot be written through.
+    expect(existsSync(p)).toBe(true);
+    expect(readdirSync(dir).filter((f) => f.endsWith(".tmp"))).toHaveLength(0);
   });
 });
 

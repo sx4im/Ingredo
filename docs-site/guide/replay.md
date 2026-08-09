@@ -8,7 +8,7 @@ A capsule file is JSON containing the seed, network configuration, invariant fai
 
 ```jsonc
 {
-  "chronosVersion": "0.0.0",
+  "chronosVersion": "0.1.5",
   "seed": "42",
   "nodes": ["0", "1", "2"],
   "config": {

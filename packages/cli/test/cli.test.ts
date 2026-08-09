@@ -491,6 +491,15 @@ describe("chronos open — server hardening (B6)", () => {
       const styleSrc = csp.match(/style-src\s+([^;]+)/i)?.[1] ?? "";
       expect(styleSrc).toContain("'self'");
       expect(styleSrc).toContain("unsafe-inline");
+      // The page renders an untrusted capsule, so a hostile site must not be
+      // able to frame it and overlay clicks.
+      expect(csp).toContain("frame-ancestors 'none'");
+      expect(capRes.headers.get("x-frame-options")).toBe("DENY");
+      // A response carrying both a meta CSP and a header CSP enforces their
+      // INTERSECTION. index.html loads its webfonts from the Google origins, so
+      // omitting them here silently blocked the app's own fonts.
+      expect(styleSrc).toContain("https://fonts.googleapis.com");
+      expect(csp).toContain("https://fonts.gstatic.com");
     } finally {
       r.server?.close();
     }

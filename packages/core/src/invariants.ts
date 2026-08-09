@@ -28,7 +28,7 @@ export class InvariantViolated extends Error {
     public readonly violator?: string,
   ) {
     const where = violator !== undefined ? ` (node ${violator})` : "";
-    super(`invariant "${invariant}" violated at t=${detail}${where}`);
+    super(`invariant "${invariant}" violated${where}: ${detail}`);
     this.name = "InvariantViolated";
   }
 }

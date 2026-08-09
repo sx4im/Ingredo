@@ -8,7 +8,7 @@ chronos trace   <capsule>              print the recorded event timeline
 chronos sweep   <scenario> [seeds]     run a scenario across N seeds (default 1000)
 chronos shrink  <capsule> <scenario>   reduce a failing capsule's fault config to minimum
 chronos open    <capsule>              open the time-travel Inspector preloaded with the capsule
-chronos explain <capsule>              summarize the failure via NVIDIA NIM (requires NVIDIA_API_KEY)
+chronos explain <capsule>              summarize the failure via an LLM (OpenAI/Anthropic/Gemini/custom)
 chronos stats   <capsule>              display simulation event and network statistics
 chronos check   [paths...]             scan source directories for unseeded global calls
 chronos export  <capsule> [flags]      export trace timelines to Markdown tables or CSV files
@@ -74,7 +74,9 @@ Starts the local Inspector UI web server preloaded with the capsule, displaying 
 
 ## `chronos explain`
 
-When `NVIDIA_API_KEY` is set in the environment, `explain` sends a structured failure summary to NVIDIA NIM and prints an explanation. If the key is missing, it logs a notice and exits cleanly.
+Sends a structured failure summary to an LLM and prints the explanation. Set one of `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or `GEMINI_API_KEY`, or point `LLM_BASE_URL` (+ `LLM_API_KEY`) at any OpenAI-compatible endpoint — Ollama, LM Studio, vLLM, OpenRouter, Groq. If no key is set, it logs a notice and exits cleanly.
+
+The summary is redacted before it leaves your machine (JWTs and `token=`/`key=`/`secret=`/`password=` values are replaced), and the key is sent as a header, never in a URL. An API key is only sent over plaintext `http` to a loopback host; anywhere else `explain` requires `https`.
 
 ## `chronos stats`
 
@@ -117,4 +119,7 @@ Verifies Node.js version requirements (>= 20), strict mode configuration status,
 | `CHRONOS_SEED` | Sets a single seed for replay and sweep commands |
 | `CHRONOS_DIR` | Sets output directory for `sweep` capsules (default `.chronos`) |
 | `CHRONOS_STRICT` | Configures strict guard level (`route`, `throw`, or `off`) |
-| `NVIDIA_API_KEY` | Enables `chronos explain` |
+| `CHRONOS_MAX_CAPSULE_BYTES` | Raises the 128 MB limit on a capsule file read |
+| `CHRONOS_ALLOW_OUTSIDE_CAPSULES` | Allows reading capsules from outside cwd/`CHRONOS_DIR` |
+| `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` / `GEMINI_API_KEY` | Enables `chronos explain` |
+| `LLM_BASE_URL` + `LLM_API_KEY` | Points `chronos explain` at any OpenAI-compatible endpoint |

@@ -50,28 +50,44 @@ export class TraceLogger {
 
   // Deterministic helpers to shrink payload logs to a stable short string.
   // Safely handles circular references and deep structures.
+  //
+  // Only a value that is its own ANCESTOR is a cycle. Tracking "every object
+  // seen anywhere" instead would mark the second occurrence of a merely SHARED
+  // reference — `{ a: x, b: x }`, an extremely common message shape — as
+  // `[Circular]`, silently corrupting the summary that `send`/`deliver` pairing
+  // (CLI stats, Inspector sequence diagram) keys on. So the guard is an
+  // ancestor stack maintained via `this` in the replacer, which JSON.stringify
+  // binds to the object currently being serialized.
   static summarize(payload: unknown, maxLen = 80): string {
-    let s: string;
+    let s: string | undefined;
     try {
       if (payload === undefined) {
         s = "undefined";
       } else {
-        // Safe JSON stringify that detects/redacts circular references
-        const seen = new WeakSet();
-        s = JSON.stringify(payload, (_key, value) => {
+        const ancestors: unknown[] = [];
+        s = JSON.stringify(payload, function (this: unknown, _key, value: unknown) {
+          while (ancestors.length > 0 && ancestors[ancestors.length - 1] !== this) {
+            ancestors.pop();
+          }
           if (typeof value === "object" && value !== null) {
-            if (seen.has(value)) {
-              return "[Circular]";
-            }
-            seen.add(value);
+            if (ancestors.includes(value)) return "[Circular]";
+            ancestors.push(value);
           }
           return value;
         });
       }
     } catch {
-      s = String(payload);
+      s = undefined;
     }
-    if (s === undefined) s = "undefined";
+    if (s === undefined) {
+      // `JSON.stringify` returns undefined for functions/symbols/undefined and
+      // throws on BigInt; fall back to a stable, non-throwing description.
+      try {
+        s = String(payload);
+      } catch {
+        s = "[unserializable]";
+      }
+    }
     return s.length > maxLen ? `${s.slice(0, maxLen)}…` : s;
   }
 }

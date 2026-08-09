@@ -10,7 +10,7 @@
 
 import { useMemo, useState } from "react";
 import type { TraceEvent } from "@sx4im/chronos-core";
-import { pairMessages, partitionSpans, describeEvent, timeBounds } from "./capsule.js";
+import { pairMessages, partitionSpans, describeEvent, timeBounds, MAX_RENDERED_SPAN } from "./capsule.js";
 import { KIND_STYLE } from "./colors.js";
 
 interface SequenceDiagramProps {
@@ -39,7 +39,10 @@ export function SequenceDiagram({
   const flows = useMemo(() => pairMessages(events), [events]);
   const spans = useMemo(() => partitionSpans(events), [events]);
 
-  const span = Math.max(1, tMax - tMin);
+  // Clamped for the same reason as the timeline: `height = span × vScale`, and
+  // an unbounded `t` in a capsule would otherwise size the SVG into the tens of
+  // trillions of pixels.
+  const span = Math.min(MAX_RENDERED_SPAN, Math.max(1, tMax - tMin));
   const laneX = (id: string): number => {
     const i = nodes.indexOf(id);
     if (i === -1) return PAD_L + nodes.length * LANE_W + LANE_W / 2; // unknown → right void
@@ -100,8 +103,13 @@ export function SequenceDiagram({
 
           {/* partition bands across the involved lanes */}
           {spans.map((s) => {
-            const xs = Math.min(...s.event.groups.flat().map((n) => laneX(n))) - 16;
-            const xe = Math.max(...s.event.groups.flat().map((n) => laneX(n))) + 16;
+            // A partition with no members has no band to draw, and spreading an
+            // empty array into Math.min/max yields ±Infinity — which renders as
+            // invalid SVG geometry rather than nothing.
+            const lanes = s.event.groups.flat().map((n) => laneX(n));
+            if (lanes.length === 0) return null;
+            const xs = Math.min(...lanes) - 16;
+            const xe = Math.max(...lanes) + 16;
             return (
               <rect
                 key={`part-${s.event.seq}`}

@@ -4,6 +4,7 @@ import {
   type DragEvent,
 } from "react";
 import type { ParsedCapsule } from "./capsule.js";
+import { CHRONOS_VERSION } from "./version.js";
 import { ChronosLogo } from "./ChronosLogo.js";
 import {
   GithubIcon,
@@ -50,7 +51,7 @@ export function LandingPage({
           <div className="nav-brand" onClick={loadDemo}>
             <ChronosLogo size={28} />
             <span className="nav-title">Chronos</span>
-            <span className="nav-version">v0.0.0</span>
+            <span className="nav-version">v{CHRONOS_VERSION}</span>
           </div>
 
           <div className="nav-links">

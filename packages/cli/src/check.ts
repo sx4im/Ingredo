@@ -1,7 +1,8 @@
 // chronos check — static analysis tool for DST (determinism) compliance.
 
-import { readdir, readFile, stat } from "node:fs/promises";
+import { readdir, readFile, lstat, stat } from "node:fs/promises";
 import { join, resolve, relative } from "node:path";
+import { CHRONOS_VERSION } from "@sx4im/chronos-core";
 import { C, drawBox, renderTopBanner } from "./ui.js";
 
 export interface CheckResult {
@@ -100,16 +101,29 @@ const RULES: Rule[] = [
   },
 ];
 
-async function getFiles(dir: string): Promise<string[]> {
+/** Recursion depth cap. A source tree is never this deep; a pathological one is
+ *  either a mistake or an attempt to blow the stack. */
+const MAX_DEPTH = 32;
+
+/** Walk a directory for scannable source files.
+ *
+ *  Uses `lstat`, not `stat`, and skips symlinks. `stat` follows links, so a
+ *  single `ln -s .. loop` inside a scanned tree made the walk recurse forever —
+ *  `chronos check` (and therefore `chronos doctor`, which calls it) would hang
+ *  or die of stack exhaustion on a perfectly ordinary repo containing a symlink
+ *  cycle. Skipping links also keeps the scan inside the tree the user named
+ *  rather than following a link out to somewhere they did not ask about. */
+async function getFiles(dir: string, depth = 0): Promise<string[]> {
+  if (depth > MAX_DEPTH) return [];
   const results: string[] = [];
   const list = await readdir(dir).catch(() => [] as string[]);
   for (const file of list) {
     if (IGNORE_DIRS.has(file)) continue;
     const path = join(dir, file);
-    const s = await stat(path).catch(() => null);
-    if (!s) continue;
+    const s = await lstat(path).catch(() => null);
+    if (!s || s.isSymbolicLink()) continue;
     if (s.isDirectory()) {
-      results.push(...(await getFiles(path)));
+      results.push(...(await getFiles(path, depth + 1)));
     } else if (s.isFile()) {
       if (
         /\.(ts|tsx|js|jsx|mjs)$/.test(file) &&
@@ -243,11 +257,11 @@ export async function checkCommand(paths: string[] = []): Promise<CheckResult> {
     lines.pop(); // remove trailing empty line
   }
 
-  const title = `${C.indigo("CHRONOS STATIC DST CHECKER")} ${C.muted(`v0.1.4`)}`;
+  const title = `${C.indigo("CHRONOS STATIC DST CHECKER")} ${C.muted(`v${CHRONOS_VERSION}`)}`;
 
   return {
     exitCode: cleanMessage ? 0 : 1,
-    message: renderTopBanner("0.1.4") + drawBox(title, lines),
+    message: renderTopBanner() + drawBox(title, lines),
   };
 }
 

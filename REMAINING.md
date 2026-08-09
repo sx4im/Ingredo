@@ -3,10 +3,39 @@
 This document tracks any outstanding bugs, tasks, or issues remaining in the **Chronos** deterministic simulation testing framework.
 
 ## Outstanding Issues
-- **None**: There are no remaining bugs, failing tests, compilation errors, lint issues, or outstanding `TODO`/`FIXME` comments in the codebase.
+
+- **None.** No failing tests, compilation errors, lint findings, or outstanding `TODO`/`FIXME` comments.
 
 ## Code Quality Status
-- **Unit and Simulation Tests**: 191/191 passing.
+
+- **Unit and Simulation Tests**: 256/256 passing.
 - **TypeScript Typecheck**: Clean (0 compilation errors).
 - **ESLint**: Clean (0 warnings or errors).
-- **Build**: Successfully compiles all workspace packages (esm, commonjs/types).
+- **Build**: All workspace packages compile (ESM + type declarations).
+
+## Security Posture
+
+A full audit of every package was completed against the categories in the
+[vibe-security](https://github.com/raroque/vibe-security-skill) checklist, and
+every finding is fixed with a regression test. See [`SECURITY.md`](./SECURITY.md)
+for the threat model — the central assumption is that **a failure capsule is
+untrusted input**, because it is designed to be shared.
+
+Closed in that pass:
+
+| Area | Issue |
+| --- | --- |
+| Core | The strict-mode `setTimeout` guard compiled string handlers via `new Function` — an eval sink Node itself does not have |
+| CLI | Untrusted capsule text reached the terminal unescaped (ANSI/OSC injection could repaint the trace viewer's own output) |
+| CLI | `chronos export --csv` allowed spreadsheet formula injection; Markdown export allowed table breakout |
+| CLI | The Gemini API key was sent in a URL query string; the interactive key prompt echoed in the clear |
+| CLI | `chronos check` followed symlinks and recursed forever on a cycle; `sweep` imported scenarios from any path |
+| Capsules | No file-size limit before read; no `__proto__` rejection; predictable temp filename on write; trace events unvalidated |
+| Inspector | Malformed events crashed the render; event count, node count, and time span were unbounded |
+| Deployment | No security headers on the hosted Inspector; source maps published; CI ran with default (write) token permissions |
+
+## Known Non-Goals
+
+- `@sx4im/chronos-core` keeps **zero runtime dependencies**. Do not add any.
+- The BigInt PRNG is the known hot path. It stays pure TypeScript until the
+  planned Rust/WASM phase, which will keep pure TS as the default.
