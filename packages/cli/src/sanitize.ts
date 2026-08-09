@@ -23,14 +23,24 @@
  *  character. Tab survives (harmless, and real payloads contain it); newline
  *  does NOT, because these renderers emit one line per event and a summary
  *  containing `\n` would forge additional event lines. */
+//
+// The byte ranges below are ECMA-48's, and each pass's quantified classes are
+// mutually disjoint — no input can be split between two of them — so every
+// pass is linear and none of this is a ReDoS vector on attacker-chosen text.
 export function sanitizeText(s: string): string {
   return (
     s
-      // CSI / OSC / SS2 / SS3 / other ESC-introduced sequences, including
-      // unterminated ones (a lone trailing ESC is itself worth removing).
+      // OSC: ESC ] … terminated by BEL or ST (ESC \), or left unterminated.
+      // Matched first, because its payload may legitimately contain `[`.
       .replace(/\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)?/g, "")
-      .replace(/\x1b[[\]()#;?]*[0-9;]*[A-Za-z]?/g, "")
-      // Remaining C0 (except tab), DEL, and C1 controls.
+      // CSI: ESC [ · parameter bytes 0x30–0x3F · intermediates 0x20–0x2F ·
+      // final byte 0x40–0x7E. Covers colors, cursor movement, and erasure.
+      .replace(/\x1b\[[0-?]*[ -/]*[@-~]?/g, "")
+      // Any other ESC-introduced sequence (charset selection, two-character
+      // escapes) and a lone trailing ESC.
+      .replace(/\x1b[ -/]*[0-~]?/g, "")
+      // Remaining C0 (except tab), DEL, and C1 controls — including the
+      // single-byte C1 forms such as 0x9B, which is CSI in its own right.
       .replace(/[\x00-\x08\x0a-\x1f\x7f-\x9f]/g, "")
   );
 }

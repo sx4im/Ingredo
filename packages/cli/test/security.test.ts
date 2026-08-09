@@ -100,8 +100,30 @@ describe("sanitizeText — terminal control-sequence stripping", () => {
     expect(sanitizeText("a\tb")).toBe("a\tb");
   });
 
+  it("removes the single-byte C1 CSI (0x9b), not just the ESC[ form", () => {
+    expect(sanitizeText("a\u009b31mb")).toBe("a31mb");
+  });
+
+  it("removes CSI sequences using the full ECMA-48 byte ranges", () => {
+    // Parameter bytes are 0x30-0x3F (not just digits) and intermediates
+    // 0x20-0x2F, so a private-use sequence like ESC[?25l must go too.
+    expect(sanitizeText(`${ESC}[?25lhidden`)).toBe("hidden");
+    expect(sanitizeText(`${ESC}[38;2;255;0;0mx`)).toBe("x");
+    expect(sanitizeText(`${ESC}(Bplain`)).toBe("plain");
+  });
+
   it("leaves ordinary text, unicode, and emoji untouched", () => {
     expect(sanitizeText("Append{term:2} → node-1 ✓ 日本語")).toBe("Append{term:2} → node-1 ✓ 日本語");
+  });
+
+  it("stays linear on adversarial input (no catastrophic backtracking)", () => {
+    // Every quantified class in sanitizeText is disjoint from its neighbours,
+    // so no input can be split between two of them. Pin that: a pathological
+    // string built from the ambiguous-looking bytes must finish immediately.
+    const evil = `${ESC}[` + ";".repeat(50_000) + "!".repeat(50_000);
+    const started = Date.now();
+    sanitizeText(evil);
+    expect(Date.now() - started).toBeLessThan(1000);
   });
 
   it("caps length so a renderer never depends on a bound enforced elsewhere", () => {

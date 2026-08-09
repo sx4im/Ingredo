@@ -3,8 +3,8 @@ import {
   type ChangeEvent,
   type DragEvent,
 } from "react";
-import { CHRONOS_VERSION } from "@sx4im/chronos-core";
 import type { ParsedCapsule } from "./capsule.js";
+import { CHRONOS_VERSION } from "./version.js";
 import { ChronosLogo } from "./ChronosLogo.js";
 import {
   GithubIcon,
