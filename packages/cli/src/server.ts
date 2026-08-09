@@ -37,7 +37,7 @@ const SECURITY_HEADERS = {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
     "connect-src 'self'; img-src 'self' data:; " +
     "font-src 'self' data: https://fonts.gstatic.com; " +
-    "base-uri 'self'; form-action 'none'; frame-ancestors 'none'",
+    "base-uri 'self'; form-action 'none'; frame-ancestors 'none'; object-src 'none'",
 } as const;
 
 // Require the Host header to be a loopback host

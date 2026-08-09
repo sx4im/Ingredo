@@ -277,17 +277,20 @@ describe("readCapsule — resource and pollution guards", () => {
     }
   });
 
-  it("rejects a capsule carrying a __proto__ key", async () => {
-    // JSON.parse alone would not pollute anything, but the parsed config and
-    // trace are spread and merged downstream, where an Object.assign or a
-    // hand-rolled deep merge WOULD trigger the setter.
-    const dir = freshDir();
-    const p = join(dir, "proto.json");
-    const raw = JSON.stringify(base()).replace(/^\{/, '{"__proto__":{"polluted":true},');
-    writeFileSync(p, raw);
-    await expect(readCapsule(p)).rejects.toThrow(/__proto__/);
-    expect(({} as Record<string, unknown>).polluted).toBeUndefined();
-  });
+  // JSON.parse alone would not pollute anything, but the parsed config and
+  // trace are spread and merged downstream, where an Object.assign or a
+  // hand-rolled deep merge WOULD trigger the setter.
+  it.each(["__proto__", "constructor", "prototype"])(
+    "rejects a capsule carrying a %s key",
+    async (key) => {
+      const dir = freshDir();
+      const p = join(dir, `${key.replace(/_/g, "")}.json`);
+      const raw = JSON.stringify(base()).replace(/^\{/, `{${JSON.stringify(key)}:{"polluted":true},`);
+      writeFileSync(p, raw);
+      await expect(readCapsule(p)).rejects.toThrow(new RegExp(key));
+      expect(({} as Record<string, unknown>).polluted).toBeUndefined();
+    },
+  );
 
   it("writes the capsule with owner-only permissions", async () => {
     const dir = freshDir();

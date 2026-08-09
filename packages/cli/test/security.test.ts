@@ -112,6 +112,21 @@ describe("sanitizeText — terminal control-sequence stripping", () => {
     expect(sanitizeText(`${ESC}(Bplain`)).toBe("plain");
   });
 
+  it("removes string-terminated sequences with their payload (OSC/DCS/APC)", () => {
+    // The payload of a DCS/APC sequence is arbitrary text; dropping only the
+    // introducer would leave it on screen looking like part of the trace.
+    expect(sanitizeText(`${ESC}Pq#0;2;0;0;0${ESC}\\ok`)).toBe("ok");
+    expect(sanitizeText(`${ESC}_payload${ESC}\\ok`)).toBe("ok");
+    expect(sanitizeText(`${ESC}^msg${ESC}\\ok`)).toBe("ok");
+  });
+
+  it("removes bidi overrides (Trojan Source) and zero-width padding", () => {
+    // U+202E makes `node-1 → node-2` render reversed — the same display
+    // deception as an ANSI repaint, in a tool whose job is reporting facts.
+    expect(sanitizeText("node-1 \u202e> 2-edon")).toBe("node-1 > 2-edon");
+    expect(sanitizeText("a\u200b\u200c\u2060\ufeffb")).toBe("ab");
+  });
+
   it("leaves ordinary text, unicode, and emoji untouched", () => {
     expect(sanitizeText("Append{term:2} → node-1 ✓ 日本語")).toBe("Append{term:2} → node-1 ✓ 日本語");
   });
@@ -147,6 +162,19 @@ describe("escapeCsvCell — spreadsheet formula injection", () => {
     // A leading \r is both a formula trigger and a terminal control character;
     // sanitizeText removes it first, which leaves nothing to neutralize.
     expect(escapeCsvCell("\rlead")).toBe("lead");
+  });
+
+  // An anchored test against the very first character alone is sidestepped by
+  // anything a spreadsheet skips over on its way to the `=`.
+  it.each([
+    [" =cmd|'/c calc'!A1", "leading whitespace, which spreadsheets skip"],
+    ["\u200b=cmd|'/c calc'!A1", "a zero-width space"],
+    ["\ufeff=cmd|'/c calc'!A1", "a byte-order mark"],
+    ["  \t =cmd|'/c calc'!A1", "mixed invisible padding"],
+  ])("neutralizes a formula hidden behind %j (%s)", (payload) => {
+    const cell = escapeCsvCell(payload);
+    const inner = cell.startsWith('"') ? cell.slice(1, -1) : cell;
+    expect(inner.startsWith("'")).toBe(true);
   });
 
   it("still quotes and doubles per RFC 4180", () => {

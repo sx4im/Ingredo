@@ -411,18 +411,22 @@ export async function readCapsule(path: string): Promise<FailureCapsule> {
   return validateCapsule(obj);
 }
 
-/** `JSON.parse` reviver that refuses `__proto__` outright.
+// Keys that only ever appear in a capsule as a prototype-pollution attempt. A
+// legitimate capsule has no use for any of them.
+const FORBIDDEN_KEYS = new Set(["__proto__", "constructor", "prototype"]);
+
+/** `JSON.parse` reviver that refuses prototype-pollution keys outright.
  *
  *  `JSON.parse('{"__proto__":{"isAdmin":true}}')` does not itself pollute
  *  anything — it creates a plain own property. The danger is downstream: the
  *  parsed `config`/`trace` objects are spread, merged, and passed into the
  *  Simulator, and any one of those steps performed with `Object.assign` or a
  *  hand-written deep merge WOULD trigger the `__proto__` setter and mutate
- *  `Object.prototype` for the whole process. Dropping the key at the parse
+ *  `Object.prototype` for the whole process. Dropping the keys at the parse
  *  boundary means no future refactor downstream can reintroduce that path. */
 function reviveSafely(this: unknown, key: string, value: unknown): unknown {
-  if (key === "__proto__") {
-    throw new InvalidCapsule("capsule contains a forbidden `__proto__` key");
+  if (FORBIDDEN_KEYS.has(key)) {
+    throw new InvalidCapsule(`capsule contains a forbidden \`${key}\` key`);
   }
   return value;
 }
