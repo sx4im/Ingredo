@@ -266,7 +266,7 @@ npx chronos <command> [options]
 * **`chronos sweep <scenario> [seeds]`**: Run a test scenario across $N$ seeds to discover hidden race conditions.
 * **`chronos shrink <capsule>`**: Shrink a complex failure trace into the minimal reproducing steps.
 * **`chronos open <capsule>`**: Launch the web-based time-travel inspector preloaded with the capsule data.
-* **`chronos explain <capsule>`**: Get AI-powered failure analysis and root-cause explanations (supports Ollama, OpenAI, Anthropic, Gemini, Groq, DeepSeek, and more).
+* **`chronos explain <capsule>`**: Get AI-powered failure analysis and root-cause explanations. Set `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or `GEMINI_API_KEY` — or point `LLM_BASE_URL` at any OpenAI-compatible endpoint (Ollama, LM Studio, vLLM, OpenRouter, Groq, …).
 * **`chronos stats <capsule>`**: Print execution statistics, network packet metrics, and event distributions.
 * **`chronos export <capsule> --format markdown|csv`**: Export trace timelines to Markdown documents or CSV reports.
 

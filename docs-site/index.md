@@ -92,4 +92,4 @@ See the repository README for setup steps and the determinism checklist.
 
 ## Status
 
-This site documents Chronos v0.0.0. Start with the [15-minute quickstart](/guide/quickstart), read [the determinism model](/concepts/determinism) for execution rules, or check the [API reference](/api/) for function signatures.
+This site documents Chronos v0.1.5. Start with the [15-minute quickstart](/guide/quickstart), read [the determinism model](/concepts/determinism) for execution rules, or check the [API reference](/api/) for function signatures.

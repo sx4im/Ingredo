@@ -3,6 +3,7 @@ import {
   type ChangeEvent,
   type DragEvent,
 } from "react";
+import { CHRONOS_VERSION } from "@sx4im/chronos-core";
 import type { ParsedCapsule } from "./capsule.js";
 import { ChronosLogo } from "./ChronosLogo.js";
 import {
@@ -50,7 +51,7 @@ export function LandingPage({
           <div className="nav-brand" onClick={loadDemo}>
             <ChronosLogo size={28} />
             <span className="nav-title">Chronos</span>
-            <span className="nav-version">v0.0.0</span>
+            <span className="nav-version">v{CHRONOS_VERSION}</span>
           </div>
 
           <div className="nav-links">

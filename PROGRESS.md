@@ -41,6 +41,28 @@ This document tracks the features, validation steps, and progress of the **Chron
 - Interactive timeline scrubber to inspect system states chronologically.
 - **Metrics & Link Matrix Dashboard**: Highlights total events, drop rate, duplicate rate, and fault counts. Offers an interactive node-to-node link matrix detailing traffic statistics and losses.
 
+### 6. Security Hardening
+
+A full audit against the [vibe-security](https://github.com/raroque/vibe-security-skill)
+checklist, with every finding fixed and pinned by a regression test. The threat
+model is written up in [`SECURITY.md`](./SECURITY.md); its central assumption is
+that **a failure capsule is untrusted input**, since capsules exist to be shared.
+
+- **Capsule trust boundary**: the whole capsule — trace envelope and every event
+  against the `TraceEvent` union — is validated at read time, so renderers can
+  stay simple. File size is capped before reading, `__proto__` is rejected at the
+  parse boundary, and writes use an unpredictable temp name with an exclusive
+  `0600` create.
+- **Per-sink output escaping**: terminal control sequences are stripped before
+  printing, CSV cells are neutralized against spreadsheet formula injection, and
+  Markdown cells against table breakout.
+- **Credential handling**: `chronos explain` sends API keys as headers only,
+  requires `https` off-loopback, and masks the interactive key prompt.
+- **Bounded rendering**: the Inspector drops malformed events and caps event
+  count, node count, and laid-out time span — surfacing any truncation in the UI.
+- **Deployment**: security headers on the hosted Inspector, no published source
+  maps, and least-privilege CI token permissions.
+
 ---
 
 ## Workspace Status
@@ -49,4 +71,4 @@ All components of the monorepo are fully operational and verified:
 - **Build**: Successfully compiles ESM and TypeScript definitions (`dts`) across all packages.
 - **Typecheck**: Zero TypeScript compile errors (`tsc --noEmit` is clean).
 - **Lint**: Zero ESLint warnings or errors.
-- **Tests**: All 191 tests are passing.
+- **Tests**: All 256 tests are passing.
