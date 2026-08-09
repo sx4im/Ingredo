@@ -17,6 +17,7 @@ import {
   describeEvent,
   isSameOriginCapsuleUrl,
   capsuleParamError,
+  MAX_RENDERED_EVENTS,
 } from "../src/capsule.js";
 
 function ev(e: TraceEvent): TraceEvent {
@@ -320,5 +321,79 @@ describe("small derivations", () => {
     expect(describeEvent(events[0]!)).toContain("timer fired @ node 0");
     expect(describeEvent(events[1]!)).toContain("0 → 1  inc");
     expect(describeEvent(events[3]!)).toContain("partition");
+  });
+});
+
+// The Inspector renders capsules that arrive by file drop or `?capsule=` — i.e.
+// whatever someone was handed. The views destructure events by `kind` and index
+// style tables with it, and size their SVG as `span × zoom`, so anything the
+// parse boundary lets through is a crash or a hung tab rather than a bad pixel.
+describe("parseCapsule — untrusted capsule defenses", () => {
+  function raw(events: unknown[], nodes: unknown[] = ["0", "1"]): string {
+    return JSON.stringify({
+      seed: "42",
+      nodes,
+      invariant: { name: "inv", detail: "d" },
+      trace: { seed: "42", config: {}, nodes, events, result: "violation" },
+    });
+  }
+
+  it("drops events that do not match the TraceEvent union", () => {
+    const parsed = parseCapsule(
+      raw([
+        { t: 0, seq: 0, kind: "wake", nodeId: "0" },
+        { t: 1, seq: 1, kind: "exec", cmd: "rm -rf /" },
+        { t: 2, seq: 2, kind: "send", from: "0", to: "1" }, // no summary
+        { t: 3, seq: 3, kind: "partition", groups: "not-an-array", healAt: 9 },
+        { t: "x", seq: 4, kind: "wake", nodeId: "1" },
+      ])
+    );
+    expect(parsed.trace.events).toHaveLength(1);
+    expect(parsed.droppedEvents).toBe(4);
+    expect(parsed.totalEvents).toBe(5);
+  });
+
+  it("keeps a readable trace rather than rejecting it over one bad event", () => {
+    const parsed = parseCapsule(
+      raw([
+        { t: 0, seq: 0, kind: "send", from: "0", to: "1", summary: "ping" },
+        { t: 1, seq: 1, kind: "bogus" },
+      ])
+    );
+    expect(parsed.trace.events).toHaveLength(1);
+    expect(parsed.droppedEvents).toBe(1);
+  });
+
+  it("caps rendered events and reports the truncation", () => {
+    // 2M events mapped to SVG markers with no virtualization is a hung tab.
+    const many = Array.from({ length: MAX_RENDERED_EVENTS + 25 }, (_, i) => ({
+      t: i,
+      seq: i,
+      kind: "wake",
+      nodeId: "0",
+    }));
+    const parsed = parseCapsule(raw(many));
+    expect(parsed.trace.events).toHaveLength(MAX_RENDERED_EVENTS);
+    expect(parsed.truncatedEvents).toBe(25);
+    expect(parsed.totalEvents).toBe(MAX_RENDERED_EVENTS + 25);
+  });
+
+  it("caps the node list (the metrics link matrix is n×n)", () => {
+    const nodes = Array.from({ length: 5000 }, (_, i) => `n${i}`);
+    expect(parseCapsule(raw([], nodes)).nodes).toHaveLength(256);
+  });
+
+  it("reports no truncation for an ordinary capsule", () => {
+    const parsed = parseCapsule(raw([{ t: 0, seq: 0, kind: "wake", nodeId: "0" }]));
+    expect(parsed.droppedEvents).toBe(0);
+    expect(parsed.truncatedEvents).toBe(0);
+    expect(parsed.totalEvents).toBe(1);
+  });
+
+  it("rejects a cross-origin ?capsule= value (client-side SSRF)", () => {
+    for (const u of ["//evil.test/c.json", "https://evil.test/c.json", "data:,x", "capsule.json"]) {
+      expect(isSameOriginCapsuleUrl(u)).toBe(false);
+    }
+    expect(isSameOriginCapsuleUrl("/capsule")).toBe(true);
   });
 });
