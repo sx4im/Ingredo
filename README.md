@@ -33,6 +33,7 @@
 - [CLI Reference](#cli-reference)
 - [Examples & Reference Implementations](#examples--reference-implementations)
 - [Comparison: Chronos vs Traditional Testing vs Madsim / Turmoil](#comparison-chronos-vs-traditional-testing-vs-madsim--turmoil)
+- [Security](#security)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -292,6 +293,16 @@ Explore ready-to-run examples in the repository:
 | **Vitest / Jest Native** | Yes | No | No | Yes |
 | **Visual Time-Travel Inspector** | No | No | No | Yes (`chronos open`) |
 | **AI Failure Explainer** | No | No | No | Yes (`chronos explain`) |
+
+---
+
+## Security
+
+**A failure capsule is untrusted input.** Capsules exist to be shared — attached to an issue, produced by someone else's CI, handed to a teammate — so Chronos treats one exactly like a file from a stranger. Every capsule is fully validated at the read boundary, capsule paths are confined to your project, and capsule text is escaped separately for each place it is rendered (terminal, CSV, Markdown, and the Inspector's DOM).
+
+One consequence worth stating outright: `env.random()` under `SimEnv` is a **seeded** PRNG. It is deterministic by design and therefore completely predictable — never use it as a source of secrets in a simulated run. The production `RealEnv` backs the same call with a CSPRNG, so the same application code is safe in production.
+
+Read **[SECURITY.md](./SECURITY.md)** for the full threat model and how to report a vulnerability.
 
 ---
 
