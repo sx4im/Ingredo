@@ -65,4 +65,7 @@ export {
   type RunOptions as SimulatorRunOptions,
 } from "./simulator.js";
 
-export const CHRONOS_VERSION = "0.0.0";
+/** The single source of truth for the version Chronos reports everywhere: the
+ *  `chronosVersion` stamped into capsules, the CLI banner, and the doctor
+ *  report. Keep it in step with the packages' `package.json` version. */
+export const CHRONOS_VERSION = "0.1.5";
