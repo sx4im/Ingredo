@@ -4,7 +4,8 @@ This document tracks any outstanding bugs, tasks, or issues remaining in the **C
 
 ## Outstanding Issues
 
-- **None.** No failing tests, compilation errors, lint findings, or outstanding `TODO`/`FIXME` comments.
+- **None** for code quality (tests/typecheck/lint/build).
+- **Outreach follow-ups (human):** from a personal GitHub account, open listing PRs using [`docs/outreach/`](./docs/outreach/README.md) patches (or wait for maintainers on the suggestion issues). Close accidental probe [dastergon/awesome-chaos-engineering#205](https://github.com/dastergon/awesome-chaos-engineering/issues/205). Wait for ~100 stars before Best of JS / awesome-nodejs.
 
 ## Code Quality Status
 

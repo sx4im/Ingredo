@@ -72,3 +72,7 @@ All components of the monorepo are fully operational and verified:
 - **Typecheck**: Zero TypeScript compile errors (`tsc --noEmit` is clean).
 - **Lint**: Zero ESLint warnings or errors.
 - **Tests**: All 256 tests are passing.
+
+## Outreach (awesome lists)
+
+Ready-to-submit listing kit lives in [`docs/outreach/`](./docs/outreach/README.md) (entries, patches, PR bodies). Suggestion issues filed on the best-fit lists; external listing PRs need a human fork (GitHub App cannot fork).
