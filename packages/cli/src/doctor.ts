@@ -30,7 +30,7 @@ async function dirExists(p: string): Promise<boolean> {
   }
 }
 
-export async function doctorCommand(): Promise<DoctorResult> {
+export async function doctorCommand(paths: string[] = []): Promise<DoctorResult> {
   const nodeVersion = process.version;
   const nodeMajor = parseInt(nodeVersion.slice(1).split(".")[0] ?? "0", 10);
   const nodeOk = nodeMajor >= 20;
@@ -43,8 +43,9 @@ export async function doctorCommand(): Promise<DoctorResult> {
   const inspectorDist = resolve(here, "..", "..", "inspector", "dist");
   const inspectorOk = await dirExists(inspectorDist);
 
-  // Run the static DST compliance linter
-  const checkRes = await checkCommand();
+  // Run the static DST compliance linter (`paths` lets tests point the check
+  // at a hermetic fixture instead of whatever directory the process sits in).
+  const checkRes = await checkCommand(paths);
   const dstOk = checkRes.exitCode === 0;
 
   const lines: string[] = [

@@ -1,8 +1,14 @@
 #!/usr/bin/env node
 // chronos — the @sx4im/chronos-cli bin (§3.4, §4.5, §5.1). A thin argv dispatcher over
 // the pure command functions (replay/trace/sweep/open/explain/doctor).
+//
+// The dispatch itself (`runCommand`) is a PURE async function from argv to a
+// result object — no process.exit, no stdout writes — so the CLI surface is
+// unit-testable. `main()` is the only impure shell: it writes streams, sets
+// process.exitCode, and keeps the process alive while the inspector serves.
 
 import { pathToFileURL } from "node:url";
+import type { Server } from "node:http";
 import { CHRONOS_VERSION } from "@sx4im/chronos-core";
 import { traceCommand } from "./trace.js";
 import { replayCommand } from "./replay.js";
@@ -63,6 +69,7 @@ function buildHelpText(): string {
     "",
     `${C.bold("Environment Variables")}:`,
     `  ${C.purple("CHRONOS_SEED")}       Force a single seed for simulation runs`,
+    `  ${C.purple("CHRONOS_MAX_SEEDS")}  Cap count-form seed sweeps (CI speed; explicit arrays exempt)`,
     `  ${C.purple("CHRONOS_DIR")}        Override default output directory (default: .chronos)`,
     `  ${C.purple("CHRONOS_STRICT")}     Entropy guard level: route (default) | throw | off`,
     `  ${C.purple("CHRONOS_MAX_CAPSULE_BYTES")}  Raise the 128 MB capsule read limit`,
@@ -71,48 +78,52 @@ function buildHelpText(): string {
   return header + drawBox(`${C.indigo("COMMAND REFERENCE")}`, helpLines) + "\n";
 }
 
-function fail(msg: string, code = 2): never {
-  process.stderr.write(`\n${C.badgeRose(" ERROR ")} ${C.rose(msg)}\n\n` + buildHelpText());
-  process.exit(code);
+/** What one invocation produces. `main()` turns this into stream writes and an
+ *  exit code; tests assert on it directly. */
+export interface RunResult {
+  /** Exit code for process.exitCode (undefined → leave unset, i.e. 0). */
+  code?: number;
+  /** Text destined for stdout. */
+  out?: string;
+  /** Text destined for stderr (argument errors carry the help text). */
+  err?: string;
+  /** `chronos open` only: the caller must keep the process alive while this
+   *  server runs (and stop it on SIGINT/SIGTERM). */
+  server?: Server;
 }
 
-async function main(): Promise<void> {
-  const [, , cmd, ...rest] = process.argv;
+/** Pure-ish dispatcher: argv tail → outcome. Never exits the process. */
+export async function runCommand(
+  cmd: string | undefined,
+  rest: string[],
+): Promise<RunResult> {
   if (!cmd || cmd === "-h" || cmd === "--help" || cmd === "help") {
-    process.stdout.write(buildHelpText());
-    return;
+    return { out: buildHelpText() };
   }
   if (cmd === "-v" || cmd === "--version" || cmd === "version") {
-    process.stdout.write(`\n  ${C.badgeIndigo(" CHRONOS ")} ${C.white(`v${VERSION}`)}\n\n`);
-    return;
+    return { out: `\n  ${C.badgeIndigo(" CHRONOS ")} ${C.white(`v${VERSION}`)}\n\n` };
   }
 
   switch (cmd) {
     case "doctor": {
-      const r = await doctorCommand();
-      process.stdout.write(r.message + "\n");
-      process.exitCode = r.exitCode;
-      return;
+      const r = await doctorCommand(rest);
+      return { out: r.message + "\n", code: r.exitCode };
     }
     case "replay": {
       const [capsule, scenario] = rest;
-      if (!capsule) fail("replay requires a <capsule> path");
+      if (!capsule) return usageError("replay requires a <capsule> path");
       const r = await replayCommand(capsule, scenario);
-      process.stdout.write(r.message + "\n");
-      process.exitCode = r.exitCode;
-      return;
+      return { out: r.message + "\n", code: r.exitCode };
     }
     case "trace": {
       const [capsule] = rest;
-      if (!capsule) fail("trace requires a <capsule> path");
+      if (!capsule) return usageError("trace requires a <capsule> path");
       const r = await traceCommand(capsule);
-      for (const line of r.lines) process.stdout.write(line + "\n");
-      process.exitCode = r.exitCode;
-      return;
+      return { out: r.lines.map((l) => l + "\n").join(""), code: r.exitCode };
     }
     case "sweep": {
       const [scenario, ...args] = rest;
-      if (!scenario) fail("sweep requires a <scenario> module path");
+      if (!scenario) return usageError("sweep requires a <scenario> module path");
       let seedsArg: string | undefined = args[0];
       for (const arg of args) {
         if (arg.startsWith("--seeds=")) seedsArg = arg.split("=")[1];
@@ -120,70 +131,55 @@ async function main(): Promise<void> {
       let seeds: number | undefined;
       if (seedsArg !== undefined && !seedsArg.startsWith("-")) {
         const n = Number(seedsArg);
-        if (!Number.isInteger(n) || n <= 0) fail("sweep seeds must be a positive integer");
+        if (!Number.isInteger(n) || n <= 0) {
+          return usageError("sweep seeds must be a positive integer");
+        }
         // `resolveSeeds` materializes the seed list before the first run, so an
         // unbounded count is an out-of-memory abort rather than a long sweep.
         if (n > MAX_SWEEP_SEEDS) {
-          fail(`sweep seeds must be <= ${MAX_SWEEP_SEEDS} (got ${n})`);
+          return usageError(`sweep seeds must be <= ${MAX_SWEEP_SEEDS} (got ${n})`);
         }
         seeds = n;
       }
       const r = await sweepCommand(scenario, seeds);
-      process.stdout.write(r.message + "\n");
-      for (const s of r.violating) process.stdout.write(`  violating seed: ${s}\n`);
-      process.exitCode = r.exitCode;
-      return;
+      const violating = r.violating.map((s) => `  violating seed: ${s}\n`).join("");
+      return { out: r.message + "\n" + violating, code: r.exitCode };
     }
     case "shrink": {
       const [capsule, scenario] = rest;
-      if (!capsule) fail("shrink requires a <capsule> path");
+      if (!capsule) return usageError("shrink requires a <capsule> path");
       const r = await shrinkCommand(capsule, scenario);
-      process.stdout.write(r.message + "\n");
-      process.exitCode = r.exitCode;
-      return;
+      return { out: r.message + "\n", code: r.exitCode };
     }
     case "open": {
       const [capsule] = rest;
-      if (!capsule) fail("open requires a <capsule> path");
+      if (!capsule) return usageError("open requires a <capsule> path");
       const r = await openCommand(capsule, { serve: true });
-      process.stdout.write(r.message + "\n");
-      process.exitCode = r.exitCode;
-      // Keep the process alive while the inspector is served; stop cleanly on signal.
-      if (r.server) {
-        const stop = (): void => {
-          r.server?.close();
-          process.exit(0);
-        };
-        process.on("SIGINT", stop);
-        process.on("SIGTERM", stop);
-      }
-      return;
+      return {
+        out: r.message + "\n",
+        code: r.exitCode,
+        ...(r.server !== undefined ? { server: r.server } : {}),
+      };
     }
     case "explain": {
       const [capsule] = rest;
-      if (!capsule) fail("explain requires a <capsule> path");
+      if (!capsule) return usageError("explain requires a <capsule> path");
       const r = await explainCommand(capsule);
-      process.stdout.write(r.message + "\n");
-      process.exitCode = r.exitCode;
-      return;
+      return { out: r.message + "\n", code: r.exitCode };
     }
     case "stats": {
       const [capsule] = rest;
-      if (!capsule) fail("stats requires a <capsule> path");
+      if (!capsule) return usageError("stats requires a <capsule> path");
       const r = await statsCommand(capsule);
-      process.stdout.write(r.message + "\n");
-      process.exitCode = r.exitCode;
-      return;
+      return { out: r.message + "\n", code: r.exitCode };
     }
     case "check": {
       const r = await checkCommand(rest);
-      process.stdout.write(r.message + "\n");
-      process.exitCode = r.exitCode;
-      return;
+      return { out: r.message + "\n", code: r.exitCode };
     }
     case "export": {
       const [capsule] = rest;
-      if (!capsule) fail("export requires a <capsule> path");
+      if (!capsule) return usageError("export requires a <capsule> path");
 
       // Parse format and output flags if any
       let format: "csv" | "markdown" | "md" | undefined;
@@ -202,12 +198,32 @@ async function main(): Promise<void> {
       }
 
       const r = await exportCommand(capsule, { format, output });
-      process.stdout.write(r.message + "\n");
-      process.exitCode = r.exitCode;
-      return;
+      return { out: r.message + "\n", code: r.exitCode };
     }
     default:
-      fail(`unknown command "${cmd}"`);
+      return usageError(`unknown command "${cmd}"`);
+  }
+}
+
+/** An argument error: message on stderr followed by the command reference. */
+function usageError(msg: string): RunResult {
+  return { err: `\n${C.badgeRose(" ERROR ")} ${C.rose(msg)}\n\n` + buildHelpText(), code: 2 };
+}
+
+async function main(): Promise<void> {
+  const [, , cmd, ...rest] = process.argv;
+  const r = await runCommand(cmd, rest);
+  if (r.out !== undefined) process.stdout.write(r.out);
+  if (r.err !== undefined) process.stderr.write(r.err);
+  if (r.code !== undefined) process.exitCode = r.code;
+  // Keep the process alive while the inspector is served; stop cleanly on signal.
+  if (r.server) {
+    const stop = (): void => {
+      r.server?.close();
+      process.exit(0);
+    };
+    process.on("SIGINT", stop);
+    process.on("SIGTERM", stop);
   }
 }
 
