@@ -22,6 +22,7 @@ export {
   shrinkCapsule,
   resolveSeeds,
   executeScenario,
+  buildSimulator,
 } from "./engine.js";
 export type { ShrinkConfig, ShrinkResult, ShrinkOptions } from "./engine.js";
 export {

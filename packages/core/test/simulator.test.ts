@@ -33,6 +33,59 @@ describe("Simulator", () => {
     }
   });
 
+  it("reports timeout (never ok) when the step budget truncates a pending queue", async () => {
+    const sim = new Simulator({ seed: 3n, nodes: 1 });
+    // Five events; the budget allows only two steps.
+    for (let i = 1; i <= 5; i++) {
+      sim.scheduler.schedule(i, () => {}, { kind: "wake", nodeId: "node-0" });
+    }
+    const result = await sim.run({ maxSteps: 2 });
+    expect(result.status).toBe("timeout");
+    if (result.status === "timeout") {
+      expect(result.steps).toBe(2);
+      expect(result.pending).toBe(3);
+      expect(result.trace.result).toBe("timeout"); // visible in the Trace too
+    }
+  });
+
+  it("skips liveness invariants on a truncated run but checks them on completion", async () => {
+    // A liveness invariant that only holds once the system actually settles.
+    // Under a truncated budget it must NOT fire (end-of-run is an artifact of
+    // the budget); on a real drain it MUST be checked.
+    let checked = false;
+    const liveness = {
+      kind: "liveness" as const,
+      name: "eventually all done",
+      check: () => {
+        checked = true;
+        return true;
+      },
+    };
+
+    const truncated = new Simulator({ seed: 5n, nodes: 1 });
+    truncated.addInvariant(liveness);
+    for (let i = 1; i <= 4; i++) {
+      truncated.scheduler.schedule(i, () => {}, {
+        kind: "wake",
+        nodeId: "node-0",
+      });
+    }
+    const t = await truncated.run({ maxSteps: 2 });
+    expect(t.status).toBe("timeout");
+    expect(checked).toBe(false); // skipped — no fake "liveness holds"
+
+    checked = false;
+    const complete = new Simulator({ seed: 5n, nodes: 1 });
+    complete.addInvariant({ ...liveness });
+    complete.scheduler.schedule(1, () => {}, {
+      kind: "wake",
+      nodeId: "node-0",
+    });
+    const c = await complete.run();
+    expect(c.status).toBe("ok");
+    expect(checked).toBe(true); // genuinely end-of-run → checked
+  });
+
   it("delivers messages between nodes via env.net", async () => {
     const sim = new Simulator({
       seed: 42n,

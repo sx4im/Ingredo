@@ -66,6 +66,18 @@ export interface RunOptions {
   onStepEnd?: (ev: SimEvent) => void; // fired after ev.run() + microtask drain (safety invariants live here)
 }
 
+/** Outcome of a scheduler run. `completed: false` means the step budget was
+ *  exhausted while events were still pending — the simulation was truncated,
+ *  NOT finished, so end-of-run semantics (liveness checks, "system settled")
+ *  must not fire downstream. The return value is the load-bearing signal that
+ *  replaces the old silent truncation. */
+export interface SchedulerRunResult {
+  /** true ⇔ the heap drained (the system reached quiescence). */
+  completed: boolean;
+  /** Number of events actually executed. */
+  steps: number;
+}
+
 export class Scheduler {
   private heap = new MinHeap<SimEvent>(cmp);
   private seqCounter = 0;
@@ -101,11 +113,15 @@ export class Scheduler {
     return ev;
   }
 
-  /** Run until the queue drains, a step budget is hit, or an invariant throws. */
-  async run(opts: RunOptions = {}): Promise<void> {
+  /** Run until the queue drains, a step budget is hit, or an invariant throws.
+   *  Returns whether the run actually completed (heap drained) or was truncated
+   *  by the step budget — the Simulator turns that into the `timeout` status. */
+  async run(opts: RunOptions = {}): Promise<SchedulerRunResult> {
     let steps = 0;
     while (!this.heap.isEmpty()) {
-      if (opts.maxSteps !== undefined && steps >= opts.maxSteps) break;
+      if (opts.maxSteps !== undefined && steps >= opts.maxSteps) {
+        return { completed: false, steps };
+      }
       const ev = this.heap.pop()!;
       if (ev.canceled) continue;
       this.clock.advanceTo(ev.time); // time jumps forward
@@ -115,6 +131,7 @@ export class Scheduler {
       opts.onStepEnd?.(ev); // hook for safety-invariant checks
       steps++;
     }
+    return { completed: true, steps };
   }
 
   /** Lazy-cancel all pending events owned by a node (used on crash). */

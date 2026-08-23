@@ -66,6 +66,10 @@ export interface RunOptions {
 
 export type RunResult =
   | { status: "ok"; trace: Trace }
+  /** The step budget was exhausted while events were still pending: the run was
+   *  truncated, so end-of-run conclusions ("system settled", liveness holds)
+   *  were NOT drawn. `pending` counts the events left in the heap. */
+  | { status: "timeout"; trace: Trace; steps: number; pending: number }
   | { status: "violation"; trace: Trace; invariant: string; detail: string };
 
 export class Simulator {
@@ -179,7 +183,14 @@ export class Simulator {
     this.partitions.clear();
   }
 
-  /** Run until the queue drains, an invariant breaks, or maxSteps is hit. */
+  /** Run until the queue drains, an invariant breaks, or maxSteps is hit.
+   *
+   *  Statuses: `"ok"` (heap drained, all invariants held), `"timeout"` (the
+   *  step budget ran out with events still pending — a TRUNCATED run; liveness
+   *  invariants are deliberately NOT checked because "end of run" here is an
+   *  artifact of the budget, not system quiescence), or `"violation"`.
+   *  A truncated run is never reported as `"ok"` — silently blessing a
+   *  half-finished simulation as settled would be a determinism lie. */
   async run(opts: RunOptions = {}): Promise<RunResult> {
     const cap = opts.maxSteps ?? this.maxSteps;
     let steps = 0;
@@ -187,7 +198,7 @@ export class Simulator {
     const world = () => this.world();
 
     try {
-      await this.scheduler.run({
+      const outcome = await this.scheduler.run({
         maxSteps: cap,
         onStep: (ev) => this.onStep(ev, steps++),
         onStepEnd: () => {
@@ -198,7 +209,22 @@ export class Simulator {
           }
         },
       });
-      // Liveness invariants checked at end-of-run.
+      // A truncated run never reaches end-of-run semantics: no liveness checks,
+      // and the trace records `timeout` so replay/inspector see it too.
+      if (!outcome.completed) {
+        return {
+          status: "timeout",
+          trace: this.trace.toTrace(
+            String(this.seed),
+            this.configSnapshot(),
+            this.ids(),
+            "timeout",
+          ),
+          steps: outcome.steps,
+          pending: this.scheduler.pendingCount(),
+        };
+      }
+      // Liveness invariants checked at end-of-run — only when truly at end.
       for (const inv of this.invariants) {
         if (inv.kind === "liveness") checkInvariant(inv, world());
       }
@@ -221,7 +247,10 @@ export class Simulator {
     }
   }
 
-  /** Run until the queue is empty (no step cap). Used inside sim bodies. */
+  /** Run until the queue is empty (no step cap beyond maxSteps). Used inside sim
+   *  bodies. Note: if the budget is exhausted with events pending, this returns
+   *  silently — check `sim.scheduler.hasPending()` if the body needs to know
+   *  whether the system actually settled. */
   async settle(): Promise<void> {
     await this.scheduler.run({ maxSteps: this.maxSteps });
   }

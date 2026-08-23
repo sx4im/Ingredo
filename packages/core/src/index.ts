@@ -12,6 +12,7 @@ export {
   type SimEvent,
   type ScheduleMeta,
   type RunOptions as SchedulerRunOptions,
+  type SchedulerRunResult,
 } from "./scheduler.js";
 export {
   createEnv,

@@ -120,6 +120,9 @@ export function buildSimulator(opts: SimTestOptions, seed: bigint): Simulator {
  * most of the actual system code executes. */
 export async function executeScenario(sim: Simulator, body: SimTestBody): Promise<{
   violation?: { name: string; detail: string };
+  /** true ⇔ the final flush exhausted maxSteps with events pending (truncated
+   *  run — liveness was NOT checked). */
+  timedOut?: boolean;
 }> {
   const level = strictLevel();
   let violation: { name: string; detail: string } | undefined;
@@ -153,6 +156,10 @@ export async function executeScenario(sim: Simulator, body: SimTestBody): Promis
   } finally {
     flushGuards?.restore();
   }
+  // A `timeout` status means the step budget truncated the run while events
+  // were still pending. That is NOT a violation — but it is not evidence of
+  // correctness either, so it surfaces as neither: the seed simply doesn't
+  // count as "invariants held" (liveness was skipped) nor as a failure.
   if (!violation && result.status === "violation") {
     violation = { name: result.invariant, detail: result.detail };
   }
@@ -162,7 +169,9 @@ export async function executeScenario(sim: Simulator, body: SimTestBody): Promis
       violation = { name: ev.name, detail: ev.detail };
     }
   }
-  return violation !== undefined ? { violation } : {};
+  return violation !== undefined
+    ? { violation, timedOut: result.status === "timeout" }
+    : { timedOut: result.status === "timeout" };
 }
 
 /** Run the scenario across seeds; stop at the first violating seed and write a
@@ -210,13 +219,19 @@ export async function replayCapsule(
   const sim = new Simulator(simOpts);
 
   let violation: { name: string; detail: string } | undefined;
+  let timedOut = false;
   if (body) {
     const out = await executeScenario(sim, body);
     violation = out.violation;
+    timedOut = out.timedOut === true;
   } else {
     const result = await sim.run({ maxSteps: sim.maxSteps });
     if (result.status === "violation") {
       violation = { name: result.invariant, detail: result.detail };
+    }
+    if (result.status === "timeout") {
+      // A truncated replay is recorded as `timeout`, never silently as "ok".
+      timedOut = true;
     }
   }
 
@@ -224,7 +239,7 @@ export async function replayCapsule(
     capsule.seed,
     { network: sim.networkConfig, chaos: sim.chaosConfig },
     sim.nodes.map((n) => n.id),
-    violation ? "violation" : "ok",
+    violation ? "violation" : timedOut ? "timeout" : "ok",
   );
 
   // Reproduction holds iff the same violation recurred and the events match.

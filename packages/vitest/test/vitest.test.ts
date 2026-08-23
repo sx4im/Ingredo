@@ -20,6 +20,8 @@ import {
   replayCapsule,
   resolveSeeds,
   readCapsule,
+  executeScenario,
+  buildSimulator,
   type SimTestBody,
 } from "@sx4im/chronos-vitest";
 
@@ -107,6 +109,28 @@ describe("runSimTest", () => {
       if (prev === undefined) delete process.env.CHRONOS_SEED;
       else process.env.CHRONOS_SEED = prev;
     }
+  });
+
+  it("treats a step-budget timeout as neither violation nor proof of health", async () => {
+    // The scenario schedules more wake events than maxSteps allows. The run is
+    // TRUNCATED: no capsule may be written (nothing violated), but the outcome
+    // must not silently read as "invariants held" either — executeScenario
+    // reports timedOut so callers can distinguish truncated from settled.
+    const out = await executeScenario(
+      buildSimulator({ seeds: [9n], nodes: 2, maxSteps: 2 }, 9n),
+      (sim) => {
+        sim.addInvariant({
+          name: "trivially true",
+          kind: "liveness",
+          check: () => true,
+        });
+        for (let i = 1; i <= 5; i++) {
+          sim.scheduler.schedule(i, () => {}, { nodeId: "node-0" });
+        }
+      },
+    );
+    expect(out.violation).toBeUndefined();
+    expect(out.timedOut).toBe(true);
   });
 });
 

@@ -19,7 +19,7 @@ const CHAOS: ChaosConfig = {
 };
 
 interface CounterChaosResult {
-  status: "ok" | "violation";
+  status: "ok" | "violation" | "timeout";
   counts: Record<string, number>;
   trace: Trace;
 }

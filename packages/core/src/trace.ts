@@ -24,7 +24,11 @@ export interface Trace {
   config: unknown; // network + chaos config used
   nodes: string[];
   events: TraceEvent[];
-  result: "ok" | "violation";
+  /** `"ok"` — the heap drained and all invariants held. `"timeout"` — the step
+   *  budget was exhausted while events were still pending, so the run was
+   *  TRUNCATED (liveness checks were skipped; nothing here proves liveness).
+   *  `"violation"` — an invariant broke. */
+  result: "ok" | "violation" | "timeout";
 }
 
 /**
@@ -44,7 +48,12 @@ export class TraceLogger {
   }
 
   /** Snapshot for checkpointing / reproduction. */
-  toTrace(seed: string, config: unknown, nodes: string[], result: "ok" | "violation"): Trace {
+  toTrace(
+    seed: string,
+    config: unknown,
+    nodes: string[],
+    result: "ok" | "violation" | "timeout",
+  ): Trace {
     return { seed, config, nodes, events: [...this.events], result };
   }
 

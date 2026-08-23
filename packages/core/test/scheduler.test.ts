@@ -105,6 +105,35 @@ describe("Scheduler", () => {
     expect(scheduler.pendingCount()).toBe(7);
   });
 
+  it("reports truncation via SchedulerRunResult.completed=false", async () => {
+    const { scheduler } = makeScheduler();
+    for (let i = 0; i < 10; i++) scheduler.schedule(i, () => {}, {});
+    const truncated = await scheduler.run({ maxSteps: 4 });
+    expect(truncated.completed).toBe(false);
+    expect(truncated.steps).toBe(4);
+    expect(scheduler.pendingCount()).toBe(6);
+
+    // The remaining events are still runnable: a follow-up run completes.
+    const rest = await scheduler.run();
+    expect(rest.completed).toBe(true);
+    expect(rest.steps).toBe(6);
+    expect(scheduler.pendingCount()).toBe(0);
+  });
+
+  it("reports completion (drained heap) as completed=true", async () => {
+    const { scheduler } = makeScheduler();
+    let ran = 0;
+    scheduler.schedule(1, () => ran++, {});
+    scheduler.schedule(2, () => {
+      ran++;
+      // Mid-run scheduling must still count toward a completed drain.
+      scheduler.schedule(3, () => ran++, {});
+    }, {});
+    const res = await scheduler.run({ maxSteps: 100 });
+    expect(res).toEqual({ completed: true, steps: 3 });
+    expect(ran).toBe(3);
+  });
+
   it("cancelNode skips a node's pending events", async () => {
     const { scheduler } = makeScheduler();
     const log: string[] = [];
