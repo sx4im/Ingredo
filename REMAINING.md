@@ -8,7 +8,7 @@ This document tracks any outstanding bugs, tasks, or issues remaining in the **C
 
 ## Code Quality Status
 
-- **Unit and Simulation Tests**: 263/263 passing.
+- **Unit and Simulation Tests**: 274/274 passing.
 - **TypeScript Typecheck**: Clean (0 compilation errors).
 - **ESLint**: Clean (0 warnings or errors).
 - **Build**: All workspace packages compile (ESM + type declarations). CI gates on `pnpm build` across Node 20 + 22.

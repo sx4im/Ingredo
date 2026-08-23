@@ -71,4 +71,4 @@ All components of the monorepo are fully operational and verified:
 - **Build**: Successfully compiles ESM and TypeScript definitions (`dts`) across all packages.
 - **Typecheck**: Zero TypeScript compile errors (`tsc --noEmit` is clean).
 - **Lint**: Zero ESLint warnings or errors.
-- **Tests**: All 263 tests are passing.
+- **Tests**: All 274 tests are passing.

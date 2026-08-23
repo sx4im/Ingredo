@@ -36,12 +36,9 @@ jobs:
 
       - run: pnpm lint
 
-      # Build gates ship-ability: a broken dist must never reach main. Also
-      # guarantees fresh .d.ts for downstream packages' tsc paths.
+      # Build gates ship-ability: a broken dist must never reach main — the
+      # published artifact is the build output, not the sources tsc checks.
+      # Also guarantees fresh .d.ts for downstream packages' tsc paths.
       - run: pnpm build
 
       - run: pnpm test
-
-      # The published artifact is the build output, not the sources tsc checks.
-      # Without this step a tsup/vite build break only surfaces at publish time.
-      - run: pnpm build
