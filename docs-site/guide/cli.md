@@ -117,6 +117,7 @@ Verifies Node.js version requirements (>= 20), strict mode configuration status,
 | Variable | Effect |
 | --- | --- |
 | `CHRONOS_SEED` | Sets a single seed for replay and sweep commands |
+| `CHRONOS_MAX_SEEDS` | Caps count-form seed sweeps to `[0..cap)` (explicit seed arrays are exempt). Intended for CI: `CHRONOS_MAX_SEEDS=200 pnpm test` keeps thousand-seed example sweeps fast while local runs stay at full strength. Unset means no cap. |
 | `CHRONOS_DIR` | Sets output directory for `sweep` capsules (default `.chronos`) |
 | `CHRONOS_STRICT` | Configures strict guard level (`route`, `throw`, or `off`) |
 | `CHRONOS_MAX_CAPSULE_BYTES` | Raises the 128 MB limit on a capsule file read |

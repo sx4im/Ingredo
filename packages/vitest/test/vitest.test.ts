@@ -75,6 +75,77 @@ describe("resolveSeeds", () => {
       else process.env.CHRONOS_SEED = prev;
     }
   });
+
+  describe("CHRONOS_MAX_SEEDS", () => {
+    const withEnv = (value: string | undefined, fn: () => void): void => {
+      const prev = process.env.CHRONOS_MAX_SEEDS;
+      try {
+        if (value === undefined) delete process.env.CHRONOS_MAX_SEEDS;
+        else process.env.CHRONOS_MAX_SEEDS = value;
+        fn();
+      } finally {
+        if (prev === undefined) delete process.env.CHRONOS_MAX_SEEDS;
+        else process.env.CHRONOS_MAX_SEEDS = prev;
+      }
+    };
+
+    it("caps a count-form sweep to a deterministic prefix", () => {
+      withEnv("3", () => {
+        expect(resolveSeeds({ seeds: 1000, nodes: 2 })).toEqual([0n, 1n, 2n]);
+      });
+    });
+
+    it("never grows a sweep and leaves small counts untouched", () => {
+      withEnv("200", () => {
+        expect(resolveSeeds({ seeds: 5, nodes: 2 })).toEqual([0n, 1n, 2n, 3n, 4n]);
+      });
+    });
+
+    it("does not cap an explicit seed array (those are deliberate)", () => {
+      withEnv("1", () => {
+        expect(resolveSeeds({ seeds: [5n, 9n, 11n], nodes: 2 })).toEqual([
+          5n, 9n, 11n,
+        ]);
+      });
+    });
+
+    it("is overridden by CHRONOS_SEED like every other seed source", () => {
+      withEnv("2", () => {
+        const prevSeed = process.env.CHRONOS_SEED;
+        try {
+          process.env.CHRONOS_SEED = "77";
+          expect(resolveSeeds({ seeds: 1000, nodes: 2 })).toEqual([77n]);
+        } finally {
+          if (prevSeed === undefined) delete process.env.CHRONOS_SEED;
+          else process.env.CHRONOS_SEED = prevSeed;
+        }
+      });
+    });
+
+    it("rejects malformed values loudly", () => {
+      withEnv("-5", () =>
+        expect(() => resolveSeeds({ seeds: 10, nodes: 2 })).toThrow(
+          /CHRONOS_MAX_SEEDS must be a positive decimal integer/,
+        ),
+      );
+      withEnv("abc", () =>
+        expect(() => resolveSeeds({ seeds: 10, nodes: 2 })).toThrow(
+          /CHRONOS_MAX_SEEDS must be a positive decimal integer/,
+        ),
+      );
+      withEnv("0", () =>
+        expect(() => resolveSeeds({ seeds: 10, nodes: 2 })).toThrow(
+          /CHRONOS_MAX_SEEDS must be a positive decimal integer/,
+        ),
+      );
+    });
+
+    it("unset means no cap (local runs stay at full strength)", () => {
+      withEnv(undefined, () => {
+        expect(resolveSeeds({ seeds: 4, nodes: 2 })).toEqual([0n, 1n, 2n, 3n]);
+      });
+    });
+  });
 });
 
 // --- runSimTest -----------------------------------------------------------

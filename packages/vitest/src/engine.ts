@@ -83,8 +83,23 @@ export function resolveSeeds(opts: SimTestOptions): bigint[] {
     return [BigInt(forced)];
   }
   if (Array.isArray(opts.seeds)) return opts.seeds.map((s) => BigInt(s));
+  let count = opts.seeds;
+  // CHRONOS_MAX_SEEDS caps a COUNT-form sweep (never an explicit array — those
+  // are deliberate). CI sets it to keep thousand-seed sweeps off the critical
+  // path while local runs stay at full strength. The capped set [0..cap) is
+  // still deterministic — a prefix of the full sweep, not a random sample.
+  const capEnv = process.env.CHRONOS_MAX_SEEDS;
+  if (capEnv !== undefined && capEnv !== "") {
+    if (!/^\d+$/.test(capEnv) || BigInt(capEnv) < 1n) {
+      throw new Error(
+        `CHRONOS_MAX_SEEDS must be a positive decimal integer (got ${JSON.stringify(capEnv)})`,
+      );
+    }
+    const cap = Number(capEnv);
+    if (count > cap) count = cap;
+  }
   const out: bigint[] = [];
-  for (let i = 0; i < opts.seeds; i++) out.push(BigInt(i));
+  for (let i = 0; i < count; i++) out.push(BigInt(i));
   return out;
 }
 

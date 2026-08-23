@@ -122,22 +122,39 @@ describe("chronos replay", () => {
 });
 
 describe("chronos sweep", () => {
+  // These tests assert EXACT run counts, so they pin CHRONOS_MAX_SEEDS unset:
+  // the sweep engine deliberately honors the CI seed cap (shared resolveSeeds),
+  // and an inherited cap from the outer environment would break the arithmetic.
+  const withoutSeedCap = async (fn: () => Promise<void>): Promise<void> => {
+    const prev = process.env.CHRONOS_MAX_SEEDS;
+    delete process.env.CHRONOS_MAX_SEEDS;
+    try {
+      await fn();
+    } finally {
+      if (prev !== undefined) process.env.CHRONOS_MAX_SEEDS = prev;
+    }
+  };
+
   it("sweepSeeds directly: finds violators and writes the first capsule", async () => {
-    const r = await sweepSeeds({ body, nodes, seeds: 60, netFactory, chronosDir: dir });
-    expect(r.exitCode).toBe(0);
-    expect(r.runs).toBe(60);
-    expect(r.violating.length).toBeGreaterThanOrEqual(1);
-    expect(r.firstCapsulePath).toBeDefined();
-    expect(existsSync(r.firstCapsulePath!)).toBe(true);
+    await withoutSeedCap(async () => {
+      const r = await sweepSeeds({ body, nodes, seeds: 60, netFactory, chronosDir: dir });
+      expect(r.exitCode).toBe(0);
+      expect(r.runs).toBe(60);
+      expect(r.violating.length).toBeGreaterThanOrEqual(1);
+      expect(r.firstCapsulePath).toBeDefined();
+      expect(existsSync(r.firstCapsulePath!)).toBe(true);
+    });
   });
 
   it("sweepCommand: loads the faulty scenario and finds violators", async () => {
-    const r = await sweepCommand(fixtureFaulty, 60);
-    expect(r.exitCode).toBe(0);
-    expect(r.runs).toBe(60);
-    expect(r.violating.length).toBeGreaterThanOrEqual(1);
-    expect(r.firstCapsulePath).toBeDefined();
-    expect(existsSync(r.firstCapsulePath!)).toBe(true);
+    await withoutSeedCap(async () => {
+      const r = await sweepCommand(fixtureFaulty, 60);
+      expect(r.exitCode).toBe(0);
+      expect(r.runs).toBe(60);
+      expect(r.violating.length).toBeGreaterThanOrEqual(1);
+      expect(r.firstCapsulePath).toBeDefined();
+      expect(existsSync(r.firstCapsulePath!)).toBe(true);
+    });
   });
 
   it("a reliable scenario sweeps clean (no violators)", async () => {
