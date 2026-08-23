@@ -14,7 +14,7 @@
 // via the `@sx4im/chronos-vitest/engine` subpath) can replay without linking Vitest.
 
 export { simTest, type SimTestFn } from "./simTest.js";
-export { replayTest } from "./replayTest.js";
+export { replayTest, assertReplay } from "./replayTest.js";
 export { expectInvariant } from "./expectInvariant.js";
 export {
   runSimTest,
