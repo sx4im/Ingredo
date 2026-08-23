@@ -57,13 +57,18 @@ export const PROVIDERS: ProviderDefinition[] = [
   },
 ];
 
-function sanitizeSummary(summary: string): string {
+// Exported for tests — these are the security-critical pure transforms
+// (credential redaction, endpoint validation) that deserve direct coverage.
+export function sanitizeSummary(summary: string): string {
   // Control characters first: this text is bound for a third-party API AND for
   // the terminal, and the credential redaction below should not be dodgeable by
   // splicing an escape sequence into the middle of a token.
   return safeText(summary)
     .replace(/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g, "[REDACTED_JWT]")
-    .replace(/(bearer\s+|token[=:]\s*|key[=:]\s*|secret[=:]\s*|password[=:]\s*)(?!\[REDACTED)[^\s,;"]+/gi, "$1[REDACTED]");
+    .replace(
+      /(bearer\s+|token[=:]\s*|key[=:]\s*|secret[=:]\s*|password[=:]\s*)(?!\[REDACTED)("[^"]*"|[^\s,;"]+)/gi,
+      "$1[REDACTED]",
+    );
 }
 
 /** An LLM endpoint must be plain `http:`/`https:`.
@@ -88,7 +93,8 @@ function assertUsableEndpoint(baseUrl: string): URL {
 
 /** Loopback hosts are the legitimate plaintext case (Ollama, LM Studio, a local
  *  vLLM). Anywhere else, `http:` puts the API key on the wire in the clear. */
-function isLoopback(url: URL): boolean {
+/** Exported for tests. */
+export function isLoopback(url: URL): boolean {
   const h = url.hostname.toLowerCase();
   return h === "localhost" || h === "127.0.0.1" || h === "::1" || h === "[::1]";
 }
