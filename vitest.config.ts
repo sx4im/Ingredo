@@ -26,5 +26,21 @@ export default defineConfig({
     // during worker teardown). Worker threads are unaffected, and Chronos tests
     // don't rely on process-level isolation.
     pool: "threads",
+    coverage: {
+      provider: "v8",
+      // Source-only: node_modules and dist are excluded by default; tests and
+      // example SUTs are not "the library" and would inflate the numbers.
+      include: ["packages/*/src/**"],
+      exclude: ["packages/inspector/src/**", "**/*.d.ts"],
+      thresholds: {
+        // Enforced floors, not aspirations — `pnpm test:coverage` fails below
+        // these. Lines/functions are held high; branches stay a notch lower
+        // until the guard-heavy error paths get dedicated cases.
+        lines: 85,
+        functions: 85,
+        branches: 75,
+        statements: 85,
+      },
+    },
   },
 });

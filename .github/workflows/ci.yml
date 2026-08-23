@@ -41,4 +41,9 @@ jobs:
       # Also guarantees fresh .d.ts for downstream packages' tsc paths.
       - run: pnpm build
 
-      - run: pnpm test
+      # Cap the example seed sweeps so CI stays fast; local runs stay at full
+      # strength (the cap only applies when CHRONOS_MAX_SEEDS is set).
+      # Coverage mode enforces the configured thresholds (vitest.config.ts).
+      - run: pnpm run test:coverage
+        env:
+          CHRONOS_MAX_SEEDS: "200"

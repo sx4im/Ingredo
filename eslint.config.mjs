@@ -37,6 +37,7 @@ export default [
   {
     ignores: [
       "**/dist/**",
+      "coverage/**",
       "**/node_modules/**",
       "**/*.d.ts",
       // docs-site/ is self-contained: NOT a pnpm-workspace member, and the root

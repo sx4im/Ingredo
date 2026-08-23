@@ -6,3 +6,4 @@ config.js
 .env.*.local
 .github-pages/
 
+coverage/
