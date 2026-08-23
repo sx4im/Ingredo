@@ -7,12 +7,12 @@
 // («throw», recommended in CI) so accidental entropy is caught loudly.
 //
 // Two levels:
-//   "route"  — Date.now / Math.random / performance.now / the Date constructor
-//              and setTimeout are redirected to the injected env; the program
-//              keeps running but deterministically.
-//   "throw"  — entropy reads (Date.now, Math.random, performance.now, new Date())
-//              throw a helpful error; setTimeout still routes (a forgotten timer
-//              is recoverable, entropy is not).
+//   "route"  — Date.now / Math.random / performance.now / process.hrtime / the
+//              Date constructor and setTimeout are redirected to the injected
+//              env; the program keeps running but deterministically.
+//   "throw"  — entropy reads (Date.now, Math.random, performance.now,
+//              new Date(), process.hrtime) throw a helpful error; setTimeout
+//              still routes (a forgotten timer is recoverable, entropy is not).
 // setInterval always throws in both levels: env has no recurring primitive, so
 // a real setInterval would be a genuine entropy/time leak. Use env.setTimeout
 // + recursion, or convert to a single scheduled wake.
@@ -46,10 +46,17 @@ interface SavedGlobals {
   date: DateConstructor;
   mathRandom: typeof Math.random;
   perfNow: (() => number) | undefined;
+  hrtime: (() => [number, number]) | undefined;
   setTimeout: typeof globalThis.setTimeout;
   clearTimeout: typeof globalThis.clearTimeout;
   clearInterval: typeof globalThis.clearInterval;
   setInterval: typeof globalThis.setInterval;
+}
+
+/** Structural shape of `process.hrtime` (kept dependency-free of @types/node). */
+interface HrtimeFn {
+  (origin?: [number, number]): [number, number];
+  bigint: () => bigint;
 }
 
 // Global nesting tracking for re-entrant installGuards calls
@@ -64,11 +71,15 @@ type GuardedDateCtor = DateConstructor & { (this: unknown, ...args: unknown[]): 
 
 export function installGuards(env: SimEnv, level: StrictLevel = "route"): InstalledGuards {
   if (patchDepth === 0) {
+    const proc = globalThis as {
+      process?: { hrtime?: HrtimeFn };
+    };
     globalSaved = {
       date: Date,
       mathRandom: Math.random,
       perfNow:
         typeof performance !== "undefined" ? (performance.now.bind(performance) as () => number) : undefined,
+      hrtime: proc.process?.hrtime as (() => [number, number]) | undefined,
       setTimeout: globalThis.setTimeout,
       clearTimeout: globalThis.clearTimeout,
       clearInterval: globalThis.clearInterval,
@@ -87,6 +98,15 @@ export function installGuards(env: SimEnv, level: StrictLevel = "route"): Instal
       Math.random = globalSaved.mathRandom;
       if (typeof performance !== "undefined" && globalSaved.perfNow) {
         performance.now = globalSaved.perfNow;
+      }
+      if (globalSaved.hrtime !== undefined) {
+        const proc = globalThis as unknown as {
+          process?: { hrtime?: HrtimeFn };
+        };
+        if (proc.process) {
+          // Restore the ORIGINAL reference (saved unbound) so identity holds.
+          proc.process.hrtime = globalSaved.hrtime as HrtimeFn;
+        }
       }
       globalThis.setTimeout = globalSaved.setTimeout;
       globalThis.clearTimeout = globalSaved.clearTimeout;
@@ -107,6 +127,25 @@ export function installGuards(env: SimEnv, level: StrictLevel = "route"): Instal
       Math.random = (() => env.random()) as unknown as typeof Math.random;
       if (typeof performance !== "undefined") {
         performance.now = (() => env.now()) as unknown as () => number;
+      }
+    }
+
+    // --- entropy: process.hrtime — monotonic high-res wall clock, same bug
+    //     class as performance.now but invisible to the guards above (and only
+    //     caught statically by `chronos check` until this patch existed).
+    //     Patched whenever a `process` global with an hrtime function exists. ---
+    const proc = globalThis as unknown as {
+      process?: { hrtime?: HrtimeFn };
+    };
+    if (proc.process && typeof proc.process.hrtime === "function") {
+      if (level === "throw") {
+        const throwing = thrown("process.hrtime") as unknown as HrtimeFn;
+        throwing.bigint = thrown(
+          "process.hrtime.bigint",
+        ) as unknown as () => bigint;
+        proc.process.hrtime = throwing;
+      } else {
+        proc.process.hrtime = makeRoutedHrtime(() => env.now());
       }
     }
 
@@ -158,6 +197,36 @@ function thrown(what: string): () => never {
   return () => {
     throw new StrictModeViolation(what);
   };
+}
+
+/** A virtual-time `process.hrtime` stand-in: reads [s, ns] and .bigint() from
+ *  the sim's clock instead of the monotonic wall clock. Supports the
+ *  `hrtime(origin)` diff form (elapsed measurements keep working — just
+ *  deterministically), which is hrtime's dominant real-world use. */
+function makeRoutedHrtime(nowFn: () => number): HrtimeFn {
+  const hrtime = (origin?: [number, number]): [number, number] => {
+    const ms = nowFn();
+    const sec = Math.floor(ms / 1000);
+    // Round-to-nearest keeps sub-ms precision monotonic in virtual time; the
+    // modulo guard is belt-and-braces against float edge cases.
+    let ns = Math.round((ms / 1000 - sec) * 1e9);
+    if (ns >= 1e9) {
+      ns -= 1e9;
+    }
+    const cur: [number, number] = [sec, ns];
+    if (origin === undefined) return cur;
+    // Diff form: cur − origin, normalized so nsec ∈ [0, 10^9) per Node docs.
+    let dSec = cur[0] - origin[0];
+    let dNs = cur[1] - origin[1];
+    if (dNs < 0) {
+      dSec -= 1;
+      dNs += 1e9;
+    }
+    return [dSec, dNs];
+  };
+  hrtime.bigint = (): bigint =>
+    BigInt(Math.round(nowFn() * 1e6)); // virtual ms → virtual ns
+  return hrtime;
 }
 
 function makeGuardedDate(

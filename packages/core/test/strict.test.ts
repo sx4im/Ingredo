@@ -40,6 +40,23 @@ describe("installGuards — route level", () => {
     }
   });
 
+  it("routes process.hrtime (plain, bigint, origin diff) to the sim clock", () => {
+    const { clock, sim } = makeEnv();
+    const guards = installGuards(sim, "route");
+    try {
+      expect(process.hrtime()).toEqual([0, 0]); // virtual clock starts at 0
+      expect(process.hrtime.bigint()).toBe(0n);
+      clock.advanceTo(1234.5);
+      expect(process.hrtime()).toEqual([1, 234500000]);
+      expect(process.hrtime.bigint()).toBe(1234500000n);
+      const origin = process.hrtime();
+      clock.advanceTo(2345.25);
+      expect(process.hrtime(origin)).toEqual([1, 110750000]); // 1110.75 ms elapsed
+    } finally {
+      guards.restore();
+    }
+  });
+
   it("routes a forgotten global setTimeout onto the sim (deterministic)", async () => {
     const { clock, scheduler, sim } = makeEnv();
     let fired = false;
@@ -85,6 +102,8 @@ describe("installGuards — throw level", () => {
       if (typeof performance !== "undefined") {
         expect(() => performance.now()).toThrow(StrictModeViolation);
       }
+      expect(() => process.hrtime()).toThrow(StrictModeViolation);
+      expect(() => process.hrtime.bigint()).toThrow(StrictModeViolation);
     } finally {
       guards.restore();
     }
@@ -118,6 +137,21 @@ describe("installGuards — restore", () => {
     expect(Number.isFinite(Date.now())).toBe(true);
     expect(Math.random()).toBeGreaterThanOrEqual(0);
     expect(new Date(0)).toBeInstanceOf(Date);
+  });
+
+  it("restores the real process.hrtime identity", () => {
+    const realHrtime = process.hrtime;
+    const { sim } = makeEnv();
+    const guards = installGuards(sim, "route");
+    try {
+      expect(process.hrtime).not.toBe(realHrtime); // patched while installed
+    } finally {
+      guards.restore();
+    }
+    expect(process.hrtime).toBe(realHrtime); // identity restored
+    // The restored hrtime still works like the real one (monotonic ns tuple).
+    const t = realHrtime();
+    expect(t.length).toBe(2);
   });
 
   it("is idempotent", () => {
