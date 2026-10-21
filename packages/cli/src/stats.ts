@@ -11,7 +11,15 @@ export interface StatsResult {
   message: string;
 }
 
-export async function statsCommand(capsulePath: string): Promise<StatsResult> {
+export interface StatsOptions {
+  /** Emit machine-readable JSON only (no banner, box, or ANSI codes). */
+  json?: boolean;
+}
+
+export async function statsCommand(
+  capsulePath: string,
+  options: StatsOptions = {},
+): Promise<StatsResult> {
   let capsule: FailureCapsule;
   try {
     capsule = await readCapsule(resolveCapsulePath(capsulePath));
@@ -92,6 +100,35 @@ export async function statsCommand(capsulePath: string): Promise<StatsResult> {
   const deliveryRate = totalSends > 0 ? ((totalDelivers - totalDups) / totalSends) * 100 : 0;
 
   const status = trace.result;
+
+  if (options.json) {
+    const stats = {
+      seed,
+      nodes,
+      maxSteps,
+      result: status,
+      eventCount: events.length,
+      eventCounts: counts,
+      network: {
+        sent: totalSends,
+        delivered: totalDelivers - totalDups,
+        dropped: totalDrops,
+        duplicated: totalDups,
+        deliveryRatePercent: Number(deliveryRate.toFixed(1)),
+        dropRatePercent: Number(dropRate.toFixed(1)),
+        duplicateRatePercent: Number(dupRate.toFixed(1)),
+        latencyMs: {
+          min: finalMinLat,
+          max: finalMaxLat,
+          avg: Number(avgLatency.toFixed(1)),
+        },
+      },
+      ...(status === "violation"
+        ? { invariant: { name: invariant.name, detail: invariant.detail } }
+        : {}),
+    };
+    return { exitCode: 0, message: JSON.stringify(stats, null, 2) };
+  }
 
   const lines: string[] = [
     `${C.bold("Simulation Metadata")}:`,
