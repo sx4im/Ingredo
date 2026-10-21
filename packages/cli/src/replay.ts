@@ -22,6 +22,11 @@ export interface ReplayResult {
   reproduced: boolean;
 }
 
+export interface ReplayOptions {
+  /** Emit a machine-readable JSON run summary only (no prose or ANSI codes). */
+  json?: boolean;
+}
+
 /** Dynamic-import a scenario module. Honors both `export default {…}` and named
  * `export { body, netFactory }`. Throws if `body` isn't a function — the caller
  * turns that into a graceful exit-2. */
@@ -45,28 +50,43 @@ export async function loadScenario(scenarioPath: string): Promise<ScenarioModule
 export async function replayCommand(
   capsulePath: string,
   scenarioPath?: string,
+  options: ReplayOptions = {},
 ): Promise<ReplayResult> {
   let capsule: FailureCapsule;
   try {
     capsule = await readCapsule(resolveCapsulePath(capsulePath));
   } catch (e) {
+    const message = capsuleReadError(capsulePath, e);
     return {
       exitCode: 2,
-      message: capsuleReadError(capsulePath, e),
+      message: options.json ? JSON.stringify({ error: message }, null, 2) : message,
       reproduced: false,
     };
   }
+
+  const recorded = {
+    seed: capsule.seed,
+    nodes: capsule.nodes,
+    recordedResult: capsule.trace.result,
+    invariant: { name: capsule.invariant.name, detail: capsule.invariant.detail },
+    events: capsule.trace.events.length,
+  };
 
   if (scenarioPath === undefined) {
     const status = capsule.trace.result;
     return {
       exitCode: 0,
-      message:
-        `capsule recorded result="${status}" — invariant ${capsule.invariant.name} (${capsule.invariant.detail}).\n` +
-        `  seed=${capsule.seed}, nodes=[${capsule.nodes.join(", ")}], ${capsule.trace.events.length} events.\n` +
-        `Reproduction needs the system-under-test. Re-run with a scenario module:\n` +
-        `  $ chronos replay ${capsulePath} <path/to/scenario.{js,ts}>\n` +
-        `where the module exports { body, netFactory? } (and optional nodes/network/chaos).`,
+      message: options.json
+        ? JSON.stringify(
+            { ...recorded, reproduced: false, scenario: null, rerun: null },
+            null,
+            2,
+          )
+        : `capsule recorded result="${status}" — invariant ${capsule.invariant.name} (${capsule.invariant.detail}).\n` +
+          `  seed=${capsule.seed}, nodes=[${capsule.nodes.join(", ")}], ${capsule.trace.events.length} events.\n` +
+          `Reproduction needs the system-under-test. Re-run with a scenario module:\n` +
+          `  $ chronos replay ${capsulePath} <path/to/scenario.{js,ts}>\n` +
+          `where the module exports { body, netFactory? } (and optional nodes/network/chaos).`,
       reproduced: false,
     };
   }
@@ -75,11 +95,12 @@ export async function replayCommand(
   try {
     scenario = await loadScenario(scenarioPath);
   } catch (e) {
+    const message =
+      `could not import scenario "${scenarioPath}": ${e instanceof Error ? e.message : String(e)}\n` +
+      `Tip: .ts scenarios need a TS-aware runner (vitest/tsx); build to .js or run under tsx.`;
     return {
       exitCode: 2,
-      message:
-        `could not import scenario "${scenarioPath}": ${e instanceof Error ? e.message : String(e)}\n` +
-        `Tip: .ts scenarios need a TS-aware runner (vitest/tsx); build to .js or run under tsx.`,
+      message: options.json ? JSON.stringify({ error: message }, null, 2) : message,
       reproduced: false,
     };
   }
@@ -92,19 +113,51 @@ export async function replayCommand(
   if (reproduced) {
     return {
       exitCode: 0,
-      message:
-        `✓ reproduced: invariant "${violation?.name ?? "<unknown>"}" recurred from seed ${capsule.seed}\n` +
-        `  the re-run trace is bit-identical to the capsule (${trace.events.length} events match).`,
+      message: options.json
+        ? JSON.stringify(
+            {
+              ...recorded,
+              reproduced: true,
+              scenario: scenarioPath,
+              rerun: {
+                result: trace.result,
+                events: trace.events.length,
+                violation: violation
+                  ? { name: violation.name, detail: violation.detail }
+                  : null,
+              },
+            },
+            null,
+            2,
+          )
+        : `✓ reproduced: invariant "${violation?.name ?? "<unknown>"}" recurred from seed ${capsule.seed}\n` +
+          `  the re-run trace is bit-identical to the capsule (${trace.events.length} events match).`,
       reproduced: true,
     };
   }
   return {
     exitCode: 1,
-    message:
-      `✗ could NOT reproduce the violation from seed ${capsule.seed}\n` +
-      `  re-run violation: ${violation?.name ?? "<none>"}\n` +
-      `  re-run events: ${trace.events.length} (capsule recorded ${capsule.trace.events.length})\n` +
-      `  Most likely the scenario's netFactory/network doesn't match the one that produced the capsule.`,
+    message: options.json
+      ? JSON.stringify(
+          {
+            ...recorded,
+            reproduced: false,
+            scenario: scenarioPath,
+            rerun: {
+              result: trace.result,
+              events: trace.events.length,
+              violation: violation
+                ? { name: violation.name, detail: violation.detail }
+                : null,
+            },
+          },
+          null,
+          2,
+        )
+      : `✗ could NOT reproduce the violation from seed ${capsule.seed}\n` +
+        `  re-run violation: ${violation?.name ?? "<none>"}\n` +
+        `  re-run events: ${trace.events.length} (capsule recorded ${capsule.trace.events.length})\n` +
+        `  Most likely the scenario's netFactory/network doesn't match the one that produced the capsule.`,
     reproduced: false,
   };
 }

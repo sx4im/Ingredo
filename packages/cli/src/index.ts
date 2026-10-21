@@ -59,6 +59,7 @@ function buildHelpText(): string {
     `${C.bold("Flags")}:`,
     `  ${C.amber("--format")}, ${C.amber("-f")}   Export format for export command (markdown|csv)`,
     `  ${C.amber("--output")}, ${C.amber("-o")}   Custom output file path for export command`,
+    `  ${C.amber("--json")}            Machine-readable JSON output (stats, replay)`,
     `  ${C.amber("--version")}, ${C.amber("-v")} Show Chronos CLI version`,
     `  ${C.amber("--help")}, ${C.amber("-h")}    Show help documentation`,
     "",
@@ -110,9 +111,10 @@ export async function runCommand(
       return { out: r.message + "\n", code: r.exitCode };
     }
     case "replay": {
-      const [capsule, scenario] = rest;
+      const json = rest.includes("--json");
+      const [capsule, scenario] = rest.filter((arg) => arg !== "--json");
       if (!capsule) return usageError("replay requires a <capsule> path");
-      const r = await replayCommand(capsule, scenario);
+      const r = await replayCommand(capsule, scenario, { json });
       return { out: r.message + "\n", code: r.exitCode };
     }
     case "trace": {
@@ -168,9 +170,10 @@ export async function runCommand(
       return { out: r.message + "\n", code: r.exitCode };
     }
     case "stats": {
-      const [capsule] = rest;
+      const json = rest.includes("--json");
+      const [capsule] = rest.filter((arg) => arg !== "--json");
       if (!capsule) return usageError("stats requires a <capsule> path");
-      const r = await statsCommand(capsule);
+      const r = await statsCommand(capsule, { json });
       return { out: r.message + "\n", code: r.exitCode };
     }
     case "check": {
